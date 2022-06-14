@@ -1,13 +1,10 @@
 package Internship.SocialNetworking.Models;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-//@Entity
+
 public class Event {
-   /*@Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)*/
    private long EventId;
    private Date StartEvent;
    private Date EndEvent;
@@ -15,12 +12,9 @@ public class Event {
    private long GroupId;
    private long CreatorId;
    private boolean IsOver;
+   private List<Person> ListUsersAccepted;
 
-   /*@ManyToMany
-   @JoinTable(name = "ListUsersAccepted",
-           joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "EventId"),
-           inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "PersonId"))
-   private List<Person> ListUsersAccepted;*/
+   public Event(){}
 
    public long getEventId() {
       return EventId;
@@ -78,11 +72,11 @@ public class Event {
       IsOver = over;
    }
 
-   /*public List<Person> getListUsersAccepted() {
+   public List<Person> getListUsersAccepted() {
       return ListUsersAccepted;
    }
 
    public void setListUsersAccepted(List<Person> listUsersAccepted) {
       ListUsersAccepted = listUsersAccepted;
-   }*/
+   }
 }

@@ -14,14 +14,102 @@
                 <constraints primaryKey="true" primaryKeyName="person_id_pk" />
             </column>
             <column name="Name" type="varchar(250)"/>
+            <column name="LastName" type="varchar(250)"/>
+            <column name="Email" type="varchar(250)"/>
+            <column name="Username" type="varchar(250)"/>
+            <column name="Password" type="varchar(250)"/>
+            <column name="Role" type="varchar(250)"/>
         </createTable>
         <createTable tableName="GroupNW">
             <column name="GroupId" type="bigint">
                 <constraints primaryKey="true" primaryKeyName="group_id_pk" />
             </column>
             <column name="Name" type="varchar(250)"/>
+            <column name="Description" type="varchar(250)"/>
+            <column name="IsPublic" type="boolean"/>
+            <column name="CreatorId" type="bigint"/>
+        </createTable>
+        <createTable tableName="Post">
+            <column name="PostId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="post_id_pk" />
+            </column>
+            <column name="Content" type="TEXT"/>
+            <column name="ImageUrl" type="varchar(250)"/>
+            <column name="VideoUrl" type="varchar(250)"/>
+            <column name="CreationData" type="DATETIME"/>
+            <column name="IsPublic" type="boolean"/>
+            <column name="IsOver" type="boolean"/>
+            <column name="CreatorId" type="bigint"/>
+        </createTable>
+        <createTable tableName="Comment">
+            <column name="CommentId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="comment_id_pk" />
+            </column>
+            <column name="Content" type="varchar(250)"/>
+            <column name="Description" type="varchar(250)"/>
+            <column name="PostId" type="bigint"/>
+            <column name="ParentId" type="bigint"/>
+            <column name="CreatorId" type="bigint"/>
+        </createTable>
+        <createTable tableName="Event">
+            <column name="EventId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="event_id_pk" />
+            </column>
+            <column name="EventName" type="varchar(250)"/>
+            <column name="StartEvent" type="DATETIME"/>
+            <column name="EndEvent" type="DATETIME"/>
+            <column name="X" type="FLOAT"/>
+            <column name="Y" type="FLOAT"/>
+            <column name="GroupId" type="bigint"/>
+            <column name="CreatorId" type="bigint"/>
+            <column name="IsOver" type="boolean"/>
+        </createTable>
+        <createTable tableName="GroupRequest">
+            <column name="GroupRequestId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="group_request_id_pk" />
+            </column>
+            <column name="Content" type="varchar(250)"/>
+            <column name="Status" type="varchar(250)"/>
+            <column name="CreatorId" type="bigint"/>
+            <column name="GroupId" type="bigint"/>
+        </createTable>
+        <createTable tableName="Friends">
+            <column name="PersonId" type="bigint"/>
+            <column name="FriendId" type="bigint"/>
+        </createTable>
+        <createTable tableName="GroupPersons">
+            <column name="GroupId" type="bigint"/>
+            <column name="PersonId" type="bigint"/>
+        </createTable>
+        <createTable tableName="EventPersons">
+            <column name="EventId" type="bigint"/>
+            <column name="PersonId" type="bigint"/>
+        </createTable>
+        <createTable tableName="BlockPersons">
+            <column name="PostId" type="bigint"/>
+            <column name="PersonId" type="bigint"/>
         </createTable>
         <addAutoIncrement tableName="Person" columnName="PersonId" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="GroupNW" columnName="GroupId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="Post" columnName="PostId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="Comment" columnName="CommentId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="Event" columnName="EventId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="GroupRequest" columnName="GroupRequestId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addForeignKeyConstraint baseTableName="GroupNW" baseColumnNames="CreatorId" constraintName="group_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="Post" baseColumnNames="CreatorId" constraintName="post_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="Comment" baseColumnNames="PostId" constraintName="comment_post_id_fk" referencedTableName="Post" referencedColumnNames="PostId" />
+        <addForeignKeyConstraint baseTableName="Comment" baseColumnNames="CreatorId" constraintName="comment_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="Event" baseColumnNames="GroupId" constraintName="event_group_id_fk" referencedTableName="GroupNW" referencedColumnNames="GroupId" />
+        <addForeignKeyConstraint baseTableName="Event" baseColumnNames="CreatorId" constraintName="event_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="GroupRequest" baseColumnNames="GroupId" constraintName="group_request_group_id_fk" referencedTableName="GroupNW" referencedColumnNames="GroupId" />
+        <addForeignKeyConstraint baseTableName="GroupRequest" baseColumnNames="CreatorId" constraintName="group_request_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="Friends" baseColumnNames="PersonId" constraintName="friends_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="Friends" baseColumnNames="FriendId" constraintName="friends_friend_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="GroupPersons" baseColumnNames="GroupId" constraintName="group_persons_group_id_fk" referencedTableName="GroupNW" referencedColumnNames="GroupId" />
+        <addForeignKeyConstraint baseTableName="GroupPersons" baseColumnNames="PersonId" constraintName="group_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="EventPersons" baseColumnNames="EventId" constraintName="event_persons_event_id_fk" referencedTableName="Event" referencedColumnNames="EventId" />
+        <addForeignKeyConstraint baseTableName="EventPersons" baseColumnNames="PersonId" constraintName="event_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="BlockPersons" baseColumnNames="PostId" constraintName="block_persons_post_id_fk" referencedTableName="Post" referencedColumnNames="PostId" />
+        <addForeignKeyConstraint baseTableName="BlockPersons" baseColumnNames="PersonId" constraintName="block_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
     </changeSet>
 </databaseChangeLog>

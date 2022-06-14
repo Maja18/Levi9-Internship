@@ -1,20 +1,13 @@
 package Internship.SocialNetworking.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-//@Entity
 public class Comment {
-
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)*/
     private long CommentId;
     private String Content;
     private long PostId;
     private long ParentId;
     private long CreatorId;
+
+    public Comment(){}
 
     public long getCommentId() {
         return CommentId;
