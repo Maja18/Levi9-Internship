@@ -3,21 +3,21 @@ package Internship.SocialNetworking.Models;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+//@Entity
 public class GroupNW {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        /*@Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)*/
         private long GroupId;
         private String Name;
         private String Description;
         private boolean isPublic;
         private long CreatorId;
 
-        @ManyToMany
+       /* @ManyToMany
         @JoinTable(name = "GroupPersons",
             joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "GroupId"),
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "PersonId"))
-        private List<Person> ListUsers;
+        private List<Person> ListUsers;*/
 
         public long getGroupId() {
             return GroupId;
@@ -59,12 +59,12 @@ public class GroupNW {
             CreatorId = creatorId;
         }
 
-        public List<Person> getListUsers() {
+        /*public List<Person> getListUsers() {
         return ListUsers;
         }
 
         public void setListUsers(List<Person> listUsers) {
         ListUsers = listUsers;
-        }
+        }*/
 }
 

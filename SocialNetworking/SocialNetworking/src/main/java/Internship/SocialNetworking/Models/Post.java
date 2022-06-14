@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Post {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /*@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)*/
     private long PostId;
     private String Text;
     private String ImageUrl;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+    <changeSet id="202010211812" author="Julius Krah">
+        <createTable tableName="Person">
+            <column name="PersonId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="person_id_pk" />
+            </column>
+            <column name="Name" type="varchar(250)"/>
+        </createTable>
+        <createTable tableName="GroupNW">
+            <column name="GroupId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="group_id_pk" />
+            </column>
+            <column name="Name" type="varchar(250)"/>
+        </createTable>
+        <addAutoIncrement tableName="Person" columnName="PersonId" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="GroupNW" columnName="GroupId" columnDataType="bigint" startWith="1" incrementBy="1" />
+    </changeSet>
+</databaseChangeLog>
