@@ -2,6 +2,6 @@ package Internship.SocialNetworking.Repository;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
 public interface CommentRepository {
 }
