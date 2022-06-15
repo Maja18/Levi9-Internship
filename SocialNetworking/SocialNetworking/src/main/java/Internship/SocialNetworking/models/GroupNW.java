@@ -1,20 +1,25 @@
 package Internship.SocialNetworking.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class GroupNW {
     @Id
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name = "group_id", nullable = false)
     private Long groupId;
+
     @Column
     private String name;
+
     @Column
     private String description;
+
     @Column
     private boolean isPublic;
+
     @Column
     private Long creatorId;
 

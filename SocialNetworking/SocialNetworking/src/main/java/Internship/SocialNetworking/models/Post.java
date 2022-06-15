@@ -1,26 +1,35 @@
 package Internship.SocialNetworking.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Post {
+
     @Id
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name = "post_id", nullable = false)
     private Long postId;
+
     @Column
     private String content;
+
     @Column
     private String imageUrl;
+
     @Column
     private String videoUrl;
+
     @Column
     private boolean isPublic;
+
     @Column
     private Long creatorId;
+
     @Column
     private Date creationDate;
+
     @Column
     private boolean isOver;
 

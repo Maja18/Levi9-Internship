@@ -14,11 +14,11 @@ public class AuthorityServiceImpl  implements AuthorityService {
 
     @Override
     public Authority findById(Long id) {
-        return authorityRepository.findByIdEquals(id);
+        return authorityRepository.findByAuthorityId(id);
     }
 
     @Override
     public Authority findByName(String name) {
-        return authorityRepository.findByNameEquals(name);
+        return authorityRepository.findByName(name);
     }
 }

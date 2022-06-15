@@ -11,7 +11,11 @@ import java.util.List;
 public class Person implements UserDetails {
 
     @Id
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name = "person_id", nullable = false)
     private Long personId;
+
     @Column
     private String name;
     @Column
@@ -19,7 +23,7 @@ public class Person implements UserDetails {
     @Column
     private String email;
     @Column
-    private String userName;
+    private String username;
     @Column
     private String password;
     @Column
@@ -27,8 +31,8 @@ public class Person implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
     @JoinTable(name = "user_authority",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "personId"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "authority_id"))
     private List<Authority> authorities;
 
     public Person(){}
@@ -66,11 +70,11 @@ public class Person implements UserDetails {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserNname(String userNname) {
-        this.userName = userNname;
+        this.username = userNname;
     }
 
     @Override
@@ -84,27 +88,28 @@ public class Person implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     public void setPassword(String password) {

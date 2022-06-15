@@ -8,27 +8,27 @@ import javax.persistence.*;
 public class Authority implements GrantedAuthority {
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "authority_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long authorityId;
 
     @Column(name ="name")
     private String name;
 
 
-    public Authority(Long id, String name) {
-        this.id = id;
+    public Authority(Long authorityId, String name) {
+        this.authorityId = authorityId;
         this.name = name;
     }
 
     public Authority() {}
 
     public Long getId() {
-        return id;
+        return authorityId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.authorityId = id;
     }
 
     public String getName() {
