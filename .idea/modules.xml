@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Levi9-Internship.iml" filepath="$PROJECT_DIR$/.idea/Levi9-Internship.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SocialNetworking/SocialNetworking/SocialNetworking.iml" filepath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/SocialNetworking.iml" />
     </modules>
   </component>
 </project>
