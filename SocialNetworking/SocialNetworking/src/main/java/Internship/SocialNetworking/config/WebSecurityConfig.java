@@ -8,6 +8,7 @@ import Internship.SocialNetworking.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -43,18 +44,17 @@ public class WebSecurityConfig {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Autowired
     private CustomUserDetailsService jwtUserDetailsService;
 
+    /*@Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-                http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .cors().and()
 
@@ -62,7 +62,6 @@ public class WebSecurityConfig {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
-
 
         return http.build();
 
@@ -73,10 +72,9 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().antMatchers("/api/auth/login");
+        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
 
     }
 

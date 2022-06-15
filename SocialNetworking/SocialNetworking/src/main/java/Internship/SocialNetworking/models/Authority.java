@@ -2,11 +2,9 @@ package Internship.SocialNetworking.models;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Authority implements GrantedAuthority {
 
     @Id
