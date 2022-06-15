@@ -89,6 +89,16 @@
             <column name="PostId" type="bigint"/>
             <column name="PersonId" type="bigint"/>
         </createTable>
+        <createTable tableName="Authority">
+            <column name="AuthorityId" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="authority_id_pk" />
+            </column>
+            <column name="Name" type="varchar(250)"/>
+        </createTable>
+        <createTable tableName="AuthorityPerson">
+            <column name="AuthorityId" type="bigint"/>
+            <column name="PersonId" type="bigint"/>
+        </createTable>
         <addAutoIncrement tableName="Person" columnName="PersonId" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="GroupNW" columnName="GroupId" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="Post" columnName="PostId" columnDataType="bigint" startWith="1" incrementBy="1" />
@@ -111,5 +121,7 @@
         <addForeignKeyConstraint baseTableName="EventPersons" baseColumnNames="PersonId" constraintName="event_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
         <addForeignKeyConstraint baseTableName="BlockPersons" baseColumnNames="PostId" constraintName="block_persons_post_id_fk" referencedTableName="Post" referencedColumnNames="PostId" />
         <addForeignKeyConstraint baseTableName="BlockPersons" baseColumnNames="PersonId" constraintName="block_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
+        <addForeignKeyConstraint baseTableName="AuthorityPerson" baseColumnNames="AuthorityId" constraintName="authority_persons_authority_id_fk" referencedTableName="Authority" referencedColumnNames="AuthorityId" />
+        <addForeignKeyConstraint baseTableName="AuthorityPerson" baseColumnNames="PersonId" constraintName="authority_persons_person_id_fk" referencedTableName="Person" referencedColumnNames="PersonId" />
     </changeSet>
 </databaseChangeLog>
