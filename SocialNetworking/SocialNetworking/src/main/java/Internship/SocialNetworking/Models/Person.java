@@ -1,15 +1,26 @@
 package Internship.SocialNetworking.Models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.List;
 
+@Entity
 public class Person {
 
+@Id
     private long PersonId;
+@Column(name="Name")
     private String Name;
+    @Column(name="LastName")
     private String Surname;
+    @Column(name="Email")
     private String Email;
+    @Column(name="Username")
     private String User_name;
+    @Column(name="Password")
     private String Password;
+    @Column(name= "Role")
     private String Role;
 
     public Person(){}
