@@ -4,10 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-public class post {
+public class Post {
     @Id
     private Long postId;
     @Column
@@ -25,7 +24,7 @@ public class post {
     @Column
     private boolean isOver;
 
-    public post(){}
+    public Post(){}
 
     public Long getPostId() {
         return postId;

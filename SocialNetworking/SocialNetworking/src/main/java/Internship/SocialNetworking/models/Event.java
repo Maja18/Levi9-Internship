@@ -4,10 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-public class event {
+public class Event {
    @Id
    private Long eventId;
    @Column
@@ -22,7 +21,7 @@ public class event {
    private Long creatorId;
    @Column
    private boolean isOver;
-   public event(){}
+   public Event(){}
 
    public Long getEventId() {
       return eventId;

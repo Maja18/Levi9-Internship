@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class comment {
+public class Comment {
     @Id
     private Long commentId;
     @Column
@@ -17,7 +17,7 @@ public class comment {
     @Column
     private Long creatorId;
 
-    public comment(){}
+    public Comment(){}
 
     public long getCommentId() {
         return commentId;

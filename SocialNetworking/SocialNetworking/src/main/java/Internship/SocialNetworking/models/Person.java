@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class person {
+public class Person {
 
     @Id
     private Long personId;
@@ -22,7 +22,7 @@ public class person {
     @Column
     private String role;
 
-    public person(){}
+    public Person(){}
 
     public long getPersonId() {
         return personId;

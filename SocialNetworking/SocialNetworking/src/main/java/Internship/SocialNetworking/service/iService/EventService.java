@@ -1,4 +1,4 @@
 package Internship.SocialNetworking.service.iService;
 
-public interface iEventService {
+public interface EventService {
 }

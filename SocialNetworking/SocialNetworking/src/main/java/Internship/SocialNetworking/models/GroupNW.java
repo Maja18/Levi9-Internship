@@ -4,10 +4,9 @@ package Internship.SocialNetworking.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.List;
 
 @Entity
-public class groupNW {
+public class GroupNW {
     @Id
     private Long groupId;
     @Column
@@ -19,7 +18,7 @@ public class groupNW {
     @Column
     private Long creatorId;
 
-    public groupNW(){}
+    public GroupNW(){}
 
     public Long getGroupId() {
         return groupId;
