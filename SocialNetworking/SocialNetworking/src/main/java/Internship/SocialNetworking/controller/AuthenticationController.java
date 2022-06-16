@@ -31,7 +31,7 @@ public class AuthenticationController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     public AuthenticationController(TokenUtils tokenUtils,AuthenticationManager authenticationManager, PersonService personService, PasswordEncoder passwordEncoder) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
