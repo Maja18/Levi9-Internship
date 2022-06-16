@@ -1,8 +1,12 @@
 package Internship.SocialNetworking.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
+@Data
 @Entity
 public class Post {
 
@@ -33,70 +37,8 @@ public class Post {
     @Column
     private boolean isOver;
 
-    public Post(){}
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public boolean isOver() {
-        return isOver;
-    }
-
-    public void setOver(boolean over) {
-        isOver = over;
-    }
-    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "blocked_posts_blocked_persons", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
+    private List<Person> blockedPersons;
 }

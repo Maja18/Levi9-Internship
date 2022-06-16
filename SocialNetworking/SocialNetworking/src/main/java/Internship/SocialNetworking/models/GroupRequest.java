@@ -6,23 +6,20 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Comment {
+public class GroupRequest {
     @Id
     @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
-    @Column(name = "comment_id", nullable = false)
-    private Long commentId;
+    @Column(name = "group_request_id", nullable = false)
+    private Long groupRequestId;
 
     @Column
-    private String content;
-
-    @Column
-    private Long postId;
-
-    @Column
-    private Long parentId;
+    private RequestStatus requestStatus;
 
     @Column
     private Long creatorId;
+
+    @Column
+    private Long groupId;
 
 }
