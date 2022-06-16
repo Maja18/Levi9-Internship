@@ -1,64 +1,36 @@
 package Internship.SocialNetworking.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Data;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Data
 @Entity
 public class GroupNW {
     @Id
+    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @Column(name = "group_id", nullable = false)
     private Long groupId;
+
     @Column
     private String name;
+
     @Column
     private String description;
+
     @Column
     private boolean isPublic;
+
     @Column
     private Long creatorId;
 
-    public GroupNW(){}
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
-
-    public long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(long creatorId) {
-        this.creatorId = creatorId;
-    }
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "person_groups_members", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
+    private List<Person> members;
 
 }
 

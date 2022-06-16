@@ -1,18 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="15ac8df8-2cf4-4aff-9bce-92bd50e49238" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="6179afe6-7a3f-4d7c-a7e0-13c2b8c33fca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/TimeProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Authority.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/AuthorityRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/TokenUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/JwtAuthenticationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/RestAuthenticationEntryPoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenBasedAuthentication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/AuthorityServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/AuthorityService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="2AWSJTI6j7w3VndgikX7EbaY5NC" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -26,6 +66,17 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Java/jdk-14.0.2" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Internship.SocialNetworking.SocialNetworkingApplication" />
+      <module name="SocialNetworking" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -41,5 +92,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

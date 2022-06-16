@@ -54,6 +54,22 @@
 			<artifactId>liquibase-maven-plugin</artifactId>
 			<version>3.4.1</version>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>0.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.8</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
