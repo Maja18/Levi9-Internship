@@ -61,6 +61,8 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("http://localhost:8080/v2/api-docs").permitAll()
+                .antMatchers("http://localhost:8080/swagger-ui.html").permitAll()
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
 
         return http.build();
@@ -74,7 +76,7 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
+        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/api/group/new");
 
     }
 

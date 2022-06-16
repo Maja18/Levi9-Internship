@@ -8,10 +8,10 @@ import java.util.List;
 
 @Data
 @Entity
+//@org.springframework.data.relational.core.mapping.Table
 public class GroupNW {
     @Id
-    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id", nullable = false)
     private Long groupId;
 

@@ -1,7 +1,7 @@
 package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.models.dto.UserTokenStateDTO;
+import Internship.SocialNetworking.dto.UserTokenStateDTO;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.JwtAuthenticationRequest;
 import Internship.SocialNetworking.service.iService.PersonService;

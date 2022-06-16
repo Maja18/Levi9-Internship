@@ -10,11 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    private PersonRepository personRepository;
+
+    private final PersonRepository personRepository;
+
+    public PersonServiceImpl(PersonRepository personRepository){
+        this.personRepository = personRepository;
+    }
 
     @Override
     public Person findByEmailEquals(String email) {
         return personRepository.findByEmailEquals(email);
     }
+
 }
