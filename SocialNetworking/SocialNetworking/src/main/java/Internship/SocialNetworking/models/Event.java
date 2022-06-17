@@ -9,8 +9,7 @@ import java.util.Date;
 @Entity
 public class Event {
    @Id
-   @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "event_id", nullable = false)
    private Long eventId;
 

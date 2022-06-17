@@ -16,8 +16,7 @@ import java.util.List;
 public class Person implements UserDetails {
 
     @Id
-  //  @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-  //  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id", nullable = false)
     private Long personId;
 
@@ -60,7 +59,7 @@ public class Person implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override

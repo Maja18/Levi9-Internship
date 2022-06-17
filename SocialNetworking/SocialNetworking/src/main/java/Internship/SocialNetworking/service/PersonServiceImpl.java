@@ -1,12 +1,9 @@
 package Internship.SocialNetworking.service;
-
-
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 
@@ -15,12 +12,9 @@ public class PersonServiceImpl implements PersonService {
 
     private PersonRepository personRepository;
 
-
-
     public PersonServiceImpl(PersonRepository personRepository){
         this.personRepository = personRepository;
     }
-
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -28,7 +22,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Person findByPersonId(Long id) {
+        return personRepository.findByPersonId(id);
+    }
 
+    @Override
     public Person addPerson(PersonDTO person) {
         Person pers = personRepository.findByPersonId(person.getPersonId());
 
@@ -73,13 +71,9 @@ public class PersonServiceImpl implements PersonService {
         return null;
     }
 
-
-       
-
     @Override
     public List<Person> getAllPersons() {
        return personRepository.findAll();
-
     }
 
 }

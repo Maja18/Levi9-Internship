@@ -10,9 +10,11 @@ import javax.persistence.*;
 @Setter
 @RequiredArgsConstructor
 public class Comment {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "comment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id", nullable = false)
+
     private Long commentId;
 
     @Column
