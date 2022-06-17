@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,8 +11,7 @@ import java.util.List;
 @Entity
 public class GroupNW {
     @Id
-    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id", nullable = false)
     private Long groupId;
 
@@ -28,9 +28,13 @@ public class GroupNW {
     private Long creatorId;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "person_groups_members", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"),
+    @JoinTable(name = "group_persons", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
     private List<Person> members;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Post> posts;
 
 }
 

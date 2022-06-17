@@ -36,10 +36,11 @@
             <column name="content" type="TEXT"/>
             <column name="image_url" type="varchar(250)"/>
             <column name="video_url" type="varchar(250)"/>
-            <column name="creation_data" type="DATETIME"/>
+            <column name="creation_date" type="DATETIME"/>
             <column name="is_public" type="boolean"/>
             <column name="is_over" type="boolean"/>
             <column name="creator_id" type="bigint"/>
+            <column name="group_id" type="bigint"/>
         </createTable>
         <createTable tableName="comment">
             <column name="comment_id" type="bigint">
@@ -106,6 +107,7 @@
         <addAutoIncrement tableName="group_request" columnName="group_request_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addForeignKeyConstraint baseTableName="groupNW" baseColumnNames="creator_id" constraintName="group_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="post" baseColumnNames="creator_id" constraintName="post_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
+        <addForeignKeyConstraint baseTableName="post" baseColumnNames="group_id" constraintName="post_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
         <addForeignKeyConstraint baseTableName="comment" baseColumnNames="post_id" constraintName="comment_post_id_fk" referencedTableName="post" referencedColumnNames="post_id" />
         <addForeignKeyConstraint baseTableName="comment" baseColumnNames="creator_id" constraintName="comment_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="event" baseColumnNames="group_id" constraintName="event_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
