@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
-
+        http.csrf().disable();
         return http.build();
 
     }

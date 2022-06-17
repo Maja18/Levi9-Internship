@@ -24,7 +24,6 @@ public class GroupController {
     }
 
     @GetMapping("/getAllGroups")
-    //@PreAuthorize("hasRole('MEMBER')")
     @RolesAllowed("ROLE_USER")
     ResponseEntity<List<GroupNW>> getAllGroups()
     {

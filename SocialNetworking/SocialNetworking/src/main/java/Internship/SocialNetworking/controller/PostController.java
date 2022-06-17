@@ -25,8 +25,7 @@ public class PostController {
     }
 
     @PostMapping("/addNew")
-    //@PreAuthorize("hasRole('MEMBER')")
-    @RolesAllowed("ROLE_USER")
+    @RolesAllowed("ROLE_MEMBER")
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
         return (ResponseEntity<Post>) (response == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(response));

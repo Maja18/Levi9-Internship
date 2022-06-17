@@ -33,11 +33,10 @@
             <column name="post_id" type="bigint">
                 <constraints primaryKey="true" primaryKeyName="post_id_pk" />
             </column>
-            <column name="content" type="TEXT"/>
             <column name="description" type="TEXT"/>
             <column name="image_url" type="varchar(250)"/>
             <column name="video_url" type="varchar(250)"/>
-            <column name="creation_data" type="DATETIME"/>
+            <column name="creation_date" type="DATETIME"/>
             <column name="is_public" type="TINYINT"/>
             <column name="is_over" type="TINYINT"/>
             <column name="creator_id" type="bigint"/>
