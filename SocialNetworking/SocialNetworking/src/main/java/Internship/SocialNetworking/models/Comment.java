@@ -1,28 +1,30 @@
 package Internship.SocialNetworking.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+
 @Entity
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Comment {
     @Id
-    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
-    @Column(name = "comment_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "comment_id")
     private Long commentId;
 
     @Column
     private String content;
 
-    @Column
+    @Column(name = "post_id", nullable = false)
     private Long postId;
 
-    @Column
+    @Column(name = "parent_id", nullable = false)
     private Long parentId;
 
-    @Column
+    @Column(name = "creator_id", nullable = false)
     private Long creatorId;
 
 }

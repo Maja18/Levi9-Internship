@@ -17,7 +17,7 @@ public class Post {
     private Long postId;
 
     @Column
-    private String content;
+    private String description;
 
     @Column
     private String imageUrl;

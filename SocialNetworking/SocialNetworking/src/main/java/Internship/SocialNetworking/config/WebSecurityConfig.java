@@ -73,7 +73,7 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login","/api/person/add-friend");
+        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login","/api/person/add-friend","/api/comment/add-comment");
     }
 
 }
