@@ -1,10 +1,8 @@
 package Internship.SocialNetworking.models;
-
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +13,6 @@ import java.util.List;
 public class Person implements UserDetails {
 
     @Id
-   // @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id", nullable = false)
     private Long personId;
