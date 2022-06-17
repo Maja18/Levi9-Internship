@@ -8,8 +8,7 @@ import javax.persistence.*;
 @Entity
 public class GroupRequest {
     @Id
-    @SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_request_id", nullable = false)
     private Long groupRequestId;
 
