@@ -30,16 +30,20 @@ public class PersonServiceImpl implements PersonService {
 
 
         if(person != null && friend != null){
-            List<Person> listFriends = person.getFriends();
-            for (Person p: listFriends)
-            {
-                if(p.getPersonId() == friendId){
-                    return null;
+            if(person.getPersonId() != friend.getPersonId()){
+                List<Person> listFriends = person.getFriends();
+                for (Person p: listFriends)
+                {
+                    if(p.getPersonId() == friendId){
+                        return null;
+                    }
                 }
+                listFriends.add(friend);
+                person.setFriends(listFriends);
+                return personRepository.save(person);
             }
-            listFriends.add(friend);
-            person.setFriends(listFriends);
-            return personRepository.save(person);
+
+            return null;
         }
 
         return null;
