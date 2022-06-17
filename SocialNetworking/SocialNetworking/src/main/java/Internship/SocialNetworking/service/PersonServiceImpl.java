@@ -5,23 +5,17 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 public class PersonServiceImpl implements PersonService {
 
+    private PersonRepository personRepository;
 
-   private PersonRepository personRepository;
+
 
     public PersonServiceImpl(PersonRepository personRepository){
         this.personRepository = personRepository;
@@ -34,6 +28,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+
     public Person addPerson(PersonDTO person) {
         Person pers = personRepository.findByPersonId(person.getPersonId());
 
@@ -48,10 +43,38 @@ public class PersonServiceImpl implements PersonService {
               mappedPerson.setRole(person.getRole());
 
               return personRepository.save(mappedPerson);
-            }
+                 }
             return null;
 
     }
+
+    public Person addFriend(Long personId, Long friendId) {
+        Person person = personRepository.findByPersonId(personId);
+        Person friend = personRepository.findByPersonId(friendId);
+
+
+        if(person != null && friend != null){
+            if(person.getPersonId() != friend.getPersonId()){
+                List<Person> listFriends = person.getFriends();
+                for (Person p: listFriends)
+                {
+                    if(p.getPersonId() == friendId){
+                        return null;
+                    }
+                }
+                listFriends.add(friend);
+                person.setFriends(listFriends);
+                return personRepository.save(person);
+            }
+
+            return null;
+        }
+
+        return null;
+    }
+
+
+       
 
     @Override
     public List<Person> getAllPersons() {
