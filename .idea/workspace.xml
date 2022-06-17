@@ -5,25 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6179afe6-7a3f-4d7c-a7e0-13c2b8c33fca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/TimeProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Authority.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/AuthorityRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/TokenUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/JwtAuthenticationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/RestAuthenticationEntryPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenBasedAuthentication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/AuthorityServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/CustomUserDetailsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/AuthorityService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_18_8.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Authority.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Authority.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/dto/UserTokenStateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/dto/UserTokenStateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/TokenUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/TokenUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,6 +32,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -57,16 +63,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true"
+  }
+}]]></component>
   <component name="RunManager">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Java/jdk-14.0.2" />

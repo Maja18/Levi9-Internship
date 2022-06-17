@@ -1,6 +1,9 @@
 package Internship.SocialNetworking.security.auth;
 
+import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.security.TokenUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +22,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private TokenUtils tokenUtils;
     private UserDetailsService userDetailsService;
 
-    public TokenAuthenticationFilter(TokenUtils tokenUtils, UserDetailsService userDetailsService) {
+    private PersonRepository personRepository;
+
+    public TokenAuthenticationFilter(TokenUtils tokenUtils, UserDetailsService userDetailsService, PersonRepository personRepository) {
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;
+        this.personRepository = personRepository;
     }
 
 
@@ -29,11 +35,28 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String mail;
         String authToken = tokenUtils.getToken(request);
+        Claims claims = tokenUtils.getAllClaimsFromToken(authToken);
+        String subject = (String) claims.get(Claims.SUBJECT);
+        String authorities = (String) claims.get("authorities");
+
+        System.out.println("SUBJECT: " + subject);
+        System.out.println("roles: " + authorities);
+        authorities = authorities.replace("[", "").replace("]", "");
+        String[] authoritiesNames = authorities.split(",");
+
+
         if (authToken != null) {
             mail = tokenUtils.getMailFromToken(authToken);
 
             if (mail != null) {
+
+                Person user = personRepository.findByEmailEquals(mail);
+                for (String s : authoritiesNames){
+                    user.addNewAuthority(s);
+                }
+                personRepository.save(user);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
+
 
                 // Is token valid
                 if (tokenUtils.validateToken(authToken, userDetails)) {
