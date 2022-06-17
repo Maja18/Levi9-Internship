@@ -33,7 +33,7 @@ public class PostServiceImpl implements PostService {
                 LocalDateTime currentDate = LocalDateTime.now();
                 post.setCreationDate(currentDate);
                 post.setCreatorId(postDTO.getUserId());
-                post.setContent(postDTO.getContent());
+                post.setDescription(postDTO.getDescription());
                 post.setImageUrl(postDTO.getImageUrl());
                 post.setVideoUrl(postDTO.getVideoUrl());
                 }
