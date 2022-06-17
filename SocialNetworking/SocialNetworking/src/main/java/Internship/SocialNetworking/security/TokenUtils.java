@@ -2,6 +2,7 @@ package Internship.SocialNetworking.security;
 
 import Internship.SocialNetworking.TimeProvider;
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.repository.PersonRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,16 +38,24 @@ public class TokenUtils {
     static final String AUDIENCE_MOBILE  = "mobile";
     static final String AUDIENCE_TABLET  = "tablet";
 
-    @Autowired
+
     private TimeProvider timeProvider;
 
+    private PersonRepository personRepository;
+
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+
+    public TokenUtils(TimeProvider timeProvider, PersonRepository personRepository){
+            this.timeProvider = timeProvider;
+            this.personRepository = personRepository;
+    }
 
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
+                .claim("authorities", personRepository.findByEmailEquals(username).getAuthorities().toString())
 //                .setAudience(generateAudience(device))
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(timeProvider.now())
@@ -117,7 +126,7 @@ public class TokenUtils {
 
     // Functions for getting data from token
 
-    private Claims getAllClaimsFromToken(String token) {
+    public Claims getAllClaimsFromToken(String token) {
         Claims claims;
         try {
             claims = Jwts.parser()

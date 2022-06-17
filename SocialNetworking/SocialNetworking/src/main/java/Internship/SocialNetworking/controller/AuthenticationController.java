@@ -1,7 +1,7 @@
 package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.models.dto.UserTokenStateDTO;
+import Internship.SocialNetworking.dto.UserTokenStateDTO;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.JwtAuthenticationRequest;
 import Internship.SocialNetworking.service.AuthorityServiceImpl;
@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -35,6 +36,7 @@ public class AuthenticationController {
         this.authorityService = authorityService;
     }
 
+    @RolesAllowed("ROLE_USER")
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDTO> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                                        HttpServletResponse response) {
@@ -46,13 +48,13 @@ public class AuthenticationController {
     }
 
     @GetMapping("/authority")
-    //@PreAuthorize("hasRole('MEMBER')")
+    @RolesAllowed("ROLE_USER")
     ResponseEntity<Person> getMyAccount()
     {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        return (ResponseEntity<Person>) (userWithId == null ?
+        return (userWithId == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(userWithId));
     }

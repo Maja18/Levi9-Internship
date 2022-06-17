@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class GroupController {
     }
 
     @GetMapping("/getAllGroups")
-    //@PreAuthorize("hasRole('MEMBER')")
+    @RolesAllowed("ROLE_USER")
     ResponseEntity<List<GroupNW>> getAllGroups()
     {
         List<GroupNW> groups =groupService.getAllGroups();
