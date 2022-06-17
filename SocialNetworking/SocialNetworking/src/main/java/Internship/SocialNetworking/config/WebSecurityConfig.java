@@ -1,6 +1,8 @@
 package Internship.SocialNetworking.config;
 
 
+import Internship.SocialNetworking.repository.AuthorityRepository;
+import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.RestAuthenticationEntryPoint;
 import Internship.SocialNetworking.security.auth.TokenAuthenticationFilter;
@@ -46,6 +48,11 @@ public class WebSecurityConfig {
     @Autowired
     private CustomUserDetailsService jwtUserDetailsService;
 
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
     /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
@@ -59,9 +66,10 @@ public class WebSecurityConfig {
                 .cors().and()
 
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/api/auth/authority").hasAuthority("ROLE_USER")
                 .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
+                .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
 
         return http.build();
 

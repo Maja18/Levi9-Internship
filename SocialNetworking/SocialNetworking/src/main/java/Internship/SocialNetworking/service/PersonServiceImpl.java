@@ -17,4 +17,9 @@ public class PersonServiceImpl implements PersonService {
     public Person findByEmailEquals(String email) {
         return personRepository.findByEmailEquals(email);
     }
+
+    @Override
+    public Person findByPersonId(Long personId) {
+        return personRepository.findByPersonIdEquals(personId);
+    }
 }

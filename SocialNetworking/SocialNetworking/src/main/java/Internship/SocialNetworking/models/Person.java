@@ -40,7 +40,7 @@ public class Person implements UserDetails {
     private List<Authority> authorities;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "person_groups",
+    @JoinTable(name = "group_persons",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"))
     private List<GroupNW> personGroups;
