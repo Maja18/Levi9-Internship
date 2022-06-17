@@ -2,6 +2,7 @@ package Internship.SocialNetworking.service;
 
 
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class PersonServiceImpl implements PersonService {
     private PersonRepository personRepository;
 
 
+
     public PersonServiceImpl(PersonRepository personRepository){
         this.personRepository = personRepository;
     }
@@ -26,6 +28,26 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+
+    public Person addPerson(PersonDTO person) {
+        Person pers = personRepository.findByPersonId(person.getPersonId());
+
+          if (pers == null) {
+               Person mappedPerson=new Person();
+              mappedPerson.setPersonId(person.getPersonId());
+              mappedPerson.setName(person.getName());
+              mappedPerson.setSurname(person.getSurname());
+              mappedPerson.setEmail(person.getEmail());
+              mappedPerson.setUsername(person.getUsername());
+              mappedPerson.setPassword(person.getPassword());
+              mappedPerson.setRole(person.getRole());
+
+              return personRepository.save(mappedPerson);
+                 }
+            return null;
+
+    }
+
     public Person addFriend(Long personId, Long friendId) {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);
@@ -51,14 +73,8 @@ public class PersonServiceImpl implements PersonService {
         return null;
     }
 
-    public Person addPerson(Person person) {
 
-          if (personRepository.existsById(person.getPersonId())) {
-                return null;
-            }
-            var pers= personRepository.save(person);
-            return pers;
-    }
+       
 
     @Override
     public List<Person> getAllPersons() {
