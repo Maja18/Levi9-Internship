@@ -24,29 +24,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post addNewPost(PostDTO postDTO){
         Post post = new Post();
-        List<GroupNW> allGroups = groupRepository.findAll();
-        for (GroupNW g: allGroups) {
-            List<Person> members= g.getMembers();
-            GroupNW group = groupRepository.findById(g.getGroupId()).get();
-            for (Person member:members) {
-                if (member.getPersonId().equals(postDTO.getUserId())) {
-                    post.setPublic(postDTO.getIsPublic());
-                    post.setGroup(group);
-                    LocalDateTime currentDate = LocalDateTime.now();
-                    post.setCreationDate(currentDate);
-                    post.setCreatorId(postDTO.getUserId());
-                    if (postDTO.getContent() != null){
-                        post.setContent(postDTO.getContent());
-                    }
-                    if (postDTO.getImageUrl() != null) {
-                        post.setImageUrl(postDTO.getImageUrl());
-                    }
-                    if (postDTO.getVideoUrl() != null) {
-                        post.setVideoUrl(postDTO.getVideoUrl());
-                    }
+        GroupNW group = groupRepository.findByGroupId(postDTO.getGroupId());
+        List<Person> members= group.getMembers();
+        for (Person member:members) {
+            if (member.getPersonId().equals(postDTO.getUserId())) {
+                post.setPublic(postDTO.getIsPublic());
+                post.setGroup(group);
+                LocalDateTime currentDate = LocalDateTime.now();
+                post.setCreationDate(currentDate);
+                post.setCreatorId(postDTO.getUserId());
+                post.setContent(postDTO.getContent());
+                post.setImageUrl(postDTO.getImageUrl());
+                post.setVideoUrl(postDTO.getVideoUrl());
                 }
             }
-        }
         postRepository.save(post);
 
         return post;
