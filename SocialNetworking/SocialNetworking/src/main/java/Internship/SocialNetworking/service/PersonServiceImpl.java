@@ -2,6 +2,7 @@ package Internship.SocialNetworking.service;
 
 
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class PersonServiceImpl implements PersonService {
 
 
-   private final PersonRepository personRepository;
+   private PersonRepository personRepository;
 
     public PersonServiceImpl(PersonRepository personRepository){
         this.personRepository = personRepository;
@@ -33,13 +34,23 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addPerson(Person person) {
+    public Person addPerson(PersonDTO person) {
+        Person pers = personRepository.findByPersonId(person.getPersonId());
 
-          if (personRepository.existsById(person.getPersonId())) {
-                return null;
+          if (pers == null) {
+               Person mappedPerson=new Person();
+              mappedPerson.setPersonId(person.getPersonId());
+              mappedPerson.setName(person.getName());
+              mappedPerson.setSurname(person.getSurname());
+              mappedPerson.setEmail(person.getEmail());
+              mappedPerson.setUsername(person.getUsername());
+              mappedPerson.setPassword(person.getPassword());
+              mappedPerson.setRole(person.getRole());
+
+              return personRepository.save(mappedPerson);
             }
-            var pers= personRepository.save(person);
-            return pers;
+            return null;
+
     }
 
     @Override

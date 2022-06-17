@@ -22,26 +22,16 @@ public class Person implements UserDetails {
     private Long personId;
 
     @Column
-    @NotBlank(message = "name is required")
-    @Length( min=3,message="name has to have 3 letters at least")
     private String name;
     @Column
-    @NotBlank(message = "surname is required")
-    @Length( min=3,message="surname has to have 3 letters at least")
     private String surname;
     @Column
-    @NotBlank(message = "email is required")
-    @Email(message = "email is incorrect")
     private String email;
     @Column
-    @NotBlank(message = "username is required")
     private String username;
     @Column
-    @NotBlank(message = "password is required")
     private String password;
     @Column
-    @NotBlank(message = "role is required")
-    @Length( min=4,message="role has to have 3 letters at least")
     private String role;
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)

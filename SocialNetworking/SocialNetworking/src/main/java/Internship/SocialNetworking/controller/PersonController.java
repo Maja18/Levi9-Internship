@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import Internship.SocialNetworking.service.iService.PersonService;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/personController")
+@RequestMapping("/api/person")
 public class PersonController {
 
     private final PersonServiceImpl personService;
@@ -38,10 +39,13 @@ public class PersonController {
     }
     //if user is invalid then exception handler is called
     @PostMapping("")
-    public ResponseEntity<Person> addPersons(@Valid @RequestBody Person person) {
+    public ResponseEntity<Person> addPersons(@Valid @RequestBody PersonDTO person) {
         var per=personService.addPerson(person);
+        if(per == null) {
+            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<Person>(person,HttpStatus.OK);
+        return new ResponseEntity<Person>(per,HttpStatus.OK);
     }
 
     //this function prints validation errors
