@@ -1,4 +1,5 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
@@ -68,6 +69,21 @@ public class PersonServiceImpl implements PersonService {
             return null;
         }
 
+        return null;
+    }
+
+    @Override
+    public String DeletePerson(Long personId) {
+
+        GroupNW group=new GroupNW();
+
+        for(int i=0; i<group.getMembers().size(); i++) {
+            Long personMemberId=group.getMembers().get(i).getPersonId();
+            if(personId == personMemberId) {
+                personRepository.deleteById(personId);
+                return "Successfully deleted member of group";
+            }
+        }
         return null;
     }
 
