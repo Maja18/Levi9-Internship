@@ -1,10 +1,8 @@
 package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.repository.PersonRepository;
+import Internship.SocialNetworking.models.dto.FriendsDTO;
 import Internship.SocialNetworking.service.PersonServiceImpl;
-import Internship.SocialNetworking.service.iService.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,31 +15,42 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/personController")
+@RequestMapping(value = "/api/person")
 public class PersonController {
 
-    private final PersonServiceImpl personService;
+    private PersonServiceImpl personService;
 
-   public PersonController(PersonServiceImpl personService){
+    public PersonController(PersonServiceImpl personService) {
         this.personService = personService;
     }
 
+    @PostMapping(value = "/add-friend")
+    public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
+        Person add = personService.addFriend(friendsDTO.getPersonId(), friendsDTO.getFriendId());
 
-@GetMapping("")
+        if (add == null) {
+            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Person>(add, HttpStatus.OK);
+    }
+
+    @GetMapping("")
     public ResponseEntity<List<Person>> getAllPersons() {
-        var listPersons=personService.getAllPersons();
-       if(listPersons == null || listPersons.size() == 0) {
+        var listPersons = personService.getAllPersons();
+        if (listPersons == null || listPersons.size() == 0) {
             return new ResponseEntity<List<Person>>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Person>>(listPersons,HttpStatus.OK);
+        return new ResponseEntity<List<Person>>(listPersons, HttpStatus.OK);
 
     }
+
     //if user is invalid then exception handler is called
     @PostMapping("")
     public ResponseEntity<Person> addPersons(@Valid @RequestBody Person person) {
-        var per=personService.addPerson(person);
+        var per = personService.addPerson(person);
 
-        return new ResponseEntity<Person>(person,HttpStatus.OK);
+        return new ResponseEntity<Person>(person, HttpStatus.OK);
     }
 
     //this function prints validation errors
@@ -57,6 +66,5 @@ public class PersonController {
         });
         return errors;
     }
-
 
 }
