@@ -46,10 +46,9 @@ public class WebSecurityConfig {
     @Autowired
     private CustomUserDetailsService jwtUserDetailsService;
 
-    /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-    }*/
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,7 +74,6 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
         return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login","/api/person/add-friend");
-
     }
 
 }

@@ -4,19 +4,21 @@ package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 public class PersonServiceImpl implements PersonService {
 
     private PersonRepository personRepository;
 
+
     public PersonServiceImpl(PersonRepository personRepository){
         this.personRepository = personRepository;
     }
+
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -48,4 +50,20 @@ public class PersonServiceImpl implements PersonService {
 
         return null;
     }
+
+    public Person addPerson(Person person) {
+
+          if (personRepository.existsById(person.getPersonId())) {
+                return null;
+            }
+            var pers= personRepository.save(person);
+            return pers;
+    }
+
+    @Override
+    public List<Person> getAllPersons() {
+       return personRepository.findAll();
+
+    }
+
 }

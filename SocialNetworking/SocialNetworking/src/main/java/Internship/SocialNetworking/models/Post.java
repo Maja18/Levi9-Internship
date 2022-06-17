@@ -32,7 +32,7 @@ public class Post {
     private Long creatorId;
 
     @Column
-    private Date creationDate;
+    private Date creationData;
 
     @Column
     private boolean isOver;
