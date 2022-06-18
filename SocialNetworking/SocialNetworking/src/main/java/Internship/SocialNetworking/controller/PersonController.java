@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PersonController {
     private final PersonServiceImpl personService;
 
     @PostMapping(value = "/add-friend")
+    @RolesAllowed("ROLE_USER")
     public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
         Person add = personService.addFriend(friendsDTO.getPersonId(), friendsDTO.getFriendId());
 
@@ -38,6 +40,7 @@ public class PersonController {
     }
 
     @GetMapping("")
+    @RolesAllowed("ROLE_USER")
     public ResponseEntity<List<Person>> getAllPersons() {
         var listPersons = personService.getAllPersons();
         if (listPersons == null || listPersons.size() == 0) {

@@ -5,6 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6179afe6-7a3f-4d7c-a7e0-13c2b8c33fca" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/AuthorityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/AuthorityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/PersonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/security/auth/TokenAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/AuthorityServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/AuthorityServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/.idea/libraries/Maven__jakarta_validation_jakarta_validation_api_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_2_3_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_validation_2_7_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/dto/PostDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/GroupController.java" afterDir="false" />
@@ -27,6 +41,9 @@
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/GroupServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/AuthorityService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/AuthorityService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/GroupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/GroupService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/PersonService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/ChangeLog/changelog-master.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/ChangeLog/changelog-master.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +61,22 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -68,6 +101,8 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,

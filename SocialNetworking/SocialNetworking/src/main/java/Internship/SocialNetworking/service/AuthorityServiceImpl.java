@@ -31,7 +31,7 @@ public class AuthorityServiceImpl  implements AuthorityService {
 
     @Override
     public Authority findByName(String name) {
-        return authorityRepository.findByName(name);
+        return authorityRepository.findByNameEquals(name);
     }
 
     @Override

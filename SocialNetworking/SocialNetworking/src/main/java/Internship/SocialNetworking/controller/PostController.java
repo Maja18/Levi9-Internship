@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping(value = "/api/post", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class PostController {
     private final PersonServiceImpl personService;
 
     @PostMapping("/addNew")
-    //@PreAuthorize("hasRole('MEMBER')")
+    @RolesAllowed("ROLE_MEMBER")
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
         return (ResponseEntity<Post>) (response == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(response));

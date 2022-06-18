@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.models.dto;
+package Internship.SocialNetworking.dto;
 
 public class UserTokenStateDTO {
     private String accessToken;

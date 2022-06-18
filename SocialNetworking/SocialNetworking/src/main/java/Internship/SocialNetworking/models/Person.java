@@ -1,13 +1,15 @@
 package Internship.SocialNetworking.models;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -65,7 +67,19 @@ public class Person implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        List<SimpleGrantedAuthority> authorities1 = new ArrayList<>();
+        for(Authority a : authorities){
+            authorities1.add(new SimpleGrantedAuthority(a.getName()));
+
+        }
+
+        return authorities1 ;
+    }
+
+    public void addNewAuthority(String authority){
+        Authority auth = new Authority();
+        auth.setName(authority);
+        this.authorities.add(auth);
     }
 
     @Override

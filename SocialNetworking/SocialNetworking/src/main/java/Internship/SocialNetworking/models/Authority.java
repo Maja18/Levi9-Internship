@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class Authority implements GrantedAuthority {
+public class Authority  {
 
     @Id
     @Column(name = "authority_id")
@@ -22,7 +22,9 @@ public class Authority implements GrantedAuthority {
     private String name;
 
     @Override
-    public String getAuthority() {
-        return name;
+    public String toString(){
+        return this.name;
     }
+
+
 }
