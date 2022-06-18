@@ -1,12 +1,16 @@
 package Internship.SocialNetworking.models.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class PersonDTO {
     private Long personId;
     @NotBlank(message = "name is required")

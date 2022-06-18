@@ -29,7 +29,7 @@ public class PostServiceImpl implements PostService {
         for (Person member:members) {
             if (member.getPersonId().equals(postDTO.getUserId())) {
                 post.setPublic(postDTO.getIsPublic());
-                post.setGroup(group);
+                post.setGroupId(postDTO.getGroupId());
                 LocalDateTime currentDate = LocalDateTime.now();
                 post.setCreationDate(currentDate);
                 post.setCreatorId(postDTO.getUserId());

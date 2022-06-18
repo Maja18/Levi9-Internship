@@ -1,32 +1,33 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.models.Comment;
+import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.models.dto.CommentDTO;
 import Internship.SocialNetworking.repository.CommentRepository;
+import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CommentServiceImpl implements CommentService {
-    CommentRepository commentRepository;
-    PostRepository postRepository;
-    PersonRepository personRepository;
+import java.util.List;
 
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,
-                              PersonRepository personRepository){
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.personRepository = personRepository;
-    }
+@Service
+@RequiredArgsConstructor
+public class CommentServiceImpl implements CommentService {
+
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final PersonRepository personRepository;
+    private final GroupRepository groupRepository;
 
     @Override
     public Comment addComment(CommentDTO commentDTO) {
         Comment comment = new Comment();
-        boolean val = validation(commentDTO.getPostId(), commentDTO.getParentId(), commentDTO.getCreatorId());
+        boolean val = validation(commentDTO);
 
         if(val) {
             comment.setContent(commentDTO.getContent());
@@ -40,16 +41,23 @@ public class CommentServiceImpl implements CommentService {
         return null;
     }
 
-    private boolean validation(Long postId, Long parentId, Long creatorId) {
-        Post post = postRepository.getByPostId(postId);
-        Comment comment = commentRepository.getByCommentId(parentId);
-        Person person = personRepository.findByPersonId(creatorId);
+    private boolean validation(CommentDTO commentDTO) {
+        Post post = postRepository.findByPostId(commentDTO.getPostId());
+        Comment comment = commentRepository.findByCommentId(commentDTO.getParentId());
+        Person person = personRepository.findByPersonId(commentDTO.getCreatorId());
 
         if(post != null && person != null){
-            if(parentId != null && comment != null){
-                return true;
-            }else if(parentId == null){
-                return true;
+            GroupNW group = groupRepository.findByGroupId(post.getGroupId());
+            List<Person> members = group.getMembers();
+
+            for (Person p: members){
+                if(p.getPersonId() == commentDTO.getCreatorId()){
+                    if(commentDTO.getParentId() != null && comment != null){
+                        return true;
+                    }else if(commentDTO.getParentId() == null){
+                        return true;
+                    }
+                }
             }
 
             return false;

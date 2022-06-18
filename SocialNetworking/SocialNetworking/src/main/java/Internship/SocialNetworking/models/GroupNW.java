@@ -1,13 +1,15 @@
 package Internship.SocialNetworking.models;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 public class GroupNW {
     @Id
@@ -32,8 +34,11 @@ public class GroupNW {
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
     private List<Person> members;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+   /* @JsonBackReference
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)*/
+    @ManyToMany
+    @JoinTable(name = "group_posts", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
     private List<Post> posts;
 
 }

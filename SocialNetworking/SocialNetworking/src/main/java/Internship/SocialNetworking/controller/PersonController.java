@@ -3,11 +3,11 @@ package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.models.Person;
 
 import Internship.SocialNetworking.models.dto.PersonDTO;
-import Internship.SocialNetworking.repository.PersonRepository;
 
 import Internship.SocialNetworking.models.dto.FriendsDTO;
 
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,16 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-
 @RequestMapping(value = "/api/person")
-
+@RequiredArgsConstructor
 public class PersonController {
 
-    private PersonServiceImpl personService;
-
-    public PersonController(PersonServiceImpl personService) {
-        this.personService = personService;
-    }
+    private final PersonServiceImpl personService;
 
     @PostMapping(value = "/add-friend")
     public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
