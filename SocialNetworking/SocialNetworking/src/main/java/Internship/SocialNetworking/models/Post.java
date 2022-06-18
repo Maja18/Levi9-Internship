@@ -1,15 +1,16 @@
 package Internship.SocialNetworking.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 public class Post {
 
@@ -31,7 +32,7 @@ public class Post {
     @Column
     private boolean isPublic;
 
-    @Column
+    @Column(name = "creator_id", nullable = false)
     private Long creatorId;
 
     @Column
@@ -45,8 +46,8 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
     private List<Person> blockedPersons;
 
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="group_id")
-    private GroupNW group;
+    /*@JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)*/
+    @Column(name="group_id")
+    private Long groupId;
 }

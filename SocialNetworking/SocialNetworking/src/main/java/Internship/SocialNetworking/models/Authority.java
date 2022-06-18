@@ -1,11 +1,15 @@
 package Internship.SocialNetworking.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 public class Authority  {
 
