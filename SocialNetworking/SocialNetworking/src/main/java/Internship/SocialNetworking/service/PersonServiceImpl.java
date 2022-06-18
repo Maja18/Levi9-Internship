@@ -4,18 +4,16 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-    private PersonRepository personRepository;
-
-    public PersonServiceImpl(PersonRepository personRepository){
-        this.personRepository = personRepository;
-    }
+    private final PersonRepository personRepository;
 
     @Override
     public Person findByEmailEquals(String email) {

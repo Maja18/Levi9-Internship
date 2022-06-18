@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
     Authority findByAuthorityId(Long id);
-    Authority findByName(String name);
+    Authority findByNameEquals(String name);
 }

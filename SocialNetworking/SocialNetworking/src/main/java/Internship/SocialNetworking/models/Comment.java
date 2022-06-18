@@ -1,27 +1,32 @@
 package Internship.SocialNetworking.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+
 @Entity
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id", nullable = false)
+
     private Long commentId;
 
     @Column
     private String content;
 
-    @Column
+    @Column(name = "post_id", nullable = false)
     private Long postId;
 
-    @Column
+    @Column(name = "parent_id", nullable = false)
     private Long parentId;
 
-    @Column
+    @Column(name = "creator_id", nullable = false)
     private Long creatorId;
 
 }

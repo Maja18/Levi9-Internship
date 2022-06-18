@@ -33,12 +33,12 @@
             <column name="post_id" type="bigint">
                 <constraints primaryKey="true" primaryKeyName="post_id_pk" />
             </column>
-            <column name="content" type="TEXT"/>
+            <column name="description" type="TEXT"/>
             <column name="image_url" type="varchar(250)"/>
             <column name="video_url" type="varchar(250)"/>
             <column name="creation_date" type="DATETIME"/>
-            <column name="is_public" type="boolean"/>
-            <column name="is_over" type="boolean"/>
+            <column name="is_public" type="TINYINT"/>
+            <column name="is_over" type="TINYINT"/>
             <column name="creator_id" type="bigint"/>
             <column name="group_id" type="bigint"/>
         </createTable>
@@ -46,8 +46,7 @@
             <column name="comment_id" type="bigint">
                 <constraints primaryKey="true" primaryKeyName="comment_id_pk" />
             </column>
-            <column name="content" type="varchar(250)"/>
-            <column name="description" type="varchar(250)"/>
+            <column name="content" type="LONGTEXT"/>
             <column name="post_id" type="bigint"/>
             <column name="parent_id" type="bigint"/>
             <column name="creator_id" type="bigint"/>
@@ -80,6 +79,10 @@
         <createTable tableName="group_persons">
             <column name="group_id" type="bigint"/>
             <column name="person_id" type="bigint"/>
+        </createTable>
+        <createTable tableName="group_posts">
+            <column name="group_id" type="bigint"/>
+            <column name="post_id" type="bigint"/>
         </createTable>
         <createTable tableName="event_persons">
             <column name="event_id" type="bigint"/>
@@ -124,5 +127,7 @@
         <addForeignKeyConstraint baseTableName="block_persons" baseColumnNames="person_id" constraintName="block_persons_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="user_authority" baseColumnNames="authority_id" constraintName="authority_persons_authority_id_fk" referencedTableName="authority" referencedColumnNames="authority_id" />
         <addForeignKeyConstraint baseTableName="user_authority" baseColumnNames="person_id" constraintName="authority_persons_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
+        <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="group_id" constraintName="group_posts_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
+        <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="post_id" constraintName="group_posts_post_id_fk" referencedTableName="post" referencedColumnNames="post_id" />
     </changeSet>
 </databaseChangeLog>

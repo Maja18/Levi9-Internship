@@ -1,10 +1,14 @@
 package Internship.SocialNetworking.models.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class PostDTO {
-    private String content;
+    private String description;
     private String imageUrl;
     private String videoUrl;
     private Boolean isPublic;
