@@ -26,7 +26,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PersonController {
 
-    private final PersonServiceImpl personService;
+    private final  PersonServiceImpl personService;
+
 
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
@@ -64,11 +65,13 @@ public class PersonController {
 
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMembersOfGroup(Long personId) {
-        String deletedUser=personService.DeletePerson(personId);
+    @DeleteMapping("{groupId}/{personId}")
+    public ResponseEntity<String> deleteMembersOfGroup(@PathVariable Long groupId,@PathVariable Long personId) {
+
+        String deletedUser=personService.deletePerson(groupId,personId);
         if(deletedUser == null) {
-            return new ResponseEntity<String>("User is not a member of group",
+            return new ResponseEntity<String>("Either group does not exist or user is not" +
+                    "a member of a group",
                     HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>("Successfully deleted member of group",HttpStatus.OK);

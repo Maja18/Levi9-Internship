@@ -15,6 +15,6 @@ public interface PersonService {
     Person addPerson(PersonDTO person);
     Person addFriend(Long personId, Long friendId);
 
-    String DeletePerson(Long personId);
+    String deletePerson(Long groupId,Long personId);
     List<Person> getAllPersons();
 }
