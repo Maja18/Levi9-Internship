@@ -1,7 +1,10 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.dto.PersonDTO;
+import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
+import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-    private final PersonRepository personRepository;
+    private final  PersonRepository personRepository;
+    private final GroupRepository groupRepository;
+
+
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -66,6 +72,26 @@ public class PersonServiceImpl implements PersonService {
             return null;
         }
 
+        return null;
+    }
+
+    @Override
+    public String deletePerson(Long groupId,Long personId) {
+
+        GroupNW group = groupRepository.findByGroupId(groupId);
+
+
+     if (group != null) {
+         for (int i = 0; i < group.getMembers().size(); i++) {
+             Long personMemberId = group.getMembers().get(i).getPersonId();
+             if (personId == personMemberId) {
+                 Person personToRemove=group.getMembers().get(i);
+                 group.getMembers().remove(personToRemove);
+                 personRepository.save(personToRemove);
+                 return "Successfully deleted member of group";
+             }
+         }
+        }
         return null;
     }
 

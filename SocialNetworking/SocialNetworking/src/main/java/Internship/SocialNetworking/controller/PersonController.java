@@ -10,6 +10,7 @@ import Internship.SocialNetworking.service.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PersonController {
 
-    private final PersonServiceImpl personService;
+    private final  PersonServiceImpl personService;
+
 
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
@@ -61,6 +63,18 @@ public class PersonController {
 
         return new ResponseEntity<Person>(per,HttpStatus.OK);
 
+    }
+
+    @DeleteMapping("{groupId}/{personId}")
+    public ResponseEntity<String> deleteMembersOfGroup(@PathVariable Long groupId,@PathVariable Long personId) {
+
+        String deletedUser=personService.deletePerson(groupId,personId);
+        if(deletedUser == null) {
+            return new ResponseEntity<String>("Either group does not exist or user is not" +
+                    "a member of a group",
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("Successfully deleted member of group",HttpStatus.OK);
     }
 
     //this function prints validation errors
