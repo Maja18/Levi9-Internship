@@ -1,4 +1,5 @@
 package Internship.SocialNetworking.controller;
+import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.models.dto.PostDTO;
 import Internship.SocialNetworking.service.PersonServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/post", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -23,8 +25,21 @@ public class PostController {
     @RolesAllowed("ROLE_MEMBER")
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
-        return (ResponseEntity<Post>) (response == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(response));
 
+        return (ResponseEntity<Post>) (response == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(response));
+
+    }
+
+    @GetMapping("/posts/{user-id}")
+    @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
+    ResponseEntity<List<Post>> getAllUserPosts(@PathVariable(name="user-id") Long userId)
+    {
+        System.out.println(("*****************************"));
+        List<Post> posts =postService.getAllUserPosts(userId);
+
+        return posts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
     }
 
 
