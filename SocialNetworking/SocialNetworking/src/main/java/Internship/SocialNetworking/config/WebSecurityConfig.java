@@ -91,6 +91,7 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
 
        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/swagger-ui.html", "/v2/api-docs");
+
     }
 
 }
