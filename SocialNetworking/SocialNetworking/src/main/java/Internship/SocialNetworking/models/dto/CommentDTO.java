@@ -16,6 +16,4 @@ public class CommentDTO {
     @NotNull
     private Long postId;
     private Long parentId;
-    @NotNull
-    private Long creatorId;
 }

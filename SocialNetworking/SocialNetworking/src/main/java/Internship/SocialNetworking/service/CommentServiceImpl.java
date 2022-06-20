@@ -13,6 +13,7 @@ import Internship.SocialNetworking.service.iService.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,15 +26,16 @@ public class CommentServiceImpl implements CommentService {
     private final GroupRepository groupRepository;
 
     @Override
-    public Comment addComment(CommentDTO commentDTO) {
+    public Comment addComment(CommentDTO commentDTO, Long creatorId) {
         Comment comment = new Comment();
-        boolean val = validation(commentDTO);
+        boolean val = validation(commentDTO, creatorId);
 
         if(val) {
             comment.setContent(commentDTO.getContent());
             comment.setPostId(commentDTO.getPostId());
             comment.setParentId(commentDTO.getParentId());
-            comment.setCreatorId(commentDTO.getCreatorId());
+            comment.setCreatorId(creatorId);
+            comment.setCreationDate(LocalDateTime.now());
 
             return commentRepository.save(comment);
         }
@@ -41,19 +43,19 @@ public class CommentServiceImpl implements CommentService {
         return null;
     }
 
-    private boolean validation(CommentDTO commentDTO) {
+    private boolean validation(CommentDTO commentDTO, Long creatorId) {
         Post post = postRepository.findByPostId(commentDTO.getPostId());
         Comment comment = commentRepository.findByCommentId(commentDTO.getParentId());
-        Person person = personRepository.findByPersonId(commentDTO.getCreatorId());
+        Person person = personRepository.findByPersonId(creatorId);
 
         if(post != null && person != null){
             GroupNW group = groupRepository.findByGroupId(post.getGroupId());
             List<Person> members = group.getMembers();
 
             for (Person p: members){
-                if(p.getPersonId() == commentDTO.getCreatorId()){
-                    if(commentDTO.getParentId() != null && comment != null){
-                        return true;
+                if(p.getPersonId() == creatorId){
+                    if(comment != null && comment.getPostId() == post.getPostId()){
+                            return true;
                     }else if(commentDTO.getParentId() == null){
                         return true;
                     }
