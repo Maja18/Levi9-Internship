@@ -19,4 +19,5 @@ public interface PersonService {
 
     String deletePerson(Long groupId,Long personId);
     List<Person> getAllPersons();
+    Person removeFriend(Long personId, Long friendId);
 }

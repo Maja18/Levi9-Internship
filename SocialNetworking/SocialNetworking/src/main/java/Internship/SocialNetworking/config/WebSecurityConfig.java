@@ -69,8 +69,15 @@ public class WebSecurityConfig {
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
+
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+
+
+
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
         http.csrf().disable();
+
         return http.build();
 
     }
@@ -82,7 +89,8 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
+
+       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/swagger-ui.html", "/v2/api-docs");
 
     }
 

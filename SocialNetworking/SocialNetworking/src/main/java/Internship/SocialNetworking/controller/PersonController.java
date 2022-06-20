@@ -1,5 +1,12 @@
 package Internship.SocialNetworking.controller;
 
+
+import Internship.SocialNetworking.service.PersonServiceImpl;
+import Internship.SocialNetworking.service.iService.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RestController;
+
 import Internship.SocialNetworking.models.Person;
 
 import Internship.SocialNetworking.models.dto.PersonDTO;
@@ -22,10 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonController {
+
 
     private final  PersonServiceImpl personService;
 
@@ -33,13 +42,31 @@ public class PersonController {
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
-        Person add = personService.addFriend(friendsDTO.getPersonId(), friendsDTO.getFriendId());
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+
+        Person add = personService.addFriend(userWithId.getPersonId(), friendsDTO.getFriendId());
 
         if (add == null) {
             return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<Person>(add, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/remove-friend/{friendId}")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<Person> removeFriend(@PathVariable(name = "friendId") Long friendId) {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+
+        Person remove = personService.removeFriend(userWithId.getPersonId(), friendId);
+
+        if (remove == null) {
+            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Person>(remove, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -104,5 +131,6 @@ public class PersonController {
         });
         return errors;
     }
+
 
 }
