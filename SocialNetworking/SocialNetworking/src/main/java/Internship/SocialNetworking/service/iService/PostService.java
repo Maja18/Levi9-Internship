@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface PostService {
     Post addNewPost(PostDTO postDTO);
-    void addPostToGroup(PostDTO postDTO, Post post, GroupNW group);
-    void addPostOutsideGroup(PostDTO postDTO, Post post);
     List<Post> getAllUserPosts(Long userId);
 }

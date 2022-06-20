@@ -41,7 +41,6 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
-    @Override
     public void addPostToGroup(PostDTO postDTO, Post post, GroupNW group) {
         List<Person> members= group.getMembers();
         for (Person member:members) {
@@ -58,7 +57,6 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @Override
     public void addPostOutsideGroup(PostDTO postDTO, Post post) {
         post.setPublic(postDTO.getIsPublic());
         LocalDateTime currentDate = LocalDateTime.now();
@@ -71,41 +69,41 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getAllUserPosts(Long userId) {
-        //dobavi sve postove iz baze za tog usera
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         Person loggedPerson = (Person) currentUser.getPrincipal();
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
         List<Post> posts = new ArrayList<>();
-        //postovi su objavljeni u grupi ukoliko imaju id grupe
         for (Post p: allPosts) {
             if (p.getGroupId() != null){
-                //postovi u grupi
-                GroupNW group = groupRepository.findByGroupId(p.getGroupId());
-                List<Person> groupMembers = group.getMembers();
-                for (Person member:groupMembers) {
-                    if (member.getPersonId().equals(loggedPerson.getPersonId())){
-                        //ako sam ja clan grupe mogu sve da vidim
-                        posts.add(p);
-                    }else if(group.isPublic()){  //ako nisam clan mogu da vidim objave samo ako je grupa public
-                        posts.add(p);
-                    }
-                }
-            }else{  //ako je objava van grupe
-                for (Person friend: personFriends) {
-                    if (friend.getPersonId().equals(loggedPerson.getPersonId())) {
-                        //ako sam ja prijatelj mogu sve da vidim
-                        posts.add(p);
-                    }else{
-                        //ako nisam mogu samo javne postove
-                        if (p.isPublic()){
-                            posts.add(p);
-                        }
-                    }
-                }
+                getAllGroupPosts(loggedPerson, posts, p);
+            }else{
+                getAllNotGroupPosts(loggedPerson, personFriends, posts, p);
             }
         }
         return posts;
+    }
+
+    private void getAllNotGroupPosts(Person loggedPerson, List<Person> personFriends, List<Post> posts, Post p) {
+        for (Person friend : personFriends) {
+            if (friend.getPersonId().equals(loggedPerson.getPersonId())) {
+                posts.add(p);
+            } else if (p.isPublic()) {
+                    posts.add(p);
+                }
+            }
+    }
+
+    private void getAllGroupPosts(Person loggedPerson, List<Post> posts, Post p) {
+        GroupNW group = groupRepository.findByGroupId(p.getGroupId());
+        List<Person> groupMembers = group.getMembers();
+        for (Person member:groupMembers) {
+            if (member.getPersonId().equals(loggedPerson.getPersonId())){
+                posts.add(p);
+            }else if(group.isPublic()){
+                posts.add(p);
+            }
+        }
     }
 }

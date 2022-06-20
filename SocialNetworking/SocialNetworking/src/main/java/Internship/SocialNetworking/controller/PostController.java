@@ -21,7 +21,7 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PersonServiceImpl personService;
 
-    @PostMapping("/addNew")
+    @PostMapping("/add")
     @RolesAllowed("ROLE_MEMBER")
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
@@ -35,7 +35,6 @@ public class PostController {
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     ResponseEntity<List<Post>> getAllUserPosts(@PathVariable(name="user-id") Long userId)
     {
-        System.out.println(("*****************************"));
         List<Post> posts =postService.getAllUserPosts(userId);
 
         return posts == null ?
