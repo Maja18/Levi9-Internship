@@ -1,7 +1,6 @@
 package Internship.SocialNetworking.controller;
-import Internship.SocialNetworking.models.GroupNW;
+import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.models.Post;
-import Internship.SocialNetworking.models.dto.PostDTO;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import Internship.SocialNetworking.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
