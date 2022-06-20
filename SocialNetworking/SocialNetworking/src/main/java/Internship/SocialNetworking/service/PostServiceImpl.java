@@ -7,6 +7,7 @@ import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,17 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    private GroupRepository groupRepository;
-    private PostRepository postRepository;
-    private PersonRepository personRepository;
-
-    public PostServiceImpl(GroupRepository groupRepository,PostRepository postRepository,PersonRepository personRepository){
-        this.groupRepository = groupRepository;
-        this.postRepository = postRepository;
-        this.personRepository = personRepository;
-    }
+    private final GroupRepository groupRepository;
+    private final  PostRepository postRepository;
+    private final PersonRepository personRepository;
 
     @Override
     public Post addNewPost(PostDTO postDTO){

@@ -1,24 +1,28 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.controller.GroupRequestController;
 import Internship.SocialNetworking.models.GroupNW;
+import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.models.RequestStatus;
+import Internship.SocialNetworking.models.dto.GroupRequestDTO;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.GroupRepository;
+import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
-
     private final  PersonRepository personRepository;
+
+    private  final GroupRequestRepository groupRequestRepository;
     private final GroupRepository groupRepository;
-
-
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -58,20 +62,54 @@ public class PersonServiceImpl implements PersonService {
         if(person != null && friend != null){
             if(person.getPersonId() != friend.getPersonId()){
                 List<Person> listFriends = person.getFriends();
-                for (Person p: listFriends)
-                {
-                    if(p.getPersonId() == friendId){
+
+                if(listFriends.stream().anyMatch(f -> f.getPersonId() == friendId)){
                         return null;
-                    }
                 }
+
                 listFriends.add(friend);
                 person.setFriends(listFriends);
                 return personRepository.save(person);
             }
-
-            return null;
         }
 
+        return null;
+    }
+
+    public Person removeFriend(Long personId, Long friendId) {
+        Person person = personRepository.findByPersonId(personId);
+        Person friend = personRepository.findByPersonId(friendId);
+
+        if(person!= null && friend != null){
+            List<Person> friendList = person.getFriends();
+            if(friendList.stream().anyMatch(f -> f.getPersonId() == friendId)){
+                friendList.remove(friend);
+                return personRepository.save(person);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String addPersonToGroup(Long groupId,Long personId) {
+        GroupNW group=groupRepository.findByGroupId(groupId);
+        if(group!=null) {
+            Person addingPerson=personRepository.findByPersonId(personId);
+            if(group.isPublic()) {
+                group.getMembers().add(addingPerson);
+                personRepository.save(addingPerson);
+                return "Successfully added user to a group";
+            }
+            else {
+                //creating a request to send
+                GroupRequest accessRequest=new GroupRequest();
+                accessRequest.setGroupId(groupId);
+                accessRequest.setRequestStatus(RequestStatus.PENDING);
+                accessRequest.setCreatorId(addingPerson.getPersonId());
+                groupRequestRepository.save(accessRequest);
+                return "Added on pending";
+            }
+        }
         return null;
     }
 

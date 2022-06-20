@@ -8,6 +8,5 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class FriendsDTO {
-    private Long personId;
     private Long friendId;
 }

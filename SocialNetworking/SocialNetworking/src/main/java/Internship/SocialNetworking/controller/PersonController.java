@@ -1,5 +1,12 @@
 package Internship.SocialNetworking.controller;
 
+
+import Internship.SocialNetworking.service.PersonServiceImpl;
+import Internship.SocialNetworking.service.iService.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RestController;
+
 import Internship.SocialNetworking.models.Person;
 
 import Internship.SocialNetworking.models.dto.PersonDTO;
@@ -11,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonController {
+
 
     private final  PersonServiceImpl personService;
 
@@ -32,13 +42,31 @@ public class PersonController {
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
-        Person add = personService.addFriend(friendsDTO.getPersonId(), friendsDTO.getFriendId());
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+
+        Person add = personService.addFriend(userWithId.getPersonId(), friendsDTO.getFriendId());
 
         if (add == null) {
             return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<Person>(add, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/remove-friend/{friendId}")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<Person> removeFriend(@PathVariable(name = "friendId") Long friendId) {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+
+        Person remove = personService.removeFriend(userWithId.getPersonId(), friendId);
+
+        if (remove == null) {
+            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<Person>(remove, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -63,6 +91,19 @@ public class PersonController {
 
         return new ResponseEntity<Person>(per,HttpStatus.OK);
 
+    }
+    @PostMapping("add-to-group/{groupId}")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<String> addPersonToGroup(@PathVariable Long groupId) {
+        //getting data from logged user
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Long loggedPersonId=userWithId.getPersonId();
+        String personToAdd=personService.addPersonToGroup(groupId,loggedPersonId);
+        if(personToAdd== null) {
+            return new ResponseEntity<String>("There is no such group",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("User added on pending and needs approval",HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/{personId}")
@@ -90,5 +131,6 @@ public class PersonController {
         });
         return errors;
     }
+
 
 }

@@ -21,7 +21,7 @@ public class PostController {
     private final PersonServiceImpl personService;
 
     @PostMapping("/add")
-    @RolesAllowed("ROLE_MEMBER")
+    @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
 

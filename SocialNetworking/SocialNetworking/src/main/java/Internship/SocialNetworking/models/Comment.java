@@ -3,6 +3,8 @@ package Internship.SocialNetworking.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -28,5 +30,8 @@ public class Comment {
 
     @Column(name = "creator_id", nullable = false)
     private Long creatorId;
+
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
 
 }
