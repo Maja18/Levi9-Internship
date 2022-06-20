@@ -43,6 +43,12 @@ public class CommentServiceImpl implements CommentService {
         return null;
     }
 
+    @Override
+    public List<Comment> getCommentsByPostId(Long postId) {
+        List<Comment> commentList = commentRepository.findByPostIdOrderByCreationDateDesc(postId);
+        return commentList;
+    }
+
     private boolean validation(CommentDTO commentDTO, Long creatorId) {
         Post post = postRepository.findByPostId(commentDTO.getPostId());
         Comment comment = commentRepository.findByCommentId(commentDTO.getParentId());
