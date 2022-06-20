@@ -70,8 +70,8 @@ public class WebSecurityConfig {
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
 
-                .antMatchers("http://localhost:8080/v2/api-docs").permitAll()
-                .antMatchers("http://localhost:8080/swagger-ui.html").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
 
 
 
@@ -90,7 +90,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
 
-       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
+       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/swagger-ui.html", "/v2/api-docs");
     }
 
 }
