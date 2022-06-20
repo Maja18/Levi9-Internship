@@ -78,15 +78,30 @@ public class PostServiceImpl implements PostService {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
         List<Post> posts = new ArrayList<>();
+        //postovi su objavljeni u grupi ukoliko imaju id grupe
         for (Post p: allPosts) {
-            for (Person friend: personFriends) {
-                if (friend.getPersonId().equals(loggedPerson.getPersonId())) {
-                    //ako sam ja prijatelj mogu sve da vidim
-                    posts.add(p);
-                }else{
-                    //ako nisam mogu samo javne postove
-                    if (p.isPublic()){
+            if (p.getGroupId() != null){
+                //postovi u grupi
+                GroupNW group = groupRepository.findByGroupId(p.getGroupId());
+                List<Person> groupMembers = group.getMembers();
+                for (Person member:groupMembers) {
+                    if (member.getPersonId().equals(loggedPerson.getPersonId())){
+                        //ako sam ja clan grupe mogu sve da vidim
                         posts.add(p);
+                    }else if(group.isPublic()){  //ako nisam clan mogu da vidim objave samo ako je grupa public
+                        posts.add(p);
+                    }
+                }
+            }else{  //ako je objava van grupe
+                for (Person friend: personFriends) {
+                    if (friend.getPersonId().equals(loggedPerson.getPersonId())) {
+                        //ako sam ja prijatelj mogu sve da vidim
+                        posts.add(p);
+                    }else{
+                        //ako nisam mogu samo javne postove
+                        if (p.isPublic()){
+                            posts.add(p);
+                        }
                     }
                 }
             }
