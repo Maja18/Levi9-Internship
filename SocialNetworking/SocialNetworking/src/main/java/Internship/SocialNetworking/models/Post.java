@@ -42,7 +42,7 @@ public class Post {
     private boolean isOver;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "blocked_posts_blocked_persons", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"),
+    @JoinTable(name = "block_persons", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
     private List<Person> blockedPersons;
 

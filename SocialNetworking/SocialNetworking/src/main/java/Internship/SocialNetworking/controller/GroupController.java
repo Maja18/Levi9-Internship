@@ -1,5 +1,4 @@
 package Internship.SocialNetworking.controller;
-
 import Internship.SocialNetworking.dto.GroupDTO;
 import Internship.SocialNetworking.service.GroupServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -9,17 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import Internship.SocialNetworking.models.GroupNW;
-
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
-
-
 import javax.validation.Valid;
 
 @RestController
