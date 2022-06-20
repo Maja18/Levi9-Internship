@@ -4,5 +4,5 @@ import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.dto.CommentDTO;
 
 public interface CommentService {
-    Comment addComment(CommentDTO commentDTO);
+    Comment addComment(CommentDTO commentDTO, Long creatorId);
 }

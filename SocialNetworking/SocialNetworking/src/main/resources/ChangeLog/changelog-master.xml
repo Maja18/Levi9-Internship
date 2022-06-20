@@ -50,6 +50,7 @@
             <column name="post_id" type="bigint"/>
             <column name="parent_id" type="bigint"/>
             <column name="creator_id" type="bigint"/>
+            <column name="creation_date" type="DATETIME"/>
         </createTable>
         <createTable tableName="event">
             <column name="event_id" type="bigint">
