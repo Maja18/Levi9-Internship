@@ -9,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/comment")
@@ -35,6 +34,18 @@ public class CommentController {
         }
 
         return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{postId}")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<List<Comment>> showComment(@PathVariable(name = "postId") Long postId) {
+        List<Comment> comments = commentService.getCommentsByPostId(postId);
+
+        if (comments == null) {
+            return new ResponseEntity<List<Comment>>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
     }
 
 }
