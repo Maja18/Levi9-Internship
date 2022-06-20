@@ -58,6 +58,9 @@ public class WebSecurityConfig {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }*/
 
+    public static final String[] AUTH_WHITELIST = {
+            "/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**"
+    };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -69,12 +72,10 @@ public class WebSecurityConfig {
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
-
-                .antMatchers("http://localhost:8080/v2/api-docs").permitAll()
-                .antMatchers("http://localhost:8080/swagger-ui.html").permitAll()
-
-
-
+                .antMatchers("/v2/api-docs/**").permitAll()
+                .antMatchers( "/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
         http.csrf().disable();
 
@@ -90,7 +91,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
 
-       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
+       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login").antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html");
     }
 
 }
