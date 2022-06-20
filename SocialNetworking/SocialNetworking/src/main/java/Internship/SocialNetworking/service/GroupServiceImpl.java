@@ -4,6 +4,7 @@ package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.GroupDTO;
 
 import Internship.SocialNetworking.models.GroupNW;
+import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.service.iService.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -60,4 +61,13 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByNameEquals(name);
     }
 
+    @Override
+    public boolean checkIfGroupMember(Long groupId, Long userId) {
+        GroupNW group = groupRepository.findByGroupId(groupId);
+        boolean match = group.getMembers().stream()
+                .anyMatch(user -> user.getPersonId() == userId);
+
+
+        return match;
+    }
 }

@@ -38,12 +38,16 @@ public class EventServiceImpl implements EventService {
 
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        boolean isMember = groupService.checkIfGroupMember(eventDTO.getGroupId(), userWithId.getPersonId());
 
         if(groupExists.isEmpty()){
             return "That group does not exist, please try again";
         }
         else if(eventExists.isPresent()){
             return "Event with that name already exists, please enter new one";
+        }
+        else if(!isMember){
+            return "User must be a group member to make an event";
         }
         Event event = new Event();
         event.setCreatorId(userWithId.getPersonId());
