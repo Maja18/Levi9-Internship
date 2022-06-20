@@ -1,16 +1,23 @@
 package Internship.SocialNetworking.models;
 
+
+import lombok.*;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+
 import javax.persistence.*;
+
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
+//@org.springframework.data.relational.core.mapping.Table
 public class GroupNW {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

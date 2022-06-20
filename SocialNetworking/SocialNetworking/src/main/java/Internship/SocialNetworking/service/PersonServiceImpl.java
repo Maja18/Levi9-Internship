@@ -15,8 +15,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
+
+
+
+
+
+
     private final  PersonRepository personRepository;
     private final GroupRepository groupRepository;
+
 
 
 
@@ -99,5 +106,6 @@ public class PersonServiceImpl implements PersonService {
     public List<Person> getAllPersons() {
        return personRepository.findAll();
     }
+
 
 }

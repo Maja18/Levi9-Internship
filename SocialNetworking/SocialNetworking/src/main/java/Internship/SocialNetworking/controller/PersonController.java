@@ -1,5 +1,11 @@
 package Internship.SocialNetworking.controller;
 
+
+import Internship.SocialNetworking.service.PersonServiceImpl;
+import Internship.SocialNetworking.service.iService.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
 import Internship.SocialNetworking.models.Person;
 
 import Internship.SocialNetworking.models.dto.PersonDTO;
@@ -21,10 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonController {
+
 
     private final  PersonServiceImpl personService;
 
@@ -90,5 +98,6 @@ public class PersonController {
         });
         return errors;
     }
+
 
 }

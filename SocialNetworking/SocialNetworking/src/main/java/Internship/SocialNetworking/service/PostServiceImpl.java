@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private GroupRepository groupRepository;
-    private PostRepository postRepository;
+    private final GroupRepository groupRepository;
+    private final PostRepository postRepository;
 
     public PostServiceImpl(GroupRepository groupRepository,PostRepository postRepository){
         this.groupRepository = groupRepository;
