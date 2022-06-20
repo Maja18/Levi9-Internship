@@ -25,6 +25,18 @@ public class PostServiceImpl implements PostService {
     public Post addNewPost(PostDTO postDTO){
         Post post = new Post();
         GroupNW group = groupRepository.findByGroupId(postDTO.getGroupId());
+        if (group == null){
+            addPostOutsideGroup(postDTO, post);
+        }else{
+            addPostToGroup(postDTO, post, group);
+        }
+        postRepository.save(post);
+
+        return post;
+    }
+
+    @Override
+    public void addPostToGroup(PostDTO postDTO, Post post, GroupNW group) {
         List<Person> members= group.getMembers();
         for (Person member:members) {
             if (member.getPersonId().equals(postDTO.getUserId())) {
@@ -36,10 +48,18 @@ public class PostServiceImpl implements PostService {
                 post.setDescription(postDTO.getDescription());
                 post.setImageUrl(postDTO.getImageUrl());
                 post.setVideoUrl(postDTO.getVideoUrl());
-                }
             }
-        postRepository.save(post);
+        }
+    }
 
-        return post;
+    @Override
+    public void addPostOutsideGroup(PostDTO postDTO, Post post) {
+        post.setPublic(postDTO.getIsPublic());
+        LocalDateTime currentDate = LocalDateTime.now();
+        post.setCreationDate(currentDate);
+        post.setCreatorId(postDTO.getUserId());
+        post.setDescription(postDTO.getDescription());
+        post.setImageUrl(postDTO.getImageUrl());
+        post.setVideoUrl(postDTO.getVideoUrl());
     }
 }
