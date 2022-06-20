@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,19 @@ public class PersonController {
 
         return new ResponseEntity<Person>(per,HttpStatus.OK);
 
+    }
+    @PostMapping("add-to-group/{groupId}")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<String> addPersonToGroup(@PathVariable Long groupId) {
+        //getting data from logged user
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Long loggedPersonId=userWithId.getPersonId();
+        String personToAdd=personService.addPersonToGroup(groupId,loggedPersonId);
+        if(personToAdd== null) {
+            return new ResponseEntity<String>("There is no such group",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("User added on pending and needs approval",HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/{personId}")

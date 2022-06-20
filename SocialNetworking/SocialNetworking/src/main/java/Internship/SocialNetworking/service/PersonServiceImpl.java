@@ -1,14 +1,20 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.controller.GroupRequestController;
 import Internship.SocialNetworking.models.GroupNW;
+import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
+import Internship.SocialNetworking.models.RequestStatus;
+import Internship.SocialNetworking.models.dto.GroupRequestDTO;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 import Internship.SocialNetworking.repository.GroupRepository;
+import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -16,6 +22,8 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
     private final  PersonRepository personRepository;
+
+    private  final GroupRequestRepository groupRequestRepository;
     private final GroupRepository groupRepository;
 
 
@@ -72,6 +80,29 @@ public class PersonServiceImpl implements PersonService {
             return null;
         }
 
+        return null;
+    }
+
+    @Override
+    public String addPersonToGroup(Long groupId,Long personId) {
+        GroupNW group=groupRepository.findByGroupId(groupId);
+        if(group!=null) {
+            Person addingPerson=personRepository.findByPersonId(personId);
+            if(group.isPublic()) {
+                group.getMembers().add(addingPerson);
+                personRepository.save(addingPerson);
+                return "Successfully added user to a group";
+            }
+            else {
+                //creating a request to send
+                GroupRequest accessRequest=new GroupRequest();
+                accessRequest.setGroupId(groupId);
+                accessRequest.setRequestStatus(RequestStatus.PENDING);
+                accessRequest.setCreatorId(addingPerson.getPersonId());
+                groupRequestRepository.save(accessRequest);
+                return "Added on pending";
+            }
+        }
         return null;
     }
 
