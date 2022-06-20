@@ -6,13 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="6179afe6-7a3f-4d7c-a7e0-13c2b8c33fca" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/dto/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/dto/CommentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/CommentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/CommentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/CommentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/ChangeLog/changelog-master.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/ChangeLog/changelog-master.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
