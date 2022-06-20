@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
@@ -36,14 +37,15 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public String createGroup(GroupDTO groupDTO) {
-        if(getByName(groupDTO.getName()) != null){
+        Optional<GroupNW> grNameCheck = Optional.ofNullable(getByName(groupDTO.getName()));
+        if(grNameCheck.isPresent()){
             return "Group name already exists, make a new one!";
         }
         else {
             GroupNW groupNW = new GroupNW();
             groupNW.setCreatorId(groupDTO.getCreatorId());
             groupNW.setDescription(groupDTO.getDescription());
-            //groupNW.setPublic(groupDTO.isPublic());
+            groupNW.setPublic(groupDTO.getIsPublic());
             groupNW.setName(groupDTO.getName());
             save(groupNW);
             return "Group successfully made!";

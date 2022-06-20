@@ -1,13 +1,18 @@
 package Internship.SocialNetworking.models;
 
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
+@NoArgsConstructor
 //@org.springframework.data.relational.core.mapping.Table
 public class GroupNW {
     @Id

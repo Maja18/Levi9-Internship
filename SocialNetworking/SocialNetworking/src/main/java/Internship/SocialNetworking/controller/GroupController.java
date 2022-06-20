@@ -10,18 +10,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "api/group", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class GroupController {
 
-    private GroupServiceImpl groupService;
+    private final GroupServiceImpl groupService;
 
     public GroupController(GroupServiceImpl groupService){
         this.groupService = groupService;
     }
 
     @PostMapping(value = "/new")
-    public ResponseEntity<String> addNewGroup(@RequestBody GroupDTO groupDTO){
+    public ResponseEntity<String> addNewGroup(@Valid @RequestBody GroupDTO groupDTO){
         return new ResponseEntity<String>(groupService.createGroup(groupDTO), HttpStatus.OK);
     }
 

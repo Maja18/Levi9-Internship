@@ -5,41 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6179afe6-7a3f-4d7c-a7e0-13c2b8c33fca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_classgraph_classgraph_4_8_83.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_core_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_schema_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spi_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spring_web_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spring_webflux_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_spring_webmvc_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger2_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger_common_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_springfox_springfox_swagger_ui_3_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_core_v3_swagger_annotations_2_1_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mapstruct_mapstruct_1_3_1_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_18_8.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_2_0_0_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_2_0_0_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/dto/GroupDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_validation_jakarta_validation_api_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_2_3_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_validation_2_7_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/SocialNetworkingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/SocialNetworkingApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/AuthenticationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/GroupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/PersonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/controller/PersonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/dto/GroupDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/dto/GroupDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/GroupNW.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/GroupNW.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/models/dto/UserTokenStateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/dto/UserTokenStateDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/GroupRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/repository/GroupRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/GroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/GroupServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/PersonServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/GroupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/java/Internship/SocialNetworking/service/iService/GroupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworking/SocialNetworking/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,11 +65,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Java/jdk-14.0.2" />
