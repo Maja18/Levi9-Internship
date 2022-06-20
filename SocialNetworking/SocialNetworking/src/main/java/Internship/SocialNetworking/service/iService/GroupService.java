@@ -17,5 +17,7 @@ public interface GroupService {
 
     void save(GroupNW groupNW);
 
+    boolean checkIfGroupMember(Long groupId, Long userId);
+
 
 }
