@@ -1,6 +1,8 @@
 package Internship.SocialNetworking.config;
 
 
+import Internship.SocialNetworking.repository.AuthorityRepository;
+import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.RestAuthenticationEntryPoint;
 import Internship.SocialNetworking.security.auth.TokenAuthenticationFilter;
@@ -46,6 +48,11 @@ public class WebSecurityConfig {
     @Autowired
     private CustomUserDetailsService jwtUserDetailsService;
 
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
     /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
@@ -59,11 +66,17 @@ public class WebSecurityConfig {
                 .cors().and()
 
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
+
                 .antMatchers("http://localhost:8080/v2/api-docs").permitAll()
                 .antMatchers("http://localhost:8080/swagger-ui.html").permitAll()
-                .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
+
+
+
+                .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
+        http.csrf().disable();
 
         return http.build();
 
@@ -76,8 +89,8 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/api/group/new");
 
+       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
     }
 
 }

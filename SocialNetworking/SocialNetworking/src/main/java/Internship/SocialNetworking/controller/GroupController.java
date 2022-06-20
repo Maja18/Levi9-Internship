@@ -10,21 +10,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import Internship.SocialNetworking.models.GroupNW;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.List;
+
+
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "api/group", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/group", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class GroupController {
 
     private final GroupServiceImpl groupService;
 
-    public GroupController(GroupServiceImpl groupService){
-        this.groupService = groupService;
-    }
+
 
     @PostMapping(value = "/new")
+    @RolesAllowed("ROLE_USER")
     public ResponseEntity<String> addNewGroup(@Valid @RequestBody GroupDTO groupDTO){
         return new ResponseEntity<String>(groupService.createGroup(groupDTO), HttpStatus.OK);
     }
+
 
 }

@@ -1,33 +1,34 @@
 package Internship.SocialNetworking.service;
 
+
 import Internship.SocialNetworking.dto.GroupDTO;
+
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.service.iService.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 
+@Service
+@RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-    public GroupServiceImpl(GroupRepository groupRepository){
-        this.groupRepository = groupRepository;
-    }
 
     @Override
     public List<GroupNW> getAllGroups() {
         return groupRepository.findAll();
     }
 
+
     @Override
     public GroupNW getGroupById(Long id) {
-        return groupRepository.findByGroupIdEquals(id);
+        return groupRepository.findByGroupId(id);
     }
 
     @Override
@@ -58,4 +59,5 @@ public class GroupServiceImpl implements GroupService {
     public GroupNW getByName(String name) {
         return groupRepository.findByNameEquals(name);
     }
+
 }
