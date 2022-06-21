@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.models.dto;
+package Internship.SocialNetworking.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,5 @@ public class PostDTO {
     private String videoUrl;
     private Boolean isPublic;
     private Long groupId;
-    private Long userId;
 
 }

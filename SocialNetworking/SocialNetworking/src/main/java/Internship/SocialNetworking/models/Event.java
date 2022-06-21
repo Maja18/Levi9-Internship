@@ -1,10 +1,12 @@
 package Internship.SocialNetworking.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,13 +20,19 @@ public class Event {
    private Long eventId;
 
    @Column
-   private Date startEvent;
+   private LocalDateTime startEvent;
 
    @Column
-   private Date endEvent;
+   private LocalDateTime endEvent;
 
    @Column
-   private float location;
+   private String name;
+
+  @Column
+  private float x;
+
+  @Column
+  private float y;
 
    @Column
    private Long groupId;
