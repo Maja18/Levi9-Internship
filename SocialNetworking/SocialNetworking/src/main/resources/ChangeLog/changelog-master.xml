@@ -8,6 +8,36 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+    <changeSet  author="liquibase-docs"  id="dropTable-example">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="friends"/>
+            <tableExists tableName="group_persons"/>
+            <tableExists tableName="group_posts"/>
+            <tableExists tableName="event_persons"/>
+            <tableExists tableName="block_persons"/>
+            <tableExists tableName="user_authority"/>
+            <tableExists tableName="authority"/>
+            <tableExists tableName="person"/>
+            <tableExists tableName="groupNW"/>
+            <tableExists tableName="post"/>
+            <tableExists tableName="comment"/>
+            <tableExists tableName="event"/>
+            <tableExists tableName="group_request"/>
+        </preConditions>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="friends"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_persons"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_posts"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event_persons"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="block_persons"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="user_authority"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="authority"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="person"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="groupNW"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="post"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="comment"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event"/>
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_request"/>
+    </changeSet>
     <changeSet id="202010211812" author="Stefan Ugarkovic">
         <createTable tableName="person">
             <column name="person_id" type="bigint">
@@ -37,8 +67,8 @@
             <column name="image_url" type="varchar(250)"/>
             <column name="video_url" type="varchar(250)"/>
             <column name="creation_date" type="DATETIME"/>
-            <column name="is_public" type="TINYINT"/>
-            <column name="is_over" type="TINYINT"/>
+            <column name="is_public" type="boolean"/>
+            <column name="is_over" type="boolean"/>
             <column name="creator_id" type="bigint"/>
             <column name="group_id" type="bigint"/>
         </createTable>
@@ -130,5 +160,159 @@
         <addForeignKeyConstraint baseTableName="user_authority" baseColumnNames="person_id" constraintName="authority_persons_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="group_id" constraintName="group_posts_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
         <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="post_id" constraintName="group_posts_post_id_fk" referencedTableName="post" referencedColumnNames="post_id" />
+    </changeSet>
+    <changeSet  author="Stefan Ugarkovic"  id="insert-person">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="person">
+            <column  name="name"  value="Stefan"/>
+            <column  name="surname"  value="Ugarkovic"/>
+            <column  name="email"  value="ugar@gmail.com"/>
+            <column  name="username"  value="ugar"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="person">
+            <column  name="name"  value="Maja"/>
+            <column  name="surname"  value="Dragojlovic"/>
+            <column  name="email"  value="maja@gmail.com"/>
+            <column  name="username"  value="maja18"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="person">
+            <column  name="name"  value="Ivan"/>
+            <column  name="surname"  value="Lecic"/>
+            <column  name="email"  value="ivan@gmail.com"/>
+            <column  name="username"  value="ivan"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="person">
+            <column  name="name"  value="Milos"/>
+            <column  name="surname"  value="Milinkovic"/>
+            <column  name="email"  value="milos@gmail.com"/>
+            <column  name="username"  value="milos"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+    </changeSet>
+    <changeSet  author="Stefan Ugarkovic"  id="insert-group">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="groupNW">
+            <column  name="name"  value="Group 1"/>
+            <column  name="description"  value="Group 1"/>
+            <column  name="is_public" valueBoolean="true"/>
+            <column  name="creator_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="groupNW">
+            <column  name="name"  value="Group 2"/>
+            <column  name="description"  value="Group 2"/>
+            <column  name="is_public" valueBoolean="true"/>
+            <column  name="creator_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="groupNW">
+            <column  name="name"  value="Group 3"/>
+            <column  name="description"  value="Group 3"/>
+            <column  name="is_public" valueBoolean="false"/>
+            <column  name="creator_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="groupNW">
+            <column  name="name"  value="Group 4"/>
+            <column  name="description"  value="Group 4"/>
+            <column  name="is_public" valueBoolean="false"/>
+            <column  name="creator_id"  value="4"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert-post" author="Stefan Ugarkovic">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="post">
+            <column  name="description"  value="Post 1"/>
+            <column  name="image_url"  value=""/>
+            <column  name="video_url" value=""/>
+            <column  name="creation_date"  value="2020.02.02."/>
+            <column  name="is_public" valueBoolean="true"/>
+            <column  name="is_over" valueBoolean="false"/>
+            <column  name="creator_id" value="1"/>
+            <column  name="group_id" value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="post">
+            <column  name="description"  value="Post 2"/>
+            <column  name="image_url"  value=""/>
+            <column  name="video_url" value=""/>
+            <column  name="creation_date"  value="2020.02.02."/>
+            <column  name="is_public" valueBoolean="true"/>
+            <column  name="is_over" valueBoolean="false"/>
+            <column  name="creator_id" value="2"/>
+            <column  name="group_id" value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="post">
+            <column  name="description"  value="Post 3"/>
+            <column  name="image_url"  value=""/>
+            <column  name="video_url" value=""/>
+            <column  name="creation_date"  value="2020.02.02."/>
+            <column  name="is_public" valueBoolean="false"/>
+            <column  name="is_over" valueBoolean="false"/>
+            <column  name="creator_id" value="3"/>
+            <column  name="group_id" value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="post">
+            <column  name="description"  value="Post 4"/>
+            <column  name="image_url"  value=""/>
+            <column  name="video_url" value=""/>
+            <column  name="creation_date"  value="2020.02.02."/>
+            <column  name="is_public" valueBoolean="false"/>
+            <column  name="is_over" valueBoolean="false"/>
+            <column  name="creator_id" value="2"/>
+            <column  name="group_id" value="3"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert-group_persons" author="Stefan Ugarkovic">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="1"/>
+            <column  name="person_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="1"/>
+            <column  name="person_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="1"/>
+            <column  name="person_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="2"/>
+            <column  name="person_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="2"/>
+            <column  name="person_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="3"/>
+            <column  name="person_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="3"/>
+            <column  name="person_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="4"/>
+            <column  name="person_id"  value="4"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="4"/>
+            <column  name="person_id"  value="2"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert_group_posts" author="Stefan Ugarkovic">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_posts">
+            <column  name="group_id"  value="1"/>
+            <column  name="post_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_posts">
+            <column  name="group_id"  value="2"/>
+            <column  name="post_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_posts">
+            <column  name="group_id"  value="3"/>
+            <column  name="post_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_posts">
+            <column  name="group_id"  value="4"/>
+            <column  name="post_id"  value="4"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
