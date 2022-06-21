@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PersonServiceImpl personService;
 
-    @PostMapping("/add")
+    @PostMapping
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
         Post response = postService.addNewPost(postDTO);
@@ -38,7 +39,9 @@ public class PostController {
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     ResponseEntity<List<Post>> getAllUserPosts(@PathVariable(name="user-id") Long userId)
     {
-        List<Post> posts =postService.getAllUserPosts(userId);
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        Person loggedPerson = (Person) currentUser.getPrincipal();
+        List<Post> posts =postService.getAllUserPosts(userId, loggedPerson);
 
         return posts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
