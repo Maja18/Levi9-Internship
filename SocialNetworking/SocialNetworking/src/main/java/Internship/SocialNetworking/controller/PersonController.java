@@ -2,8 +2,6 @@ package Internship.SocialNetworking.controller;
 
 
 import Internship.SocialNetworking.service.PersonServiceImpl;
-import Internship.SocialNetworking.service.iService.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,14 +9,11 @@ import Internship.SocialNetworking.models.Person;
 
 import Internship.SocialNetworking.models.dto.PersonDTO;
 
-import Internship.SocialNetworking.models.dto.FriendsDTO;
+import Internship.SocialNetworking.dto.FriendsDTO;
 
-import Internship.SocialNetworking.service.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +29,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
 public class PersonController {
-
-
     private final  PersonServiceImpl personService;
-
 
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")

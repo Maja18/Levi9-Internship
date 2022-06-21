@@ -4,7 +4,7 @@ import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
-import Internship.SocialNetworking.models.dto.CommentDTO;
+import Internship.SocialNetworking.dto.CommentDTO;
 import Internship.SocialNetworking.repository.CommentRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;

@@ -1,4 +1,5 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -110,5 +111,39 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             }
         }
+    }
+
+    @Override
+    public Post hidePost(HidePostDTO hidePostDTO, Long personId) {
+
+        if(validation(hidePostDTO, personId)) {
+            Post post = postRepository.findByPostId(hidePostDTO.getPostId());
+            Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
+            List<Person> blockListPersons = post.getBlockedPersons();
+            blockListPersons.add(blockPerson);
+            post.setBlockedPersons(blockListPersons);
+
+            return postRepository.save(post);
+        }
+        return null;
+    }
+
+    private boolean validation(HidePostDTO hidePostDTO, Long personId) {
+        Person person = personRepository.findByPersonId(personId);
+        Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
+        Post post = postRepository.findByPostId(hidePostDTO.getPostId());
+
+        if(person != null && blockPerson != null && post != null){
+            GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
+            if(person.getPersonId() == post.getCreatorId() && person.getPersonId() != blockPerson.getPersonId()){
+                if(groupNW.getMembers().stream().anyMatch(m -> m.getPersonId() == blockPerson.getPersonId())){
+                    if(post.getBlockedPersons().stream().anyMatch(b -> b.getPersonId() == blockPerson.getPersonId())){
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
