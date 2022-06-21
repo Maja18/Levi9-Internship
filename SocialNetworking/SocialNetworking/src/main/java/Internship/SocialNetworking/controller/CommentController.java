@@ -2,7 +2,7 @@ package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.models.dto.CommentDTO;
+import Internship.SocialNetworking.dto.CommentDTO;
 import Internship.SocialNetworking.service.CommentServiceImpl;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;

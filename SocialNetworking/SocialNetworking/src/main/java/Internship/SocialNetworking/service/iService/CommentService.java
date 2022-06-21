@@ -1,7 +1,7 @@
 package Internship.SocialNetworking.service.iService;
 
 import Internship.SocialNetworking.models.Comment;
-import Internship.SocialNetworking.models.dto.CommentDTO;
+import Internship.SocialNetworking.dto.CommentDTO;
 
 import java.util.List;
 
