@@ -315,4 +315,52 @@
             <column  name="post_id"  value="4"/>
         </insert>
     </changeSet>
+    <changeSet id="insert-authority" author="Stefan Ugarkovic">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="authority">
+            <column  name="authority_id"  value="1"/>
+            <column  name="name"  value="ROLE_ADMIN"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="authority">
+            <column  name="authority_id"  value="2"/>
+            <column  name="name"  value="ROLE_USER"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="authority">
+            <column  name="authority_id"  value="3"/>
+            <column  name="name"  value="ROLE_MEMBER"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert-user_authority" author="Stefan Ugarkovic">
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="1"/>
+            <column  name="person_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="1"/>
+            <column  name="person_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="1"/>
+            <column  name="person_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="1"/>
+            <column  name="person_id"  value="4"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="2"/>
+            <column  name="person_id"  value="1"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="2"/>
+            <column  name="person_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="2"/>
+            <column  name="person_id"  value="3"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="user_authority">
+            <column  name="authority_id"  value="2"/>
+            <column  name="person_id"  value="4"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
