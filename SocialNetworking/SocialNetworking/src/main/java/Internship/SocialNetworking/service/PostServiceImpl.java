@@ -88,14 +88,19 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        //sta ako nema prijatelja?
-        personFriends.stream().forEach(friend -> {
-            if (friend.getPersonId().equals(loggedPerson.getPersonId())) {
-                posts.add(p);
-            } else if (p.isPublic()) {
-                posts.add(p);
-            }
-        });
+        if (personFriends.isEmpty() && p.isPublic()){
+            posts.add(p);
+        }else {
+            personFriends.stream().forEach(friend -> {
+                if (friend.getPersonId().equals(loggedPerson.getPersonId()))
+                    posts.add(p);
+                else
+                    return;
+                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId())) {
+                    posts.add(p);
+                }
+            });
+        }
     }
 
     private void getAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
