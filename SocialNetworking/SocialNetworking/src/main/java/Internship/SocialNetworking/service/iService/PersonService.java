@@ -2,6 +2,10 @@ package Internship.SocialNetworking.service.iService;
 
 import Internship.SocialNetworking.models.Person;
 
+
+
+
+
 import Internship.SocialNetworking.dto.PersonDTO;
 
 
@@ -15,7 +19,10 @@ public interface PersonService {
 
     String addPersonToGroup(Long groupId,Long personId);
 
+    String alterPersonInformation(PersonDTO person, Long userId);
+
     String deletePersonFromGroup(Long groupId,Long personId,Long administratorId);
+
     List<Person> getAllPersons();
     Person removeFriend(Long personId, Long friendId);
 }
