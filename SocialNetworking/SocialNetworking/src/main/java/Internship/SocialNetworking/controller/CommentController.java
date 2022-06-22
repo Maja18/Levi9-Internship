@@ -5,6 +5,7 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.dto.CommentDTO;
 import Internship.SocialNetworking.service.CommentServiceImpl;
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/comment")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class CommentController {
     private final CommentServiceImpl commentService;
     private final PersonServiceImpl personService;
 
-    @RequestMapping(value = "/add")
+    @PostMapping(value = "/")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<Comment> addComment(@RequestBody CommentDTO commentDTO) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -38,7 +40,7 @@ public class CommentController {
 
     @GetMapping(value = "/{postId}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<List<Comment>> showComment(@PathVariable(name = "postId") Long postId) {
+    public ResponseEntity<List<Comment>> showComments(@PathVariable(name = "postId") Long postId) {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
 
         if (comments == null) {
