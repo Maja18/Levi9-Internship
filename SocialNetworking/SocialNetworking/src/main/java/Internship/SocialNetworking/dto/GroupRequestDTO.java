@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.models.dto;
+package Internship.SocialNetworking.dto;
 
 import Internship.SocialNetworking.models.RequestStatus;
 import lombok.Getter;

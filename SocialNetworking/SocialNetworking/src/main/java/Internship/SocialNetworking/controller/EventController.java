@@ -22,7 +22,7 @@ public class EventController {
 
     private final GroupServiceImpl groupService;
 
-    @PostMapping("/new")
+    @PostMapping("/event")
     public ResponseEntity<String> newEvent(@Valid @RequestBody EventDTO eventDTO){
         return new ResponseEntity<String>(eventService.createEvent(eventDTO), HttpStatus.OK);
     }

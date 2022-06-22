@@ -1,11 +1,9 @@
 package Internship.SocialNetworking.service;
-import Internship.SocialNetworking.controller.GroupRequestController;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.RequestStatus;
-import Internship.SocialNetworking.models.dto.GroupRequestDTO;
-import Internship.SocialNetworking.models.dto.PersonDTO;
+import Internship.SocialNetworking.dto.PersonDTO;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
@@ -13,7 +11,6 @@ import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service

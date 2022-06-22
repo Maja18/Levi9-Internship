@@ -2,8 +2,7 @@ package Internship.SocialNetworking.controller;
 
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.models.RequestStatus;
-import Internship.SocialNetworking.models.dto.GroupRequestDTO;
+import Internship.SocialNetworking.dto.GroupRequestDTO;
 import Internship.SocialNetworking.service.GroupRequestServiceImpl;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;

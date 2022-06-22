@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Internship.SocialNetworking.models.Person;
 
-import Internship.SocialNetworking.models.dto.PersonDTO;
+import Internship.SocialNetworking.dto.PersonDTO;
 
 import Internship.SocialNetworking.dto.FriendsDTO;
 
