@@ -65,6 +65,13 @@ public class Person implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "person_id"))
     private List<Person> friends;
 
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_notification",
+            joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
+    private List<Notification> notifications;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities1 = new ArrayList<>();

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/event")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "javainuseapi")
 public class EventController {
@@ -24,7 +24,7 @@ public class EventController {
 
     private final GroupServiceImpl groupService;
 
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity<String> newEvent(@Valid @RequestBody EventDTO eventDTO){
         return new ResponseEntity<String>(eventService.createEvent(eventDTO), HttpStatus.OK);
     }

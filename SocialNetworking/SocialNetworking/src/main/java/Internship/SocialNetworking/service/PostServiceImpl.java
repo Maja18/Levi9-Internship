@@ -26,6 +26,8 @@ public class PostServiceImpl implements PostService {
     private final  PostRepository postRepository;
     private final PersonRepository personRepository;
 
+    private final NotificationServiceImpl notificationService;
+
     @Override
     public Post addNewPost(PostDTO postDTO){
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
@@ -36,6 +38,8 @@ public class PostServiceImpl implements PostService {
             post = addPostOutsideGroup(postDTO,loggedPerson);
         }else{
             post = addPostToGroup(postDTO, group, loggedPerson);
+            notificationService.addNotificationPost(group.get().getName(),
+                    personRepository.findByEmailEquals(loggedPerson.getEmail()));
         }
         postRepository.save(post);
 
