@@ -36,9 +36,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person addPerson(PersonDTO person) {
-        Person pers = personRepository.findByPersonId(person.getPersonId());
+        Person findPerson = personRepository.findByPersonId(person.getPersonId());
 
-          if (pers == null) {
+          if (findPerson == null) {
                Person mappedPerson=new Person();
               mappedPerson.setPersonId(person.getPersonId());
               mappedPerson.setName(person.getName());
@@ -114,21 +114,23 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String deletePerson(Long groupId,Long personId) {
+    public String deletePersonFromGroup(Long groupId,Long personId,Long administratorId) {
 
         GroupNW group = groupRepository.findByGroupId(groupId);
 
-
      if (group != null) {
-         for (int i = 0; i < group.getMembers().size(); i++) {
-             Long personMemberId = group.getMembers().get(i).getPersonId();
-             if (personId == personMemberId) {
-                 Person personToRemove=group.getMembers().get(i);
-                 group.getMembers().remove(personToRemove);
-                 personRepository.save(personToRemove);
-                 return "Successfully deleted member of group";
+         if(administratorId == group.getCreatorId()) {
+             for (int i = 0; i < group.getMembers().size(); i++) {
+                 Long personMemberId = group.getMembers().get(i).getPersonId();
+                 if (personId == personMemberId) {
+                     Person personToRemove = group.getMembers().get(i);
+                     group.getMembers().remove(personToRemove);
+                     personRepository.save(personToRemove);
+                     return "Successfully deleted member of group";
+                 }
              }
          }
+         else return "No permission";
         }
         return null;
     }

@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                 .cors().and()
 
                 .authorizeRequests()
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/login").hasAnyAuthority("ROLE_USER")
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
                 .antMatchers("/api/**").permitAll()
 
