@@ -3,6 +3,7 @@ import Internship.SocialNetworking.dto.GroupDTO;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.service.GroupServiceImpl;
 import Internship.SocialNetworking.service.iService.EventService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/group", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class GroupController {
 
     private final GroupServiceImpl groupService;

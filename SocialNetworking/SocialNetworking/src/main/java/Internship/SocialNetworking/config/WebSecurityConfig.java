@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -28,6 +29,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
@@ -61,6 +63,7 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/api/auth/authority").hasAnyAuthority("ROLE_USER","ROLE_MEMBER","ROLE_ADMIN")
+                .antMatchers("/swagger-ui/**", "/javainuse-openapi/**").permitAll()
                 .antMatchers("/api/**").permitAll()
 
                 .anyRequest().authenticated().and().addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService, personRepository, authorityRepository), BasicAuthenticationFilter.class);
@@ -78,7 +81,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
 
-       return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login", "/swagger-ui.html", "/v2/api-docs");
+       return (web) -> web.ignoring().antMatchers("/api/auth/login", "/swagger-ui/**", "/v3/api-docs/**");
 
 
     }

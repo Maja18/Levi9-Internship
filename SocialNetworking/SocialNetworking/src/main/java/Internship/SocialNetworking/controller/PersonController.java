@@ -2,6 +2,7 @@ package Internship.SocialNetworking.controller;
 
 
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class PersonController {
     private final  PersonServiceImpl personService;
 

@@ -6,6 +6,7 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import Internship.SocialNetworking.service.PostServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/post", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class PostController {
 
     private final PostServiceImpl postService;

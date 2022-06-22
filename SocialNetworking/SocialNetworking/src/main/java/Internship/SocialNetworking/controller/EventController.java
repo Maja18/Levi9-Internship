@@ -4,6 +4,7 @@ import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.service.EventServiceImpl;
 import Internship.SocialNetworking.service.GroupServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class EventController {
 
     private final EventServiceImpl eventService;
