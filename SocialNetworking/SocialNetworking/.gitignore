@@ -13,6 +13,18 @@ target/
 .springBeans
 .sts4-cache
 
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# SonarLint plugin
+.idea/sonarlint/
+
+/**/.idea/*
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

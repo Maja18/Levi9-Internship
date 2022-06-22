@@ -2,6 +2,7 @@ package Internship.SocialNetworking.controller;
 
 
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/person")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class PersonController {
     private final  PersonServiceImpl personService;
 
@@ -74,7 +76,7 @@ public class PersonController {
 
     //if user is invalid then exception handler is called
     @PostMapping("")
-
+    @RolesAllowed("ROLE_USER")
     public ResponseEntity<Person> addPersons(@Valid @RequestBody PersonDTO person) {
         var per=personService.addPerson(person);
         if(per == null) {
@@ -84,6 +86,28 @@ public class PersonController {
         return new ResponseEntity<Person>(per,HttpStatus.OK);
 
     }
+    @PutMapping("")
+   @RolesAllowed("ROLE_USER")
+    public ResponseEntity<String> alterPersons(@RequestBody PersonDTO person) {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Long loggedPersonId=userWithId.getPersonId();
+        //we will loop through list of all persons to check is there a person with such id
+        var personToAlter=personService.alterPersonInformation(person,loggedPersonId);
+        if(personToAlter == null) {
+            return new ResponseEntity<String>("Person with such id " +
+                    "does not exist",HttpStatus.NOT_FOUND);
+        }
+
+        if(personToAlter == "No permission") {
+            return new ResponseEntity<String>("You cannot change " +
+                    "other user's information",HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<String>("Successfully altered person",HttpStatus.OK);
+
+    }
+
+
     @PostMapping("add-to-group/{groupId}")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<String> addPersonToGroup(@PathVariable Long groupId) {
@@ -99,13 +123,21 @@ public class PersonController {
     }
 
     @DeleteMapping("{groupId}/{personId}")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<String> deleteMembersOfGroup(@PathVariable Long groupId,@PathVariable Long personId) {
-
-        String deletedUser=personService.deletePerson(groupId,personId);
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Long loggedPersonId=userWithId.getPersonId();
+        String deletedUser=personService.deletePersonFromGroup(groupId,personId,loggedPersonId);
         if(deletedUser == null) {
             return new ResponseEntity<String>("Either group does not exist or user is not" +
                     "a member of a group",
                     HttpStatus.BAD_REQUEST);
+        }
+        if(deletedUser == "No permission") {
+            return new ResponseEntity<String>("You are not an administrator" +
+                    " of a group with specified id" , HttpStatus.FORBIDDEN);
+
         }
         return new ResponseEntity<String>("Successfully deleted member of group",HttpStatus.OK);
     }

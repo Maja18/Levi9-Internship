@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+
 @Service
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
@@ -33,9 +34,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person addPerson(PersonDTO person) {
-        Person pers = personRepository.findByPersonId(person.getPersonId());
+        Person findPerson = personRepository.findByPersonId(person.getPersonId());
 
-          if (pers == null) {
+          if (findPerson == null) {
                Person mappedPerson=new Person();
               mappedPerson.setPersonId(person.getPersonId());
               mappedPerson.setName(person.getName());
@@ -111,23 +112,48 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String deletePerson(Long groupId,Long personId) {
+    public String deletePersonFromGroup(Long groupId,Long personId,Long administratorId) {
 
         GroupNW group = groupRepository.findByGroupId(groupId);
 
-
      if (group != null) {
-         for (int i = 0; i < group.getMembers().size(); i++) {
-             Long personMemberId = group.getMembers().get(i).getPersonId();
-             if (personId == personMemberId) {
-                 Person personToRemove=group.getMembers().get(i);
-                 group.getMembers().remove(personToRemove);
-                 personRepository.save(personToRemove);
-                 return "Successfully deleted member of group";
+         if(administratorId == group.getCreatorId()) {
+             for (int i = 0; i < group.getMembers().size(); i++) {
+                 Long personMemberId = group.getMembers().get(i).getPersonId();
+                 if (personId == personMemberId) {
+                     Person personToRemove = group.getMembers().get(i);
+                     group.getMembers().remove(personToRemove);
+                     personRepository.save(personToRemove);
+                     return "Successfully deleted member of group";
+                 }
              }
          }
+         else return "No permission";
         }
         return null;
+    }
+
+    @Override
+    public String alterPersonInformation(PersonDTO person, Long userId) {
+        Person alteringPerson=personRepository.findByPersonId(person.getPersonId());
+        //checking whether user with specified id exists at all
+        if(alteringPerson != null) {
+            //checking whether user is allowed to change information
+            if (alteringPerson.getPersonId() == userId) {
+                alteringPerson.setPersonId(person.getPersonId());
+                alteringPerson.setName(person.getName());
+                alteringPerson.setSurname(person.getSurname());
+                alteringPerson.setEmail(person.getEmail());
+                alteringPerson.setUsername(person.getUsername());
+                alteringPerson.setPassword(person.getPassword());
+                        //we save changes to the database
+                personRepository.save(alteringPerson);
+                return "Successfully updated user";
+
+                }
+            return "No permission";
+        }
+       return null;
     }
 
     @Override

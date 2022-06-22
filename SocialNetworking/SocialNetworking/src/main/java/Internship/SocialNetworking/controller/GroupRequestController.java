@@ -5,6 +5,7 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.dto.GroupRequestDTO;
 import Internship.SocialNetworking.service.GroupRequestServiceImpl;
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/group-request")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class GroupRequestController {
 
     private final GroupRequestServiceImpl groupRequestService;
