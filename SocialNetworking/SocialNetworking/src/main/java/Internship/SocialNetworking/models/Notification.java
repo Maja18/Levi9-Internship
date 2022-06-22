@@ -17,7 +17,6 @@ public class Notification {
     @Column(name = "notification_id", nullable = false)
     private Long notificationId;
 
-
     @Column
     private String content;
 
@@ -29,6 +28,9 @@ public class Notification {
 
     @Column
     private String receiver;
+
+    @Column
+    private PostMuteStatus postMuteStatus;
 
 
 

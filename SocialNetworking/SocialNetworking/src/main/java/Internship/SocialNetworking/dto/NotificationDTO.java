@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.dto;
 
+import Internship.SocialNetworking.models.PostMuteStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,4 +32,6 @@ public class NotificationDTO {
 
     @NotBlank(message = "receiver is required")
     private String receiver;
+    @NotBlank(message = "mute status is required")
+    private PostMuteStatus postMuteStatus;
 }
