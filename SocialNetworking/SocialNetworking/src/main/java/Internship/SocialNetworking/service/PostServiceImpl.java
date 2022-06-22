@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,17 +103,16 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        if (personFriends.isEmpty() && p.isPublic()){
+        if (personFriends.isEmpty() && p.isPublic())
             posts.add(p);
-        }else {
+        else {
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
                 else
                     return;
-                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
-                    posts.add(p);
-                }
+                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                        posts.add(p);
             });
         }
     }
@@ -162,5 +163,17 @@ public class PostServiceImpl implements PostService {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<Post> getAllFriendPosts(Person loggedPerson) {
+        List<Post> friendPosts= new ArrayList<>();
+        List<Person> personFriends = loggedPerson.getFriends();
+        personFriends.stream().forEach(friend -> {
+            List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
+            friendPosts.addAll(posts);
+        });
+
+        return friendPosts;
     }
 }
