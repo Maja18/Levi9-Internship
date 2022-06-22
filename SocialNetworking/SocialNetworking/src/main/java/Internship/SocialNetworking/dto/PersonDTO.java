@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.models.dto;
+package Internship.SocialNetworking.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
