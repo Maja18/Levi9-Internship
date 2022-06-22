@@ -92,8 +92,7 @@ public class PersonController {
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         Long loggedPersonId=userWithId.getPersonId();
         //we will loop through list of all persons to check is there a person with such id
-        var listPersons = personService.getAllPersons();
-        var personToAlter=personService.alterPersonInformation(person,loggedPersonId,listPersons);
+        var personToAlter=personService.alterPersonInformation(person,loggedPersonId);
         if(personToAlter == null) {
             return new ResponseEntity<String>("Person with such id " +
                     "does not exist",HttpStatus.NOT_FOUND);

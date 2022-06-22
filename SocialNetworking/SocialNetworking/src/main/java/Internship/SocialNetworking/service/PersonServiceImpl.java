@@ -135,7 +135,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String alterPersonInformation(PersonDTO person, Long userId,List<Person> persons) {
+    public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(person.getPersonId());
         //checking whether user with specified id exists at all
         if(alteringPerson != null) {
@@ -147,14 +147,11 @@ public class PersonServiceImpl implements PersonService {
                 alteringPerson.setEmail(person.getEmail());
                 alteringPerson.setUsername(person.getUsername());
                 alteringPerson.setPassword(person.getPassword());
-                for (int i = 0; i < persons.size(); i++) {
-                    if (alteringPerson.getPersonId() == persons.get(i).getPersonId()) {
                         //we save changes to the database
-                        personRepository.save(alteringPerson);
-                        return "Successfully updated user";
-                    }
+                personRepository.save(alteringPerson);
+                return "Successfully updated user";
+
                 }
-            }
             return "No permission";
         }
        return null;
