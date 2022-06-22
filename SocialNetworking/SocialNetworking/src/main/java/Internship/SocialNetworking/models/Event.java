@@ -1,17 +1,17 @@
 package Internship.SocialNetworking.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Event {
    @Id
@@ -42,5 +42,24 @@ public class Event {
 
    @Column
    private boolean isOver;
+
+   @Column
+   private Boolean notified;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "event_persons",
+            joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
+    private List<Person> going;
+
+   /*public boolean getIsNotified(){
+       return this.isNotified;
+   } */
+
+  // public void setIsNotified(boolean isNotified){
+       //this.isNotified = isNotified;
+   //}
+
 
 }
