@@ -2,9 +2,7 @@ package Internship.SocialNetworking.service.iService;
 
 import Internship.SocialNetworking.models.Person;
 
-import Internship.SocialNetworking.models.dto.PersonDTO;
-
-import org.springframework.http.ResponseEntity;
+import Internship.SocialNetworking.dto.PersonDTO;
 
 
 import java.util.List;
