@@ -75,10 +75,19 @@ public class PostServiceImpl implements PostService {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
         allPosts.stream().forEach(p-> {
+            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
+                p.setOver(true);
+            }
             if (p.getGroupId() != null){
                 getAllGroupPosts(loggedPerson,posts, p);
             }else{
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
+            }
+        });
+
+        posts.stream().forEach(p -> {
+            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
+                p.setOver(true);
             }
         });
 
@@ -92,11 +101,11 @@ public class PostServiceImpl implements PostService {
             posts.add(p);
         }else {
             personFriends.stream().forEach(friend -> {
-                if (friend.getPersonId().equals(loggedPerson.getPersonId()))
+                if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
                 else
                     return;
-                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId())) {
+                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
                     posts.add(p);
                 }
             });
@@ -107,11 +116,11 @@ public class PostServiceImpl implements PostService {
         GroupNW group = groupRepository.findByGroupId(p.getGroupId());
         List<Person> groupMembers = group.getMembers();
         groupMembers.stream().forEach(member -> {
-            if (member.getPersonId().equals(loggedPerson.getPersonId()))
+            if (member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId())) {
+            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
                 posts.add(p);
             }
         });

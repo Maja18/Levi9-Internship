@@ -222,10 +222,10 @@
             <column  name="description"  value="Post 1"/>
             <column  name="image_url"  value=""/>
             <column  name="video_url" value=""/>
-            <column  name="creation_date"  value="2020.02.02."/>
+            <column  name="creation_date"  value="2022.06.21. 11:13:00"/>
             <column  name="is_public" valueBoolean="true"/>
             <column  name="is_over" valueBoolean="false"/>
-            <column  name="creator_id" value="1"/>
+            <column  name="creator_id" value="2"/>
             <column  name="group_id" value="1"/>
         </insert>
         <insert  dbms="mysql" schemaName="social_networking" tableName="post">

@@ -1,9 +1,0 @@
-
-n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¯ÅÇ
-N
-java:S1854"8Remove this useless assignment to local variable "post".(äêÜ¨
-S	java:S106^"9Replace this use of System.out or System.err by a logger.(®“öëýÿÿÿÿ
-b
-java:S1871a"LThis branch's code block is the same as the block for the branch on line 95.(¿Ä÷ý
-c
-java:S1871m"MThis branch's code block is the same as the block for the branch on line 107.(½ñ¨„
