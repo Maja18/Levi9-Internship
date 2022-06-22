@@ -83,12 +83,6 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.1.0.Final</version>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>sonar-maven-plugin</artifactId>
-			<version>3.4.0.905</version>
-			<type>pom</type>
-		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -102,6 +96,7 @@
 				<sonar.host.url>
 					http://localhost:9000
 				</sonar.host.url>
+				<sonar.java.source>14</sonar.java.source>
 			</properties>
 		</profile>
 	</profiles>
@@ -123,7 +118,7 @@
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.9.0.2155</version>
 			</plugin>
 		</plugins>
 	</build>
