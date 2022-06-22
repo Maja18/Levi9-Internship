@@ -76,7 +76,6 @@ public class PersonController {
 
     //if user is invalid then exception handler is called
     @PostMapping("")
-
     public ResponseEntity<Person> addPersons(@Valid @RequestBody PersonDTO person) {
         var per=personService.addPerson(person);
         if(per == null) {
@@ -86,6 +85,29 @@ public class PersonController {
         return new ResponseEntity<Person>(per,HttpStatus.OK);
 
     }
+    @PutMapping("")
+   @RolesAllowed("ROLE_USER")
+    public ResponseEntity<String> alterPersons(@RequestBody PersonDTO person) {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Long loggedPersonId=userWithId.getPersonId();
+        //we will loop through list of all persons to check is there a person with such id
+        var listPersons = personService.getAllPersons();
+        var personToAlter=personService.alterPersonInformation(person,loggedPersonId,listPersons);
+        if(personToAlter == null) {
+            return new ResponseEntity<String>("Person with such id " +
+                    "does not exist",HttpStatus.NOT_FOUND);
+        }
+
+        if(personToAlter == "No permission") {
+            return new ResponseEntity<String>("You cannot change " +
+                    "other user's information",HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<String>("Successfully altered person",HttpStatus.OK);
+
+    }
+
+
     @PostMapping("add-to-group/{groupId}")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<String> addPersonToGroup(@PathVariable Long groupId) {

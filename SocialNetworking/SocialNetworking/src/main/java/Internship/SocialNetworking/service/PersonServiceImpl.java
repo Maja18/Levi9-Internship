@@ -13,6 +13,7 @@ import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -131,6 +132,32 @@ public class PersonServiceImpl implements PersonService {
          }
         }
         return null;
+    }
+
+    @Override
+    public String alterPersonInformation(PersonDTO person, Long userId,List<Person> persons) {
+        Person alteringPerson=personRepository.findByPersonId(person.getPersonId());
+        //checking whether user with specified id exists at all
+        if(alteringPerson != null) {
+            //checking whether user is allowed to change information
+            if (alteringPerson.getPersonId() == userId) {
+                alteringPerson.setPersonId(person.getPersonId());
+                alteringPerson.setName(person.getName());
+                alteringPerson.setSurname(person.getSurname());
+                alteringPerson.setEmail(person.getEmail());
+                alteringPerson.setUsername(person.getUsername());
+                alteringPerson.setPassword(person.getPassword());
+                for (int i = 0; i < persons.size(); i++) {
+                    if (alteringPerson.getPersonId() == persons.get(i).getPersonId()) {
+                        //we save changes to the database
+                        personRepository.save(alteringPerson);
+                        return "Successfully updated user";
+                    }
+                }
+            }
+            return "No permission";
+        }
+       return null;
     }
 
     @Override

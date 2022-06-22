@@ -2,6 +2,7 @@ package Internship.SocialNetworking.service.iService;
 
 import Internship.SocialNetworking.models.Person;
 
+import Internship.SocialNetworking.models.dto.GroupRequestDTO;
 import Internship.SocialNetworking.models.dto.PersonDTO;
 
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public interface PersonService {
     String addPersonToGroup(Long groupId,Long personId);
 
     String deletePerson(Long groupId,Long personId);
+    String alterPersonInformation(PersonDTO person, Long userId,List<Person> listPersons);
     List<Person> getAllPersons();
     Person removeFriend(Long personId, Long friendId);
 }
