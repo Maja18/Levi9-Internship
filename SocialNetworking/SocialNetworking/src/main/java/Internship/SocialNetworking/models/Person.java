@@ -56,21 +56,21 @@ public class Person implements UserDetails {
     @JoinTable(name = "block_persons",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
-    private List<Post> blockedPosts;
+    private  List<Post> blockedPosts;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "friends",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "person_id"))
-    private List<Person> friends;
+    private transient List<Person> friends;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "user_notification",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
-    private List<Notification> notifications;
+    private transient List<Notification> notifications;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

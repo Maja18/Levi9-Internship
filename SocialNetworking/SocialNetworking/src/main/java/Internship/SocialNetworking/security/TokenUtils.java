@@ -1,12 +1,10 @@
 package Internship.SocialNetworking.security;
 
 import Internship.SocialNetworking.TimeProvider;
-import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.PersonRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -92,9 +90,7 @@ public class TokenUtils {
     // Functions for validating JWT token data
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        Person user = (Person) userDetails;
         final String mail = getMailFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
 
         return (mail != null && mail.equals(userDetails.getUsername()) /*&& !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate())*/);
     }
@@ -173,7 +169,6 @@ public class TokenUtils {
     }
 
     public int getExpiredIn() {
-//        return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
         return EXPIRES_IN;
     }
 
