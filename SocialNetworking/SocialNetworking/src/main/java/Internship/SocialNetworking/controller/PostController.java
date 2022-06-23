@@ -64,4 +64,16 @@ public class PostController {
         return new ResponseEntity<Post>(post, HttpStatus.OK);
     }
 
+    @GetMapping
+    @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
+    ResponseEntity<List<Post>> getAllFriendPosts()
+    {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person loggedPerson = personService.findByPersonId(currentUser.getPersonId());
+        List<Post> posts = postService.getAllFriendPosts(loggedPerson);
+
+        return posts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
+    }
+
 }

@@ -10,6 +10,6 @@ import java.util.List;
 public interface PostService {
     Post addNewPost(PostDTO postDTO);
     List<Post> getAllUserPosts(Long userId, Person loggedPerson);
-
     Post hidePost(HidePostDTO hidePostDTO, Long personId);
+    List<Post> getAllFriendPosts(Person loggedPerson);
 }
