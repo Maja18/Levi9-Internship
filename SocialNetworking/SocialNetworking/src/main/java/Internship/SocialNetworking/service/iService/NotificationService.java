@@ -1,6 +1,10 @@
 package Internship.SocialNetworking.service.iService;
 
+
 import Internship.SocialNetworking.dto.NotificationDTO;
+
+import Internship.SocialNetworking.models.Event;
+
 import Internship.SocialNetworking.models.Notification;
 import Internship.SocialNetworking.models.Person;
 
@@ -14,6 +18,10 @@ public interface NotificationService {
 
     String muteNotification(Long groupId,Long authPersonId,Long muteStatus);
 
-    String addNotificationPost(String groupName, Person sender);
+    void addNotificationPost(String groupName, Person sender);
+
+    void sendNotificationsEvent(Event event);
+
+    void iterateEventsList(List<Event> events);
 
 }

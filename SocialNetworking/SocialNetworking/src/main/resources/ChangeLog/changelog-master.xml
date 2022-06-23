@@ -24,6 +24,7 @@
             <tableExists tableName="event"/>
             <tableExists tableName="group_request"/>
             <tableExists tableName="notification" />
+            <tableExists tableName="event_persons" />
         </preConditions>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="friends"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_persons"/>
@@ -39,6 +40,7 @@
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_request"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="notification" />
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event_persons" />
     </changeSet>
     <changeSet id="202010211812" author="Stefan Ugarkovic">
         <createTable tableName="person">
@@ -96,6 +98,7 @@
             <column name="group_id" type="bigint"/>
             <column name="creator_id" type="bigint"/>
             <column name="is_over" type="boolean"/>
+            <column name="notified" type="boolean" />
         </createTable>
         <createTable tableName="group_request">
             <column name="group_request_id" type="bigint">
