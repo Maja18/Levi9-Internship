@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final PersonRepository personRepository;
 
-
+    private final PersonServiceImpl personService;
     private final GroupRepository groupRepository;
 
     @Override
@@ -34,50 +34,67 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getAllNotifications(String personName) {
-        List<Notification> notificationList=notificationRepository.findAll();
-        //new list that we will add receiver notifications in
-        List<Notification> listReceiverNotifications=new ArrayList<>();
-        System.out.println(notificationList.get(0).getReceiver());
-        System.out.println(personName);
-        for(int i=0; i<notificationList.size(); i++) {
-            if(Objects.equals(personName, notificationList.get(i).getReceiver())) {
-                    Notification notification = notificationList.get(i);
-                    listReceiverNotifications.add(notification);
-
+    public List<Notification> getAllNotifications(Long personId,Long groupId) {
+        Person person = personRepository.findByPersonId(personId);
+        GroupNW group=groupRepository.findByGroupId(groupId);
+        List<Notification> listReceiverNotifications = new ArrayList<>();
+        if(group!=null) {
+            for(int i=0; i<group.getMembers().size(); i++) {
+                if(personId == group.getMembers().get(i).getPersonId()) {
+                    for(int p=0; p<person.getNotifications().size(); p++) {
+                        if(Objects.equals(group.getName(), person.getNotifications().get(p).getGroupName())) {
+                            if (Objects.equals(person.getNotifications().get(p).getReceiver(), person.getEmail())) {
+                                Notification notification = person.getNotifications().get(p);
+                                listReceiverNotifications.add(notification);
+                            }
+                        }
+                    }
+                   for(int k=0; k<listReceiverNotifications.size(); k++) {
+                        if(listReceiverNotifications.get(k).getPostMuteStatus() == PostMuteStatus.PERMANENT) {
+                            listReceiverNotifications.clear();
+                           return listReceiverNotifications;
+                        }
+                    }
+                    return listReceiverNotifications;
+                }
             }
         }
-        for(int i=0; i<listReceiverNotifications.size(); i++) {
-            //if user has turned notifications off,he won't receive anything
-            if(listReceiverNotifications.get(i).getPostMuteStatus()==PostMuteStatus.PERMANENT)
-                listReceiverNotifications.clear();
-        }
-        return listReceiverNotifications;
+        return null;
     }
 
 
     @Override
-    public String muteNotification(NotificationDTO notification) {
-        Notification notifyAlert=notificationRepository.findByNotificationId(notification.getNotificationId());
-        if(notifyAlert!=null) {
-            Notification modifiedNotification=new Notification();
-            modifiedNotification.setNotificationId(notification.getNotificationId());
-            modifiedNotification.setContent(notification.getContent());
-            modifiedNotification.setSource(notification.getSource());
-            modifiedNotification.setSender(notification.getSender());
-            modifiedNotification.setReceiver(notification.getReceiver());
-            modifiedNotification.setPostMuteStatus(notification.getPostMuteStatus());
-            if(modifiedNotification.getPostMuteStatus()==PostMuteStatus.PERMANENT) {
-                notificationRepository.save(modifiedNotification);
-                return "You have successfully turned notifications off permanently!";
+    public String muteNotification(Long groupId,Long authPersonId,Long muteStatus) {
+        GroupNW group=groupRepository.findByGroupId(groupId);
+        if(group != null) {
+            for(int i=0; i<group.getMembers().size(); i++) {
+                //we check whether is user member of group whose notifications want to mute
+                if(authPersonId == group.getMembers().get(i).getPersonId()) {
+                    Person person=personRepository.findByPersonId(authPersonId);
+                    //we loop through notification list
+                    //if mute status is 0 that means temporary,1 means permanent
+                    for(int p=0; p<person.getNotifications().size(); p++) {
+                        if (Objects.equals(person.getEmail(), person.getNotifications().get(p).getReceiver())) {
+                            Notification notification = person.getNotifications().get(p);
+                            if (muteStatus == 1) {
+                                notification.setPostMuteStatus(PostMuteStatus.PERMANENT);
+                                notificationRepository.save(notification);
+                                return "Successfully turned notifications off temporary";
+                            }
+
+                        }
+
+                    }
+                }
             }
+            return "You are not member of that group";
         }
         return null;
     }
 
     @Override
     public String addNotificationPost(String groupName, Person sender) {
-        String content = "User " + sender.getUsername() + " shared a new post" +  " in group " + groupName;
+        String content = "User " + sender.getUsername() + " shared a new post" +  " in group "; // + groupName;
         GroupNW group = groupRepository.findByNameEquals(groupName);
         List<Person> personList = group.getMembers().stream()
                 .filter(user -> !user.getPersonId().equals(sender.getPersonId()))
@@ -89,6 +106,7 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setSender(sender.getUsername());
             notification.setSource("Web notification");
             notification.setReceiver(p.getUsername());
+            notification.setGroupName(groupName);
             notification.setPostMuteStatus(PostMuteStatus.NONE);
             saveNotification(notification);
             p.getNotifications().add(notification);

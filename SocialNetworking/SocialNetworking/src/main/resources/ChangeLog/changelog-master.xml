@@ -143,6 +143,7 @@
             <column name="source" type="varchar(250)"/>
             <column name="sender" type="varchar(250)"/>
             <column name="receiver" type="varchar(250)"/>
+            <column name="group_name" type="varchar(250)"/>
             <column name="post_mute_status" type="varchar(250)"/>
         </createTable>
         <createTable tableName="user_notification">

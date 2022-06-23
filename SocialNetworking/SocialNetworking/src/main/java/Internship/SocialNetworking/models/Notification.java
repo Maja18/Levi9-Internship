@@ -28,6 +28,8 @@ public class Notification {
 
     @Column
     private String receiver;
+    @Column
+    private String groupName;
 
     @Column
     private PostMuteStatus postMuteStatus;

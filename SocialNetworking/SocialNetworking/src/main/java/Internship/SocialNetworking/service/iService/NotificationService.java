@@ -10,9 +10,9 @@ public interface NotificationService {
 
     void saveNotification(Notification notification);
 
-    List<Notification> getAllNotifications(String personName);
+    List<Notification> getAllNotifications(Long loggedPersonUserName,Long groupId);
 
-    String muteNotification(NotificationDTO notification);
+    String muteNotification(Long groupId,Long authPersonId,Long muteStatus);
 
     String addNotificationPost(String groupName, Person sender);
 
