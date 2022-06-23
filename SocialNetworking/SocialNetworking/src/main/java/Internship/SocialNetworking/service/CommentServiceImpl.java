@@ -94,13 +94,18 @@ public class CommentServiceImpl implements CommentService {
         if(comment != null){
             if(comment.getCreatorId().equals(loggedUser.getPersonId())){
                 for(Comment c: comments){
-                    if(c.getCommentId().equals(comment.getCommentId())){
-                        commentRepository.delete(c);
-                        return "Successfully deleted";
+                    if(comment.getParentId() == c.getCommentId()){
+                        List<Comment> updateList = c.getComments();
+                        updateList.remove(comment);
+                        c.setComments(updateList);
+                        commentRepository.save(c);
                     }
                 }
+                commentRepository.delete(comment);
+                return "Successfully deleted";
             }
         }
+
         return null;
     }
 
