@@ -31,27 +31,29 @@ public class GroupRequestServiceImpl implements GroupRequestService {
     @Override
     public String acceptOrRejectRequest(Long requestId,Long administratorId,Long approvalStatus) {
         GroupRequest groupRequest=groupRequestRepository.findByGroupRequestId(requestId);
-        if(approvalStatus == 0)
-            groupRequest.setRequestStatus(RequestStatus.ACCEPTED);
-        if(groupRequest.getRequestStatus() == RequestStatus.ACCEPTED) {
-            GroupNW group =groupRepository.findByGroupId(groupRequest.getGroupId());
-            Person acceptedPerson=personRepository.findByPersonId(groupRequest.getCreatorId());
-            if(group!=null) {
-                //checking whether request sender is authorized namely is administrator of a group
-                if(Objects.equals(administratorId, group.getCreatorId())) {
-                    group.getMembers().add(acceptedPerson);
-                    personRepository.save(acceptedPerson);
-                    //we change the value of request from pending to accepted
-                    groupRequestRepository.save(groupRequest);
-                    return "Successfully updated!";
+        if(groupRequest!= null) {
+            if (approvalStatus == 0)
+                groupRequest.setRequestStatus(RequestStatus.ACCEPTED);
+            if (groupRequest.getRequestStatus() == RequestStatus.ACCEPTED) {
+                GroupNW group = groupRepository.findByGroupId(groupRequest.getGroupId());
+                Person acceptedPerson = personRepository.findByPersonId(groupRequest.getCreatorId());
+                if (group != null) {
+                    //checking whether request sender is authorized namely is administrator of a group
+                    if (Objects.equals(administratorId, group.getCreatorId())) {
+                        group.getMembers().add(acceptedPerson);
+                        personRepository.save(acceptedPerson);
+                        //we change the value of request from pending to accepted
+                        groupRequestRepository.save(groupRequest);
+                        return "Successfully updated!";
+                    } else {
+                        return "No permission";
+                    }
                 }
-                else {
-                    return "No permission";
-                }
+                return null;
             }
-            return null;
+            return "Rejected";
         }
-        return null;
+        return "No request";
     }
 
 

@@ -50,9 +50,15 @@ public class GroupRequestController {
         Long loggedPersonId=userWithId.getPersonId();
         String groupRequest=groupRequestService.acceptOrRejectRequest(requestId,loggedPersonId,approvalStatus);
         if(groupRequest == null) {
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+        if(groupRequest.equals("Rejected")) {
             return new ResponseEntity<String>("User request rejected",HttpStatus.NOT_ACCEPTABLE);
         }
-        if(groupRequest == "No permission") {
+        if(groupRequest.equals("No request")) {
+            return new ResponseEntity<String>("There is no such request",HttpStatus.NOT_FOUND);
+        }
+        if(groupRequest.equals("No permission")) {
             return new ResponseEntity<String>("You are not administrator of that group",HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<String>("User request accepted and added to group",HttpStatus.ACCEPTED);
