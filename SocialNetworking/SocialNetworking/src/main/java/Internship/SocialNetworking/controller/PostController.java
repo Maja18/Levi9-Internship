@@ -1,7 +1,6 @@
 package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
-import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.service.PersonServiceImpl;
@@ -58,10 +57,10 @@ public class PostController {
         Post post = postService.hidePost(hidePostDTO, userWithId.getPersonId());
 
         if(post == null) {
-            return new ResponseEntity<Post>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Post>(post, HttpStatus.OK);
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
     @GetMapping
