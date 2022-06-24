@@ -26,6 +26,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final GroupRepository groupRepository;
 
+    private final MuteRequestServiceImpl muteRequestService;
+
     @Override
     public void saveNotification(Notification notification) {
         notificationRepository.save(notification);
@@ -42,7 +44,9 @@ public class NotificationServiceImpl implements NotificationService {
         GroupNW group = groupRepository.findByNameEquals(groupName);
         List<Person> personList = group.getMembers().stream()
                 .filter(user -> !user.getPersonId().equals(sender.getPersonId()))
+                .filter(user -> !muteRequestService.isGroupBlockedPermanently(user.getPersonId(), group.getGroupId()) )
                 .collect(Collectors.toList());
+
 
         for(Person p : personList){
             Notification notification = new Notification();
