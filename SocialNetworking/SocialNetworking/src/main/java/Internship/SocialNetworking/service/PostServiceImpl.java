@@ -85,15 +85,11 @@ public class PostServiceImpl implements PostService {
                 p.setOver(true);
             }
             if (p.getGroupId() != null){
+                System.out.println("************************");
                 getAllGroupPosts(loggedPerson,posts, p);
             }else{
+                System.out.println("#########################");
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
-            }
-        });
-
-        posts.stream().forEach(p -> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
-                p.setOver(true);
             }
         });
 
@@ -101,11 +97,17 @@ public class PostServiceImpl implements PostService {
     }
 
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
+        System.out.println("HEREEE");
         Person person = personRepository.findByPersonId(userId);
+        System.out.println("HERE");
         List<Person> personFriends = person.getFriends();
+        System.out.println("HERE");
+        System.out.println(p.isPublic());
+        System.out.println(person.getName());
         if (personFriends.isEmpty() && p.isPublic())
             posts.add(p);
         else {
+            System.out.println("HEREE");
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
