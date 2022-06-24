@@ -24,7 +24,12 @@
             <tableExists tableName="event"/>
             <tableExists tableName="group_request"/>
             <tableExists tableName="notification" />
+
+            <tableExists tableName="mute_request" />
+            <tableExists tableName="user_muted_groups" />
+
             <tableExists tableName="event_persons" />
+
         </preConditions>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="friends"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_persons"/>
@@ -40,7 +45,12 @@
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_request"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="notification" />
+
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="mute_request" />
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="user_muted_groups" />
+
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event_persons" />
+
     </changeSet>
     <changeSet id="202010211812" author="Stefan Ugarkovic">
         <createTable tableName="person">
@@ -155,6 +165,19 @@
             <column name="notification_id" type="bigint" />
             <column name="person_id" type="bigint" />
         </createTable>
+        <createTable tableName="mute_request">
+            <column name="mute_request_id" type="bigint">
+                <constraints primaryKey = "true" primaryKeyName = "mute_request_id_pk" />
+            </column>
+            <column name="group_id" type="bigint" />
+            <column name="person_id" type="bigint" />
+            <column name="mute_start" type="DATETIME" />
+            <column name="mute_end" type="varchar(250)" />
+        </createTable>
+        <createTable tableName="user_muted_groups">
+            <column name="person_id" type="bigint" />
+            <column name="mute_request_id" type="bigint" />
+        </createTable>
         <addAutoIncrement tableName="person" columnName="person_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="groupNW" columnName="group_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="post" columnName="post_id" columnDataType="bigint" startWith="1" incrementBy="1" />
@@ -162,6 +185,7 @@
         <addAutoIncrement tableName="event" columnName="event_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="group_request" columnName="group_request_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addAutoIncrement tableName="notification" columnName="notification_id" columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addAutoIncrement tableName="mute_request" columnName="mute_request_id" columnDataType="bigint" startWith="1" incrementBy="1" />
         <addForeignKeyConstraint baseTableName="groupNW" baseColumnNames="creator_id" constraintName="group_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="post" baseColumnNames="creator_id" constraintName="post_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="post" baseColumnNames="group_id" constraintName="post_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
@@ -187,6 +211,12 @@
         <addForeignKeyConstraint baseTableName="comments" baseColumnNames="child_id" constraintName="comment_child_id_fk" referencedTableName="comment" referencedColumnNames="comment_id" />
         <addForeignKeyConstraint baseTableName="user_notification" baseColumnNames="notification_id" constraintName="user_notification_notification_id_fk" referencedTableName="notification" referencedColumnNames = "notification_id" />
         <addForeignKeyConstraint baseTableName="user_notification" baseColumnNames="person_id" constraintName="user_notification_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
+        <addForeignKeyConstraint baseTableName="user_muted_groups" baseColumnNames="person_id" constraintName="person_id_fk"
+                                 referencedTableName="person"
+                                 referencedColumnNames="person_id" />
+        <addForeignKeyConstraint baseTableName="user_muted_groups" baseColumnNames="mute_request_id" constraintName="mute_request_id_fk"
+                                 referencedTableName="mute_request"
+                                 referencedColumnNames="mute_request_id" />
     </changeSet>
     <changeSet  author="Stefan Ugarkovic"  id="insert-person">
         <insert  dbms="mysql" schemaName="social_networking" tableName="person">
