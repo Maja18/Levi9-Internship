@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,5 +34,12 @@ public class Comment {
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "comments",
+            joinColumns = @JoinColumn(name = "parent_id", referencedColumnName = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id", referencedColumnName = "comment_id"))
+    private List<Comment> comments;
 
 }

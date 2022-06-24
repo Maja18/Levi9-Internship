@@ -24,8 +24,12 @@
             <tableExists tableName="event"/>
             <tableExists tableName="group_request"/>
             <tableExists tableName="notification" />
+
             <tableExists tableName="mute_request" />
             <tableExists tableName="user_muted_groups" />
+
+            <tableExists tableName="event_persons" />
+
         </preConditions>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="friends"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_persons"/>
@@ -41,8 +45,12 @@
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="group_request"/>
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="notification" />
+
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="mute_request" />
         <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="user_muted_groups" />
+
+        <dropTable  cascadeConstraints="true" schemaName="social_networking" tableName="event_persons" />
+
     </changeSet>
     <changeSet id="202010211812" author="Stefan Ugarkovic">
         <createTable tableName="person">
@@ -100,6 +108,7 @@
             <column name="group_id" type="bigint"/>
             <column name="creator_id" type="bigint"/>
             <column name="is_over" type="boolean"/>
+            <column name="notified" type="boolean" />
         </createTable>
         <createTable tableName="group_request">
             <column name="group_request_id" type="bigint">
@@ -128,6 +137,10 @@
         <createTable tableName="block_persons">
             <column name="post_id" type="bigint"/>
             <column name="person_id" type="bigint"/>
+        </createTable>
+        <createTable tableName="comments">
+            <column name="parent_id" type="bigint"/>
+            <column name="child_id" type="bigint"/>
         </createTable>
         <createTable tableName="authority">
             <column name="authority_id" type="bigint">
@@ -194,6 +207,8 @@
         <addForeignKeyConstraint baseTableName="user_authority" baseColumnNames="person_id" constraintName="authority_persons_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="group_id" constraintName="group_posts_group_id_fk" referencedTableName="groupNW" referencedColumnNames="group_id" />
         <addForeignKeyConstraint baseTableName="group_posts" baseColumnNames="post_id" constraintName="group_posts_post_id_fk" referencedTableName="post" referencedColumnNames="post_id" />
+        <addForeignKeyConstraint baseTableName="comments" baseColumnNames="parent_id" constraintName="comment_parent_id_fk" referencedTableName="comment" referencedColumnNames="comment_id" />
+        <addForeignKeyConstraint baseTableName="comments" baseColumnNames="child_id" constraintName="comment_child_id_fk" referencedTableName="comment" referencedColumnNames="comment_id" />
         <addForeignKeyConstraint baseTableName="user_notification" baseColumnNames="notification_id" constraintName="user_notification_notification_id_fk" referencedTableName="notification" referencedColumnNames = "notification_id" />
         <addForeignKeyConstraint baseTableName="user_notification" baseColumnNames="person_id" constraintName="user_notification_person_id_fk" referencedTableName="person" referencedColumnNames="person_id" />
         <addForeignKeyConstraint baseTableName="user_muted_groups" baseColumnNames="person_id" constraintName="person_id_fk"

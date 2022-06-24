@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,11 +32,21 @@ public class CommentServiceImpl implements CommentService {
         boolean val = validation(commentDTO, creatorId);
 
         if(val) {
+            Comment parentComment = commentRepository.findByCommentId(commentDTO.getParentId());
+
             comment.setContent(commentDTO.getContent());
             comment.setPostId(commentDTO.getPostId());
             comment.setParentId(commentDTO.getParentId());
             comment.setCreatorId(creatorId);
             comment.setCreationDate(LocalDateTime.now());
+            comment.setComments(null);
+
+            if(parentComment != null) {
+                List<Comment> commentList = parentComment.getComments();
+                commentList.add(comment);
+                parentComment.setComments(commentList);
+                return commentRepository.save(parentComment);
+            }
 
             return commentRepository.save(comment);
         }
@@ -46,7 +57,56 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getCommentsByPostId(Long postId) {
         List<Comment> commentList = commentRepository.findByPostIdOrderByCreationDateDesc(postId);
-        return commentList;
+        List<Comment> commentList1 = new ArrayList<>();
+        
+        if(!commentList.isEmpty()) {
+            for (Comment comment : commentList) {
+                if(comment.getParentId() == null){
+                    commentList1.add(comment);
+                }
+            }
+        }
+        return commentList1;
+    }
+
+    @Override
+    public List<Comment> getCommentsByCommentId(Long commentId) {
+        Comment comment = commentRepository.findByCommentId(commentId);
+        List<Comment> comments = commentRepository.findAll();
+        List<Comment> childComments = new ArrayList<>();
+
+        if(comment != null){
+            for (Comment c: comments) {
+                if(c.getParentId() == comment.getCommentId()){
+                    childComments.add(c);
+                }
+            }
+        }
+
+        return childComments;
+    }
+
+    @Override
+    public String deleteComment(Long commentId, Person loggedUser) {
+        Comment comment = commentRepository.findByCommentId(commentId);
+        List<Comment> comments = commentRepository.findAll();
+
+        if(comment != null){
+            if(comment.getCreatorId().equals(loggedUser.getPersonId())){
+                for(Comment c: comments){
+                    if(comment.getParentId() == c.getCommentId()){
+                        List<Comment> updateList = c.getComments();
+                        updateList.remove(comment);
+                        c.setComments(updateList);
+                        commentRepository.save(c);
+                    }
+                }
+                commentRepository.delete(comment);
+                return "Successfully deleted";
+            }
+        }
+
+        return null;
     }
 
     private boolean validation(CommentDTO commentDTO, Long creatorId) {
