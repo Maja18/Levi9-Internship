@@ -42,13 +42,13 @@ public class GroupRequestController {
     }
 
 
-    @PutMapping("")
+    @PutMapping("{requestId}/{approvalStatus}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<String> acceptOrRejectRequest(@RequestBody GroupRequestDTO request) {
+    public ResponseEntity<String> acceptOrRejectRequest(Long requestId,Long approvalStatus) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         Long loggedPersonId=userWithId.getPersonId();
-        String groupRequest=groupRequestService.acceptOrRejectRequest(request,loggedPersonId);
+        String groupRequest=groupRequestService.acceptOrRejectRequest(requestId,loggedPersonId,approvalStatus);
         if(groupRequest == null) {
             return new ResponseEntity<String>("User request rejected",HttpStatus.NOT_ACCEPTABLE);
         }
