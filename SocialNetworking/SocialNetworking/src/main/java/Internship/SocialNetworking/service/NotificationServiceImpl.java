@@ -44,7 +44,8 @@ public class NotificationServiceImpl implements NotificationService {
         GroupNW group = groupRepository.findByNameEquals(groupName);
         List<Person> personList = group.getMembers().stream()
                 .filter(user -> !user.getPersonId().equals(sender.getPersonId()))
-                .filter(user -> !muteRequestService.isGroupBlockedPermanently(user.getPersonId(), group.getGroupId()) )
+                .filter(user -> !muteRequestService.isGroupBlockedPermanently(user.getPersonId(), group.getGroupId()))
+                .filter(user -> !muteRequestService.isGroupBlockedTemporary(user.getPersonId(), group.getGroupId()))
                 .collect(Collectors.toList());
 
 

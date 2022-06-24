@@ -58,13 +58,19 @@ public class MuteRequestServiceImpl implements MuteRequestService {
     @Override
     public boolean isGroupBlockedPermanently(Long personId, Long groupId) {
         Person person = personRepository.findByPersonId(personId);
-        GroupNW groupNW = groupRepository.findByGroupId(groupId);
 
-        boolean isBlocked = person.getMutedGroups().stream()
+        return person.getMutedGroups().stream()
                 .filter(request -> request.getMuteEnd().equals("PERMANENT"))
                 .anyMatch(request -> request.getGroupId().equals(groupId));
+    }
 
+    @Override
+    public boolean isGroupBlockedTemporary(Long personId, Long groupId) {
+        Person person = personRepository.findByPersonId(personId);
 
-        return isBlocked;
+        return person.getMutedGroups().stream()
+                .filter(request -> !request.getMuteEnd().equals("PERMANENT"))
+                .filter(request ->  LocalDateTime.parse(request.getMuteEnd()).compareTo(LocalDateTime.now()) > 0)
+                .anyMatch(request -> request.getGroupId().equals(groupId));
     }
 }

@@ -12,4 +12,7 @@ public interface MuteRequestService {
     String muteGroup(MuteRequestDTO muteRequestDTO);
 
     boolean isGroupBlockedPermanently(Long personId, Long groupId);
+
+    boolean isGroupBlockedTemporary(Long personId, Long groupId);
+
 }
