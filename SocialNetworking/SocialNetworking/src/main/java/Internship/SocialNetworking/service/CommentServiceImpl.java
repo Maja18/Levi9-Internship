@@ -91,19 +91,17 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByCommentId(commentId);
         List<Comment> comments = commentRepository.findAll();
 
-        if(comment != null){
-            if(comment.getCreatorId().equals(loggedUser.getPersonId())){
-                for(Comment c: comments){
-                    if(comment.getParentId() == c.getCommentId()){
-                        List<Comment> updateList = c.getComments();
-                        updateList.remove(comment);
-                        c.setComments(updateList);
-                        commentRepository.save(c);
-                    }
+        if(comment != null && comment.getCreatorId().equals(loggedUser.getPersonId())){
+            for(Comment c: comments){
+                if(comment.getParentId().equals(c.getCommentId())){
+                    List<Comment> updateList = c.getComments();
+                    updateList.remove(comment);
+                    c.setComments(updateList);
+                    commentRepository.save(c);
                 }
-                commentRepository.delete(comment);
-                return "Successfully deleted";
             }
+            commentRepository.delete(comment);
+            return "Successfully deleted";
         }
 
         return null;
@@ -118,12 +116,8 @@ public class CommentServiceImpl implements CommentService {
             GroupNW group = groupRepository.findByGroupId(post.getGroupId());
             List<Person> members = group.getMembers();
 
-            if(members.stream().anyMatch(m-> m.getPersonId() == creatorId)){
-                if(comment != null && comment.getPostId() == post.getPostId()){
-                    return true;
-                }else if(commentDTO.getParentId() == null){
-                    return true;
-                }
+            if(members.stream().anyMatch(m-> m.getPersonId().equals(creatorId))){
+                return comment != null && comment.getPostId().equals(post.getPostId()) || commentDTO.getParentId() == null;
             }
         }
 

@@ -32,10 +32,10 @@ public class CommentController {
         Comment comment = commentService.addComment(commentDTO, loggedUser.getPersonId());
 
         if (comment == null) {
-            return new ResponseEntity<Comment>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
     @GetMapping(value = "/post/{post-id}")
@@ -44,10 +44,10 @@ public class CommentController {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
 
         if (comments == null) {
-            return new ResponseEntity<List<Comment>>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{comment-id}")
@@ -56,10 +56,10 @@ public class CommentController {
         List<Comment> comments = commentService.getCommentsByCommentId(commentId);
 
         if (comments == null) {
-            return new ResponseEntity<List<Comment>>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{comment-id}")
@@ -71,10 +71,10 @@ public class CommentController {
         String comment = commentService.deleteComment(commentId, loggedUser);
 
         if (comment == null) {
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<String>(comment, HttpStatus.OK);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
 }

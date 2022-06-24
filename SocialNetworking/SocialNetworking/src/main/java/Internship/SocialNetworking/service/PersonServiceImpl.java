@@ -11,7 +11,7 @@ import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @Service
@@ -57,18 +57,16 @@ public class PersonServiceImpl implements PersonService {
         Person friend = personRepository.findByPersonId(friendId);
 
 
-        if(person != null && friend != null){
-            if(person.getPersonId() != friend.getPersonId()){
-                List<Person> listFriends = person.getFriends();
+        if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
+            List<Person> listFriends = person.getFriends();
 
-                if(listFriends.stream().anyMatch(f -> f.getPersonId() == friendId)){
-                        return null;
-                }
-
-                listFriends.add(friend);
-                person.setFriends(listFriends);
-                return personRepository.save(person);
+            if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friendId))){
+                    return null;
             }
+
+            listFriends.add(friend);
+            person.setFriends(listFriends);
+            return personRepository.save(person);
         }
 
         return null;
@@ -80,7 +78,7 @@ public class PersonServiceImpl implements PersonService {
 
         if(person!= null && friend != null){
             List<Person> friendList = person.getFriends();
-            if(friendList.stream().anyMatch(f -> f.getPersonId() == friendId)){
+            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))){
                 friendList.remove(friend);
                 return personRepository.save(person);
             }
