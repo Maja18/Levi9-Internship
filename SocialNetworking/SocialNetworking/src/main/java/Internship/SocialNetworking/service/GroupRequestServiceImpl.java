@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +29,16 @@ public class GroupRequestServiceImpl implements GroupRequestService {
     }
 
     @Override
-    public String acceptOrRejectRequest(GroupRequestDTO request,Long administratorId) {
-        GroupRequest groupRequest=groupRequestRepository.findByGroupRequestId(request.getGroupRequestId());
-        groupRequest.setGroupRequestId(request.getGroupRequestId());
-        groupRequest.setRequestStatus(request.getRequestStatus());
-        groupRequest.setGroupId(request.getGroupId());
-        groupRequest.setCreatorId(request.getCreatorId());
+    public String acceptOrRejectRequest(Long requestId,Long administratorId,Long approvalStatus) {
+        GroupRequest groupRequest=groupRequestRepository.findByGroupRequestId(requestId);
+        if(approvalStatus == 0)
+            groupRequest.setRequestStatus(RequestStatus.ACCEPTED);
         if(groupRequest.getRequestStatus() == RequestStatus.ACCEPTED) {
             GroupNW group =groupRepository.findByGroupId(groupRequest.getGroupId());
             Person acceptedPerson=personRepository.findByPersonId(groupRequest.getCreatorId());
             if(group!=null) {
                 //checking whether request sender is authorized namely is administrator of a group
-                if(administratorId == group.getCreatorId()) {
+                if(Objects.equals(administratorId, group.getCreatorId())) {
                     group.getMembers().add(acceptedPerson);
                     personRepository.save(acceptedPerson);
                     //we change the value of request from pending to accepted
