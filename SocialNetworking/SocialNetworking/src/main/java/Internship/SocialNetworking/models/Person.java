@@ -63,14 +63,14 @@ public class Person implements UserDetails {
     @JoinTable(name = "friends",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "person_id"))
-    private transient List<Person> friends;
+    private List<Person> friends;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "user_notification",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
-    private transient List<Notification> notifications;
+    private List<Notification> notifications;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

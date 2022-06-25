@@ -82,33 +82,24 @@ public class PostServiceImpl implements PostService {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
         allPosts.stream().forEach(p-> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
+            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setOver(true);
-            }
-            if (p.getGroupId() != null){
-                System.out.println("************************");
+            if (p.getGroupId() != null)
                 getAllGroupPosts(loggedPerson,posts, p);
-            }else{
-                System.out.println("#########################");
+            else
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
-            }
         });
 
         return posts;
     }
 
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
-        System.out.println("HEREEE");
         Person person = personRepository.findByPersonId(userId);
-        System.out.println("HERE");
         List<Person> personFriends = person.getFriends();
-        System.out.println("HERE");
-        System.out.println(p.isPublic());
-        System.out.println(person.getName());
-        if (personFriends.isEmpty() && p.isPublic())
+        if (personFriends == null && !p.isPublic()) return;
+        if (personFriends == null && p.isPublic())
             posts.add(p);
         else {
-            System.out.println("HEREE");
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
@@ -128,9 +119,8 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
-                posts.add(p);
-            }
+            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                    posts.add(p);
         });
     }
 
