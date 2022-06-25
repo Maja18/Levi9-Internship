@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -155,15 +156,15 @@ public class PostServiceImpl implements PostService {
 
         if(person != null && blockPerson != null && post != null){
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
-            if(person.getPersonId() == post.getCreatorId() && person.getPersonId() != blockPerson.getPersonId()){
-                if(groupNW.getMembers().stream().anyMatch(m -> m.getPersonId() == blockPerson.getPersonId())){
-                    if(post.getBlockedPersons().stream().anyMatch(b -> b.getPersonId() == blockPerson.getPersonId())){
-                        return false;
-                    }
-                    return true;
-                }
+
+            if(person.getPersonId().equals(post.getCreatorId()) && !Objects.equals(person.getPersonId(), blockPerson.getPersonId())
+                    && groupNW.getMembers().stream().anyMatch(m -> m.getPersonId().equals(blockPerson.getPersonId()))){
+
+                    return post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
+
             }
         }
+
         return false;
     }
 

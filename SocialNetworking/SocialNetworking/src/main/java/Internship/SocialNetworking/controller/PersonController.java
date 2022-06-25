@@ -42,10 +42,10 @@ public class PersonController {
         Person add = personService.addFriend(userWithId.getPersonId(), friendsDTO.getFriendId());
 
         if (add == null) {
-            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Person>(add, HttpStatus.OK);
+        return new ResponseEntity<>(add, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/remove-friend/{friendId}")
@@ -57,10 +57,10 @@ public class PersonController {
         Person remove = personService.removeFriend(userWithId.getPersonId(), friendId);
 
         if (remove == null) {
-            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Person>(remove, HttpStatus.OK);
+        return new ResponseEntity<>(remove, HttpStatus.OK);
     }
 
     @GetMapping("")

@@ -72,6 +72,14 @@ public class Person implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
     private transient List<Notification> notifications;
 
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_muted_groups",
+                joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
+                inverseJoinColumns = @JoinColumn(name = "mute_request_id", referencedColumnName = "mute_request_id"))
+    private List<MuteRequest> mutedGroups;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities1 = new ArrayList<>();

@@ -1,34 +1,35 @@
 package Internship.SocialNetworking.models;
-
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import javax.persistence.*;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Entity
-public class Notification {
+public class MuteRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id", nullable = false)
-    private Long notificationId;
-
-
-    @Column
-    private String content;
+    @Column(name = "mute_request_id", nullable = false)
+    private Long muteRequestId;
 
     @Column
-    private String source;
+    private Long groupId;
 
     @Column
-    private String sender;
+    private Long personId;
 
     @Column
-    private String receiver;
+    private LocalDateTime muteStart;
+
+    @Column
+    private String muteEnd;
+
+
 
 
 

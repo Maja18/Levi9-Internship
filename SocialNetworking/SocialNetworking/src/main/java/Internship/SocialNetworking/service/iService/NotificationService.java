@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service.iService;
 
+import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.Notification;
 import Internship.SocialNetworking.models.Person;
 
@@ -11,6 +12,10 @@ public interface NotificationService {
 
     List<Notification> getAllNotifications();
 
-    String addNotificationPost(String groupName, Person sender);
+    void addNotificationPost(String groupName, Person sender);
+
+    void sendNotificationsEvent(Event event);
+
+    void iterateEventsList(List<Event> events);
 
 }

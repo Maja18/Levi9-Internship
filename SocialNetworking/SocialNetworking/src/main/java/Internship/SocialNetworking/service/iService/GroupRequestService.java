@@ -8,5 +8,5 @@ import java.util.List;
 public interface GroupRequestService {
     List<GroupRequest> listAllRequests();
 
-    String acceptOrRejectRequest(GroupRequestDTO request,Long administratorId);
+    String acceptOrRejectRequest(Long requestId,Long administratorId,Long approvalStatus);
 }
