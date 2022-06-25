@@ -110,4 +110,30 @@ public class NotificationServiceImpl implements NotificationService {
         eventRepository.save(event);
         System.out.println("zavrseno!!!!!!!!");
     }
+
+
+    @Override
+    public void checkIfEventIsOver(Event event) {
+        List<Person> persons = event.getGoing();
+        String content = "The event " + event.getName() +  "in group " +
+                groupRepository.findByGroupId(event.getGroupId()).getName()
+                + " is over!! " ;
+
+        persons.forEach(person -> {
+            Notification notification = new Notification();
+            notification.setContent(content);
+            notification.setSource("Event scheduler");
+            notification.setSender(personRepository.findByPersonId(event.getCreatorId()).getUsername());
+            notification.setReceiver(person.getUsername());
+            saveNotification(notification);
+            Person temp = personRepository.findByPersonId(person.getPersonId());
+            temp.getNotifications().add(notification);
+            personRepository.save(temp);
+        });
+        Event event1 = eventRepository.getByEventId(event.getEventId());
+        event1.setIsOver(true);
+        eventRepository.save(event1);
+
+
+    }
 }
