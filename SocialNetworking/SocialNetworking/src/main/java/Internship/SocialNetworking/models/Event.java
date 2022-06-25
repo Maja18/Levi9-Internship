@@ -41,7 +41,7 @@ public class Event {
    private Long creatorId;
 
    @Column
-   private boolean isOver;
+   private Boolean isOver;
 
    @Column
    private Boolean notified;

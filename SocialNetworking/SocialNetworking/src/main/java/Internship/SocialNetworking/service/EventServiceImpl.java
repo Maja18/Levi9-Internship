@@ -86,6 +86,7 @@ public class EventServiceImpl implements EventService {
         event.setStartEvent(LocalDateTime.parse(eventDTO.getStartEvent()));
         event.setEndEvent(LocalDateTime.parse(eventDTO.getEndEvent()));
         event.setGroupId(eventDTO.getGroupId());
+        event.setIsOver(false);
         event.setNotified(false);
         eventRepository.save(event);
 
