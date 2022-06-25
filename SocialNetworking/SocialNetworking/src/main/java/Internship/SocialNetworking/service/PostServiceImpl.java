@@ -32,9 +32,7 @@ public class PostServiceImpl implements PostService {
     private final NotificationServiceImpl notificationService;
 
     @Override
-    public Post addNewPost(PostDTO postDTO){
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        Person loggedPerson = (Person) currentUser.getPrincipal();
+    public Post addNewPost(PostDTO postDTO, Person loggedPerson){
         Post post;
         Optional<GroupNW> group = Optional.ofNullable(groupRepository.findByGroupId(postDTO.getGroupId()));
         if (group.isEmpty()){
@@ -73,6 +71,8 @@ public class PostServiceImpl implements PostService {
         post.setDescription(postDTO.getDescription());
         post.setImageUrl(postDTO.getImageUrl());
         post.setVideoUrl(postDTO.getVideoUrl());
+
+        System.out.println(post.getDescription());
 
         return post;
     }
