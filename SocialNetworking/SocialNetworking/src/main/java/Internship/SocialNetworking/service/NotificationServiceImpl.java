@@ -30,7 +30,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final GroupRepository groupRepository;
 
+
+    private final MuteRequestServiceImpl muteRequestService;
+
     private final EventRepository eventRepository;
+
 
     @Override
     public void saveNotification(Notification notification) {
@@ -48,7 +52,10 @@ public class NotificationServiceImpl implements NotificationService {
         GroupNW group = groupRepository.findByNameEquals(groupName);
         List<Person> personList = group.getMembers().stream()
                 .filter(user -> !user.getPersonId().equals(sender.getPersonId()))
+                .filter(user -> !muteRequestService.isGroupBlockedPermanently(user.getPersonId(), group.getGroupId()))
+                .filter(user -> !muteRequestService.isGroupBlockedTemporary(user.getPersonId(), group.getGroupId()))
                 .collect(Collectors.toList());
+
 
         for(Person p : personList){
             Notification notification = new Notification();
@@ -102,5 +109,31 @@ public class NotificationServiceImpl implements NotificationService {
         event.setNotified(true);
         eventRepository.save(event);
         System.out.println("zavrseno!!!!!!!!");
+    }
+
+
+    @Override
+    public void checkIfEventIsOver(Event event) {
+        List<Person> persons = event.getGoing();
+        String content = "The event " + event.getName() +  "in group " +
+                groupRepository.findByGroupId(event.getGroupId()).getName()
+                + " is over!! " ;
+
+        persons.forEach(person -> {
+            Notification notification = new Notification();
+            notification.setContent(content);
+            notification.setSource("Event scheduler");
+            notification.setSender(personRepository.findByPersonId(event.getCreatorId()).getUsername());
+            notification.setReceiver(person.getUsername());
+            saveNotification(notification);
+            Person temp = personRepository.findByPersonId(person.getPersonId());
+            temp.getNotifications().add(notification);
+            personRepository.save(temp);
+        });
+        Event event1 = eventRepository.getByEventId(event.getEventId());
+        event1.setIsOver(true);
+        eventRepository.save(event1);
+
+
     }
 }

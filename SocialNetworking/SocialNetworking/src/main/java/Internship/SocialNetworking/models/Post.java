@@ -15,7 +15,6 @@ import java.util.List;
 public class Post {
 
     @Id
-    //@SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id", nullable = false)
     private Long postId;
@@ -50,4 +49,5 @@ public class Post {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)*/
     @Column(name="group_id")
     private Long groupId;
+
 }

@@ -9,9 +9,8 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,9 +29,7 @@ public class PostServiceImpl implements PostService {
     private final NotificationServiceImpl notificationService;
 
     @Override
-    public Post addNewPost(PostDTO postDTO){
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        Person loggedPerson = (Person) currentUser.getPrincipal();
+    public Post addNewPost(PostDTO postDTO, Person loggedPerson){
         Post post;
         Optional<GroupNW> group = Optional.ofNullable(groupRepository.findByGroupId(postDTO.getGroupId()));
         if (group.isEmpty()){
@@ -59,6 +56,7 @@ public class PostServiceImpl implements PostService {
             post.setImageUrl(postDTO.getImageUrl());
             post.setVideoUrl(postDTO.getVideoUrl());
         }
+
         return post;
     }
 
@@ -80,20 +78,12 @@ public class PostServiceImpl implements PostService {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
         allPosts.stream().forEach(p-> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
+            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setOver(true);
-            }
-            if (p.getGroupId() != null){
+            if (p.getGroupId() != null)
                 getAllGroupPosts(loggedPerson,posts, p);
-            }else{
+            else
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
-            }
-        });
-
-        posts.stream().forEach(p -> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
-                p.setOver(true);
-            }
         });
 
         return posts;
@@ -102,7 +92,10 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        if (personFriends.isEmpty() && p.isPublic())
+        boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
+        if (isNullOrEmpty && !p.isPublic())
+            return;
+        if (isNullOrEmpty && p.isPublic())
             posts.add(p);
         else {
             personFriends.stream().forEach(friend -> {
@@ -124,9 +117,8 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
-                posts.add(p);
-            }
+            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                    posts.add(p);
         });
     }
 
@@ -150,7 +142,10 @@ public class PostServiceImpl implements PostService {
         Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
         Post post = postRepository.findByPostId(hidePostDTO.getPostId());
 
-        if(person != null && blockPerson != null && post != null && person.getPersonId().equals(post.getCreatorId())){
+        if(person != null && blockPerson != null && post != null
+                && person.getPersonId().equals(post.getCreatorId())
+                && !post.isOver()){
+
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
 
             if(!Objects.equals(person.getPersonId(), blockPerson.getPersonId()) && groupNW != null
@@ -172,7 +167,12 @@ public class PostServiceImpl implements PostService {
         List<Person> personFriends = loggedPerson.getFriends();
         personFriends.stream().forEach(friend -> {
             List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
-            friendPosts.addAll(posts);
+            for (Post p: posts) {
+                if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
+                    p.setOver(true);
+                if (!p.isOver())
+                    friendPosts.add(p);
+            }
         });
 
         return friendPosts;

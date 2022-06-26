@@ -1,26 +1,18 @@
 package Internship.SocialNetworking.security.auth;
-
-import Internship.SocialNetworking.models.Authority;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.AuthorityRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.security.TokenUtils;
-import Internship.SocialNetworking.service.PersonServiceImpl;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -45,11 +37,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String mail;
         String authToken = tokenUtils.getToken(request);
         Claims claims = tokenUtils.getAllClaimsFromToken(authToken);
-        String subject = (String) claims.get(Claims.SUBJECT);
         String authorities = (String) claims.get("authorities");
-
-        System.out.println("SUBJECT: " + subject);
-        System.out.println("roles: " + authorities);
         authorities = authorities.replace("[", "").replace("]", "");
         String[] authoritiesNames = authorities.split(",");
 
@@ -59,12 +47,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             mail = tokenUtils.getMailFromToken(authToken);
 
             if (mail != null) {
-                System.out.println("EMAIL : " + mail);
                 Person user = personRepository.findByEmailEquals(mail);
                 for (String s : authoritiesNames){
                     user.addNewAuthority(s);
                 }
-                //personRepository.save(user);
+
                 UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
 
 

@@ -56,7 +56,7 @@ public class Person implements UserDetails {
     @JoinTable(name = "block_persons",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
-    private List<Post> blockedPosts;
+    private  List<Post> blockedPosts;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -71,6 +71,14 @@ public class Person implements UserDetails {
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
     private List<Notification> notifications;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_muted_groups",
+                joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
+                inverseJoinColumns = @JoinColumn(name = "mute_request_id", referencedColumnName = "mute_request_id"))
+    private List<MuteRequest> mutedGroups;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
