@@ -12,14 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -152,15 +150,17 @@ public class PostServiceImpl implements PostService {
         Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
         Post post = postRepository.findByPostId(hidePostDTO.getPostId());
 
-        if(person != null && blockPerson != null && post != null){
+        if(person != null && blockPerson != null && post != null && person.getPersonId().equals(post.getCreatorId())){
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
 
-            if(person.getPersonId().equals(post.getCreatorId()) && !Objects.equals(person.getPersonId(), blockPerson.getPersonId())
+            if(!Objects.equals(person.getPersonId(), blockPerson.getPersonId()) && groupNW != null
                     && groupNW.getMembers().stream().anyMatch(m -> m.getPersonId().equals(blockPerson.getPersonId()))){
 
-                    return post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
+                return post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
 
-            }
+            }else return post.getGroupId() == null
+                    && person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(blockPerson.getPersonId()))
+                    && post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
         }
 
         return false;
