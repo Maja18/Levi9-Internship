@@ -37,7 +37,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String mail;
         String authToken = tokenUtils.getToken(request);
         Claims claims = tokenUtils.getAllClaimsFromToken(authToken);
-        String subject = (String) claims.get(Claims.SUBJECT);
         String authorities = (String) claims.get("authorities");
         authorities = authorities.replace("[", "").replace("]", "");
         String[] authoritiesNames = authorities.split(",");
@@ -48,7 +47,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             mail = tokenUtils.getMailFromToken(authToken);
 
             if (mail != null) {
-                System.out.println("EMAIL : " + mail);
                 Person user = personRepository.findByEmailEquals(mail);
                 for (String s : authoritiesNames){
                     user.addNewAuthority(s);

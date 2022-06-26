@@ -1,8 +1,6 @@
 package Internship.SocialNetworking.service;
-
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.models.GroupNW;
-import Internship.SocialNetworking.models.Notification;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.repository.GroupRepository;
@@ -17,16 +15,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-public class PostServiceTests {
+class PostServiceTests {
 
     @InjectMocks
     private PostServiceImpl postService;
@@ -59,6 +55,7 @@ public class PostServiceTests {
         post.setDescription("mikin post");
         post.setCreatorId(2L);
         post.setPublic(false);
+        post.setCreationDate(LocalDateTime.now());
         posts.add(post);
 
         Person loggedPerson = new Person();
@@ -105,8 +102,7 @@ public class PostServiceTests {
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
-        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() == 2);
-
+        Assertions.assertEquals(2, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
     }
 
     @Test
@@ -139,8 +135,7 @@ public class PostServiceTests {
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
-        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() == 1);
-
+        Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
     }
 
     @Test
@@ -185,7 +180,7 @@ public class PostServiceTests {
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
-        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() == 1);
+        Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
     }
 
     @Test
@@ -234,7 +229,7 @@ public class PostServiceTests {
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
-        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() == 2);
+        Assertions.assertEquals(2, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
     }
 
     @Test
@@ -250,7 +245,7 @@ public class PostServiceTests {
 
         when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
         Assertions.assertNotNull(postService.addNewPost(post, loggedPerson));
-        Assertions.assertTrue(postService.addNewPost(post, loggedPerson).getDescription().equals("my first post"));
+        Assertions.assertEquals("my first post", postService.addNewPost(post, loggedPerson).getDescription());
     }
 
     @Test
@@ -274,8 +269,8 @@ public class PostServiceTests {
 
         when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(group);
         Assertions.assertNotNull(postService.addNewPost(post, loggedPerson));
-        Assertions.assertTrue(postService.addNewPost(post, loggedPerson).getDescription().equals("my first post"));
-        Assertions.assertTrue(postService.addNewPost(post, loggedPerson).getGroupId().equals(1L));
+        Assertions.assertEquals("my first post", postService.addNewPost(post, loggedPerson).getDescription());
+        Assertions.assertEquals(1L, postService.addNewPost(post, loggedPerson).getGroupId());
 
     }
 }

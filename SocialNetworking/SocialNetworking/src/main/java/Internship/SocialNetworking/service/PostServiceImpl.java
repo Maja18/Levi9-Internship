@@ -59,6 +59,7 @@ public class PostServiceImpl implements PostService {
             post.setImageUrl(postDTO.getImageUrl());
             post.setVideoUrl(postDTO.getVideoUrl());
         }
+
         return post;
     }
 
@@ -71,8 +72,6 @@ public class PostServiceImpl implements PostService {
         post.setDescription(postDTO.getDescription());
         post.setImageUrl(postDTO.getImageUrl());
         post.setVideoUrl(postDTO.getVideoUrl());
-
-        System.out.println(post.getDescription());
 
         return post;
     }
@@ -164,7 +163,12 @@ public class PostServiceImpl implements PostService {
         List<Person> personFriends = loggedPerson.getFriends();
         personFriends.stream().forEach(friend -> {
             List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
-            friendPosts.addAll(posts);
+            for (Post p: posts) {
+                if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
+                    p.setOver(true);
+                if (!p.isOver())
+                    friendPosts.add(p);
+            }
         });
 
         return friendPosts;

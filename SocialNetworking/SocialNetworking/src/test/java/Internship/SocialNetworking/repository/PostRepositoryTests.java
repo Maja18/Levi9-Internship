@@ -9,7 +9,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class PostRepositoryTests {
+class PostRepositoryTests {
 
     @Autowired
     private PostRepository postRepository;

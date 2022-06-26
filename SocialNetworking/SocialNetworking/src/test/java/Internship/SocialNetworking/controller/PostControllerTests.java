@@ -77,7 +77,7 @@ class PostControllerTests {
         person.setPersonId(1L);
         person.setName("Pera");
         person.setSurname("Peric");
-        person.setEmail("pera@gmail.com");
+        person.setEmail("maja@gmail.com");
         person.setPassword("123");
         Authority authority = new Authority();
         authority.setAuthorityId(1L);
@@ -95,6 +95,8 @@ class PostControllerTests {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Person p = (Person) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(p.getEmail());
+        System.out.println("*********************");
+        System.out.println(jwt);
         int expiresIn = tokenUtils.getExpiredIn();
     }
 
@@ -105,7 +107,7 @@ class PostControllerTests {
         person.setPersonId(1L);
         person.setName("Maja");
         person.setSurname("Dragojlovic");
-        person.setEmail("maja@gmail.com");
+        person.setEmail("pera@gmail.com");
         person.setPassword("123");
         Authority authority = new Authority();
         authority.setAuthorityId(1L);
