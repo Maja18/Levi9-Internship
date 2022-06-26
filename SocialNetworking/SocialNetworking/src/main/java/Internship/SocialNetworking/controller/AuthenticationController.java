@@ -6,6 +6,7 @@ import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.JwtAuthenticationRequest;
 import Internship.SocialNetworking.service.AuthorityServiceImpl;
 import Internship.SocialNetworking.service.PersonServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,23 +19,15 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
-    private  TokenUtils tokenUtils;
+    private final TokenUtils tokenUtils;
 
-    private  PersonServiceImpl personService;
+    private final PersonServiceImpl personService;
 
-    private  PasswordEncoder passwordEncoder;
+    private final AuthorityServiceImpl authorityService;
 
-    private AuthorityServiceImpl authorityService;
-
-    @Autowired
-    public AuthenticationController(TokenUtils tokenUtils , PersonServiceImpl personService, PasswordEncoder passwordEncoder, AuthorityServiceImpl authorityService) {
-        this.tokenUtils = tokenUtils;
-        this.personService = personService;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityService = authorityService;
-    }
 
     @RolesAllowed("ROLE_USER")
     @PostMapping("/login")

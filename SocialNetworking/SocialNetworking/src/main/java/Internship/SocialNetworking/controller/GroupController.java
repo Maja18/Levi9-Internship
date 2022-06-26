@@ -1,6 +1,5 @@
 package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.dto.GroupDTO;
-import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.service.GroupServiceImpl;
 import Internship.SocialNetworking.service.iService.EventService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/group", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -20,10 +18,6 @@ import java.util.List;
 public class GroupController {
 
     private final GroupServiceImpl groupService;
-
-    private final EventService eventService;
-
-
 
     @PostMapping(value = "/new")
     @RolesAllowed("ROLE_USER")

@@ -32,9 +32,7 @@ public class PostServiceImpl implements PostService {
     private final NotificationServiceImpl notificationService;
 
     @Override
-    public Post addNewPost(PostDTO postDTO){
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        Person loggedPerson = (Person) currentUser.getPrincipal();
+    public Post addNewPost(PostDTO postDTO, Person loggedPerson){
         Post post;
         Optional<GroupNW> group = Optional.ofNullable(groupRepository.findByGroupId(postDTO.getGroupId()));
         if (group.isEmpty()){
@@ -61,6 +59,7 @@ public class PostServiceImpl implements PostService {
             post.setImageUrl(postDTO.getImageUrl());
             post.setVideoUrl(postDTO.getVideoUrl());
         }
+
         return post;
     }
 
@@ -82,20 +81,12 @@ public class PostServiceImpl implements PostService {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
         allPosts.stream().forEach(p-> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
+            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setOver(true);
-            }
-            if (p.getGroupId() != null){
+            if (p.getGroupId() != null)
                 getAllGroupPosts(loggedPerson,posts, p);
-            }else{
+            else
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
-            }
-        });
-
-        posts.stream().forEach(p -> {
-            if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1))){
-                p.setOver(true);
-            }
         });
 
         return posts;
@@ -104,7 +95,8 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        if (personFriends.isEmpty() && p.isPublic())
+        if (personFriends == null && !p.isPublic()) return;
+        if (personFriends == null && p.isPublic())
             posts.add(p);
         else {
             personFriends.stream().forEach(friend -> {
@@ -126,9 +118,8 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver()) {
-                posts.add(p);
-            }
+            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                    posts.add(p);
         });
     }
 
@@ -172,7 +163,12 @@ public class PostServiceImpl implements PostService {
         List<Person> personFriends = loggedPerson.getFriends();
         personFriends.stream().forEach(friend -> {
             List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
-            friendPosts.addAll(posts);
+            for (Post p: posts) {
+                if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
+                    p.setOver(true);
+                if (!p.isOver())
+                    friendPosts.add(p);
+            }
         });
 
         return friendPosts;

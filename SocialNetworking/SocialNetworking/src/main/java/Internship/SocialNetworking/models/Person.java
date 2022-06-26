@@ -56,7 +56,7 @@ public class Person implements UserDetails {
     @JoinTable(name = "block_persons",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
-    private List<Post> blockedPosts;
+    private  List<Post> blockedPosts;
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
