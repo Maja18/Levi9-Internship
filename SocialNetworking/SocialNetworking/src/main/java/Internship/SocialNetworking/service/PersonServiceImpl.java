@@ -82,8 +82,14 @@ public class PersonServiceImpl implements PersonService {
 
         if(person!= null && friend != null){
             List<Person> friendList = person.getFriends();
-            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))){
+            List<Person> friendList1 = friend.getFriends();
+
+            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))
+            && friendList1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
+
                 friendList.remove(friend);
+                friendList1.remove(person);
+                personRepository.save(friend);
                 return personRepository.save(person);
             }
         }
