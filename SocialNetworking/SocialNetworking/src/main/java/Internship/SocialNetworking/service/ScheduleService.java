@@ -38,7 +38,7 @@ public class ScheduleService {
 
     @Bean
     @Async
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(cron = "10 * * * * *")
     public void checkEventStartingTime(){
         if (eventService.getAllEvents().size() != 0) {
            List<Event> events = eventService.getAllEvents()
@@ -62,6 +62,26 @@ public class ScheduleService {
             //System.out.println(events.size());
 
         }
+
+    }
+
+    @Bean
+    @Async
+    @Scheduled(cron = "1 * * * * *")
+    public void checkIfEventFinished(){
+        if(eventService.getAllEvents() != null){
+            List<Event> events = eventService.getAllEvents().stream()
+                    .filter(event -> !event.getIsOver())
+                    .filter(event -> event.getEndEvent().toLocalTime().compareTo(LocalDateTime.now().toLocalTime()) < 0)
+                    .collect(Collectors.toList());
+
+            events.forEach(notificationService::checkIfEventIsOver);
+
+
+        }
+
+
+
 
     }
 

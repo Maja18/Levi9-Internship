@@ -247,6 +247,27 @@
             <column  name="username"  value="milos"/>
             <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
         </insert>
+        <insert dbms="mysql" schemaName="social_networking" tableName="person">
+            <column name="name" value="Mladenko" />
+            <column name="surname" value="Novokmet" />
+            <column  name="email"  value="mladenko@gmail.com"/>
+            <column  name="username"  value="madjija"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+        <insert dbms="mysql" schemaName="social_networking" tableName="person">
+            <column name="name" value="Batko" />
+            <column name="surname" value="Cuk" />
+            <column  name="email"  value="batko@gmail.com"/>
+            <column  name="username"  value="batko"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
+        <insert dbms="mysql" schemaName="social_networking" tableName="person">
+            <column name="name" value="Branislav" />
+            <column name="surname" value="Colic" />
+            <column  name="email"  value="bato@gmail.com"/>
+            <column  name="username"  value="bato"/>
+            <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
+        </insert>
     </changeSet>
     <changeSet  author="Stefan Ugarkovic"  id="insert-group">
         <insert  dbms="mysql" schemaName="social_networking" tableName="groupNW">
@@ -352,6 +373,26 @@
         <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
             <column  name="group_id"  value="4"/>
             <column  name="person_id"  value="2"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="1"/>
+            <column  name="person_id"  value="5"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="4"/>
+            <column  name="person_id"  value="5"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="1"/>
+            <column  name="person_id"  value="6"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="3"/>
+            <column  name="person_id"  value="7"/>
+        </insert>
+        <insert  dbms="mysql" schemaName="social_networking" tableName="group_persons">
+            <column  name="group_id"  value="4"/>
+            <column  name="person_id"  value="7"/>
         </insert>
     </changeSet>
     <changeSet id="insert_group_posts" author="Stefan Ugarkovic">

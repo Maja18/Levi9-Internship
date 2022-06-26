@@ -18,4 +18,6 @@ public interface NotificationService {
 
     void iterateEventsList(List<Event> events);
 
+    void checkIfEventIsOver(Event event);
+
 }

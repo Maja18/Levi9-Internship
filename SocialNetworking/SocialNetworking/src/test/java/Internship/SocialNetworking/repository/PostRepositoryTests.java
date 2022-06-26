@@ -41,7 +41,7 @@ class PostRepositoryTests {
 
     @Test
     void findPostsByCreatorId(){
-        List<Post> posts = postRepository.findByCreatorId(1L);
+        List<Post> posts = postRepository.findByCreatorId(2L);
         assertThat(posts).isNotEmpty();
     }
 
