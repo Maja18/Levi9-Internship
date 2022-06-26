@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -95,8 +96,10 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        if (personFriends == null && !p.isPublic()) return;
-        if (personFriends == null && p.isPublic())
+        boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
+        if (isNullOrEmpty && !p.isPublic())
+            return;
+        if (isNullOrEmpty && p.isPublic())
             posts.add(p);
         else {
             personFriends.stream().forEach(friend -> {
