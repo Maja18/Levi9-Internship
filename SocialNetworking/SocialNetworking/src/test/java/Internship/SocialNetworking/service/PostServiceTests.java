@@ -273,4 +273,29 @@ class PostServiceTests {
         Assertions.assertEquals(1L, postService.addNewPost(post, loggedPerson).getGroupId());
 
     }
+
+    @Test
+    void testGetNoFriendsPostsIfAllArePassed(){
+        List<Post> posts = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(2L);
+        post.setPublic(false);
+        post.setCreationDate(LocalDateTime.now().minusDays(3));
+        posts.add(post);
+
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friends = new ArrayList<>();
+        friends.add(person);
+        loggedPerson.setFriends(friends);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        Assertions.assertEquals(0,postService.getAllFriendPosts(loggedPerson).size());
+    }
 }
