@@ -135,6 +135,12 @@ public class PersonController {
         if(personToAdd== null) {
             return new ResponseEntity<String>("There is no such group",HttpStatus.BAD_REQUEST);
         }
+        if(personToAdd.equals("Successfully added user to a group")) {
+            return new ResponseEntity<String>("You have successfully joined a group",HttpStatus.OK);
+        }
+        if(personToAdd.equals("Already a member")) {
+            return new ResponseEntity<String>("You are already a member",HttpStatus.NOT_ACCEPTABLE);
+        }
         return new ResponseEntity<String>("User added on pending and needs approval",HttpStatus.OK);
     }
 

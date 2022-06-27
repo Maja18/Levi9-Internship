@@ -12,6 +12,7 @@ import Internship.SocialNetworking.service.iService.GroupRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,8 +25,17 @@ public class GroupRequestServiceImpl implements GroupRequestService {
     private  final GroupRepository groupRepository;
 
     @Override
-    public List<GroupRequest> listAllRequests() {
-       return groupRequestRepository.findAll();
+    public List<GroupRequest> listAllRequests(Long personId)
+    {
+       List<GroupRequest> groupRequestsList=groupRequestRepository.findAll();
+       List<GroupRequest> administratorList=new ArrayList<>();
+       for(GroupRequest adminRequests : groupRequestsList) {
+           GroupNW group=groupRepository.findByGroupId(adminRequests.getGroupId());
+           if(Objects.equals(group.getCreatorId(), personId)) {
+               administratorList.add(adminRequests);
+           }
+       }
+       return administratorList;
     }
 
     @Override

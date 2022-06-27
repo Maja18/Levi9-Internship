@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @RequiredArgsConstructor
 public class PersonDTO {
-    private Long personId;
+
     @NotBlank(message = "name is required")
     @Length( min=3,message="name has to have 3 letters at least")
     private String name;
@@ -26,7 +26,4 @@ public class PersonDTO {
     private String username;
     @NotBlank(message = "password is required")
     private String password;
-    @NotBlank(message = "role is required")
-    private String role;
-
 }

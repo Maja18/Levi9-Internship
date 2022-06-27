@@ -37,6 +37,7 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(person.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
+
         return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn));
     }
 
