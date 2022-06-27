@@ -28,23 +28,23 @@ public class PostController {
 
     @PostMapping
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
-    public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<PostDTO> addNewPost(@RequestBody PostDTO postDTO) {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         Person loggedPerson = (Person) currentUser.getPrincipal();
-        Post response = postService.addNewPost(postDTO, loggedPerson);
+        PostDTO response = postService.addNewPost(postDTO, loggedPerson);
 
-        return (ResponseEntity<Post>) (response == null ?
+        return (ResponseEntity<PostDTO>) (response == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(response));
 
     }
 
     @GetMapping("/posts/{user-id}")
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
-    ResponseEntity<List<Post>> getAllUserPosts(@PathVariable(name="user-id") Long userId)
+    ResponseEntity<List<PostDTO>> getAllUserPosts(@PathVariable(name="user-id") Long userId)
     {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         Person loggedPerson = (Person) currentUser.getPrincipal();
-        List<Post> posts =postService.getAllUserPosts(userId, loggedPerson);
+        List<PostDTO> posts =postService.getAllUserPosts(userId, loggedPerson);
 
         return posts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
@@ -65,13 +65,13 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/friends-posts")
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
-    ResponseEntity<List<Post>> getAllFriendPosts()
+    ResponseEntity<List<PostDTO>> getAllFriendPosts()
     {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person loggedPerson = personService.findByPersonId(currentUser.getPersonId());
-        List<Post> posts = postService.getAllFriendPosts(loggedPerson);
+        List<PostDTO> posts = postService.getAllFriendPosts(loggedPerson);
 
         return posts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);

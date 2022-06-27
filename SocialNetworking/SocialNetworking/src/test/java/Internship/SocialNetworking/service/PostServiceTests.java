@@ -54,7 +54,7 @@ class PostServiceTests {
         post.setPostId(1L);
         post.setDescription("mikin post");
         post.setCreatorId(2L);
-        post.setPublic(false);
+        post.setIsPublic(false);
         post.setCreationDate(LocalDateTime.now());
         posts.add(post);
 
@@ -87,14 +87,14 @@ class PostServiceTests {
         postFirst.setPostId(1L);
         postFirst.setDescription("mikin post");
         postFirst.setCreatorId(2L);
-        postFirst.setPublic(true);
+        postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
         postSecond.setDescription("mikin drugi post");
         postSecond.setCreatorId(2L);
-        postSecond.setPublic(false);
+        postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
         posts.add(postFirst);
         posts.add(postSecond);
@@ -120,14 +120,14 @@ class PostServiceTests {
         postFirst.setPostId(1L);
         postFirst.setDescription("mikin post");
         postFirst.setCreatorId(2L);
-        postFirst.setPublic(true);
+        postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
         postSecond.setDescription("mikin drugi post");
         postSecond.setCreatorId(2L);
-        postSecond.setPublic(false);
+        postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
         posts.add(postFirst);
         posts.add(postSecond);
@@ -153,7 +153,7 @@ class PostServiceTests {
         postFirst.setPostId(1L);
         postFirst.setDescription("mikin post");
         postFirst.setCreatorId(2L);
-        postFirst.setPublic(true);
+        postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
         postFirst.setGroupId(1L);
 
@@ -161,7 +161,7 @@ class PostServiceTests {
         postSecond.setPostId(2L);
         postSecond.setDescription("mikin drugi post");
         postSecond.setCreatorId(2L);
-        postSecond.setPublic(false);
+        postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
         posts.add(postFirst);
         posts.add(postSecond);
@@ -198,7 +198,7 @@ class PostServiceTests {
         postFirst.setPostId(1L);
         postFirst.setDescription("mikin post");
         postFirst.setCreatorId(2L);
-        postFirst.setPublic(true);
+        postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
         postFirst.setGroupId(1L);
 
@@ -206,7 +206,7 @@ class PostServiceTests {
         postSecond.setPostId(2L);
         postSecond.setDescription("mikin drugi post");
         postSecond.setCreatorId(2L);
-        postSecond.setPublic(false);
+        postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
         posts.add(postFirst);
         posts.add(postSecond);
@@ -284,7 +284,7 @@ class PostServiceTests {
         post.setPostId(1L);
         post.setDescription("mikin post");
         post.setCreatorId(2L);
-        post.setPublic(false);
+        post.setIsPublic(false);
         post.setCreationDate(LocalDateTime.now().minusDays(3));
         posts.add(post);
 
