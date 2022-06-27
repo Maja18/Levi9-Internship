@@ -77,6 +77,8 @@ public class EventServiceImpl implements EventService {
         }
         else if(!isMember){
             return "User must be a group member to make an event";
+        } else if(LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())) > 0) {
+            return "End date can't be before start date, please enter dates again!";
         }
         Event event = new Event();
         event.setCreatorId(userWithId.getPersonId());

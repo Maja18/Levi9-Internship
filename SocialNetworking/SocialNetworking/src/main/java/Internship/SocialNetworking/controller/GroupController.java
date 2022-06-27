@@ -19,7 +19,7 @@ public class GroupController {
 
     private final GroupServiceImpl groupService;
 
-    @PostMapping(value = "/new")
+    @PostMapping
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<String> addNewGroup(@Valid @RequestBody GroupDTO groupDTO){
         return new ResponseEntity<String>(groupService.createGroup(groupDTO), HttpStatus.OK);

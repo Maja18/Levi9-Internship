@@ -91,7 +91,7 @@ public class PersonServiceImpl implements PersonService {
         GroupNW group=groupRepository.findByGroupId(groupId);
         if(group!=null) {
             Person addingPerson=personRepository.findByPersonId(personId);
-            if(group.isPublic()) {
+            if(group.getIsPublic()) {
                 group.getMembers().add(addingPerson);
                 personRepository.save(addingPerson);
                 return "Successfully added user to a group";

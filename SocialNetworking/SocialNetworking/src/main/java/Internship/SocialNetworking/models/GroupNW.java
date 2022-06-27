@@ -31,7 +31,7 @@ public class GroupNW {
     private String description;
 
     @Column
-    private boolean isPublic;
+    private Boolean isPublic;
 
     @Column
     private Long creatorId;

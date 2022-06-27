@@ -121,7 +121,7 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+            if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
         });
     }
