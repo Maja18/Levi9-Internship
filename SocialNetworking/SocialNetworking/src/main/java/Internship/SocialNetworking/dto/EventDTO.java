@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class EventDTO {
 
-    private Long eventId;
+
 
     @NotNull(message = "You must input date!")
     private String startEvent;
@@ -31,11 +31,6 @@ public class EventDTO {
 
     private float y;
 
-
-    private boolean isOver;
-
-
-    private Long creatorId;
 
     @NotNull(message = "Group must be real!")
     private Long groupId;
