@@ -150,6 +150,9 @@ public class PersonServiceImpl implements PersonService {
                         return "Already a member";
                     }
                 }
+                group.getMembers().add(addingPerson);
+                personRepository.save(addingPerson);
+                return "Successfully added user to a group";
             }
             else {
                 //creating a request to send
