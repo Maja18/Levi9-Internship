@@ -36,7 +36,6 @@ public class Person implements UserDetails {
     private String password;
     @Column
     private String role;
-
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
     @JoinTable(name = "user_authority",

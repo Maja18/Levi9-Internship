@@ -1,4 +1,5 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.config.WebSecurityConfig;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
@@ -9,6 +10,7 @@ import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class PersonServiceImpl implements PersonService {
 
     private  final GroupRequestRepository groupRequestRepository;
     private final GroupRepository groupRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -34,21 +37,15 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person addPerson(PersonDTO person) {
-        Person findPerson = personRepository.findByPersonId(person.getPersonId());
 
-          if (findPerson == null) {
                Person mappedPerson=new Person();
-              mappedPerson.setPersonId(person.getPersonId());
               mappedPerson.setName(person.getName());
               mappedPerson.setSurname(person.getSurname());
               mappedPerson.setEmail(person.getEmail());
               mappedPerson.setUsername(person.getUsername());
               mappedPerson.setPassword(person.getPassword());
-              mappedPerson.setRole(person.getRole());
 
               return personRepository.save(mappedPerson);
-                 }
-            return null;
 
     }
 
@@ -92,6 +89,11 @@ public class PersonServiceImpl implements PersonService {
         if(group!=null) {
             Person addingPerson=personRepository.findByPersonId(personId);
             if(group.isPublic()) {
+                for(Person member : group.getMembers()) {
+                    if(Objects.equals(personId, member.getPersonId())) {
+                        return "Already a member";
+                    }
+                }
                 group.getMembers().add(addingPerson);
                 personRepository.save(addingPerson);
                 return "Successfully added user to a group";
@@ -133,25 +135,19 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public String alterPersonInformation(PersonDTO person, Long userId) {
-        Person alteringPerson=personRepository.findByPersonId(person.getPersonId());
+        Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-        if(alteringPerson != null) {
-            //checking whether user is allowed to change information
-            if (alteringPerson.getPersonId() == userId) {
-                alteringPerson.setPersonId(person.getPersonId());
+                alteringPerson.setPersonId(userId);
                 alteringPerson.setName(person.getName());
                 alteringPerson.setSurname(person.getSurname());
                 alteringPerson.setEmail(person.getEmail());
                 alteringPerson.setUsername(person.getUsername());
-                alteringPerson.setPassword(person.getPassword());
+                alteringPerson.setPassword(passwordEncoder.encode(person.getPassword()));
                         //we save changes to the database
                 personRepository.save(alteringPerson);
                 return "Successfully updated user";
 
-                }
-            return "No permission";
-        }
-       return null;
+
     }
 
     @Override

@@ -6,7 +6,7 @@ import Internship.SocialNetworking.dto.GroupRequestDTO;
 import java.util.List;
 
 public interface GroupRequestService {
-    List<GroupRequest> listAllRequests();
+    List<GroupRequest> listAllRequests(Long personId);
 
     String acceptOrRejectRequest(Long requestId,Long administratorId,Long approvalStatus);
 }

@@ -31,7 +31,7 @@ public class GroupRequestController {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         Long loggedPersonId=userWithId.getPersonId();
-        var listOfRequests=groupRequestService.listAllRequests();
+        var listOfRequests=groupRequestService.listAllRequests(loggedPersonId);
 
 
         if(listOfRequests.size() == 0 || listOfRequests == null) {
