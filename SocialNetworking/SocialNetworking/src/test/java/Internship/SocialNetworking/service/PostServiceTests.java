@@ -168,7 +168,7 @@ class PostServiceTests {
 
         GroupNW group = new GroupNW();
         group.setGroupId(1L);
-        group.setPublic(true);
+        group.setIsPublic(true);
         group.setName("grupa");
         group.setCreatorId(person.getPersonId());
         List<Person> members = new ArrayList<>();
@@ -213,7 +213,7 @@ class PostServiceTests {
 
         GroupNW group = new GroupNW();
         group.setGroupId(1L);
-        group.setPublic(true);
+        group.setIsPublic(true);
         group.setName("grupa");
         group.setCreatorId(person.getPersonId());
         List<Person> members = new ArrayList<>();
