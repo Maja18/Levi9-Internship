@@ -101,9 +101,7 @@ public class PostServiceImpl implements PostService {
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
-                else
-                    return;
-                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                else if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                         posts.add(p);
             });
         }
