@@ -1,10 +1,16 @@
 package Internship.SocialNetworking.service;
+
 import Internship.SocialNetworking.config.WebSecurityConfig;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.RequestStatus;
+
+import Internship.SocialNetworking.dto.FriendRequestDTO;
+import Internship.SocialNetworking.models.*;
+
 import Internship.SocialNetworking.dto.PersonDTO;
+import Internship.SocialNetworking.repository.FriendRequestRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
@@ -23,7 +29,11 @@ public class PersonServiceImpl implements PersonService {
 
     private  final GroupRequestRepository groupRequestRepository;
     private final GroupRepository groupRepository;
+
     private final PasswordEncoder passwordEncoder;
+
+    private final FriendRequestRepository friendRequestRepository;
+
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -54,20 +64,55 @@ public class PersonServiceImpl implements PersonService {
         Person friend = personRepository.findByPersonId(friendId);
 
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
-            List<Person> listFriends = person.getFriends();
-            List<Person> listFriends1 = friend.getFriends();
+            List<FriendRequest> friendRequestList = person.getFriendRequest();
 
-            if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friendId))
-            && listFriends1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
+            if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(friendId))){
                     return null;
             }
 
-            listFriends.add(friend);
-            listFriends1.add(person);
-            person.setFriends(listFriends);
-            friend.setFriends(listFriends1);
-            personRepository.save(friend);
+            FriendRequest friendRequest = new FriendRequest();
+            friendRequest.setFriendId(friendId);
+            friendRequest.setStatus(FriendRequestStatus.PENDING);
+            friendRequestList.add(friendRequest);
+            person.setFriendRequest(friendRequestList);
+
             return personRepository.save(person);
+        }
+
+        return null;
+    }
+
+    public Person approveFriendRequest(FriendRequestDTO friendRequestDTO, Long personId) {
+        Person person = personRepository.findByPersonId(personId);
+        FriendRequest friendRequest = friendRequestRepository.findByFriendRequestId(friendRequestDTO.getFriendRequestId());
+
+        if(person != null && friendRequest != null && !Objects.equals(person.getPersonId(), friendRequest.getFriendId())){
+            Person friend = personRepository.findByPersonId(friendRequest.getFriendId());
+            List<Person> listFriends = person.getFriends();
+            List<Person> listFriends1 = friend.getFriends();
+
+            if(person.getFriendRequest().stream().anyMatch(fr-> fr.getFriendId().equals(friend.getPersonId()))){
+                if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friend.getPersonId()))
+                        && listFriends1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
+                    return null;
+                }
+
+                friendRequest.setStatus(friendRequestDTO.getStatus());
+
+                if(friendRequestDTO.getStatus() == FriendRequestStatus.DECLINE
+                        || friendRequestDTO.getStatus() == FriendRequestStatus.PENDING){
+                    friendRequestRepository.save(friendRequest);
+                    return friend;
+                }
+
+                listFriends.add(friend);
+                listFriends1.add(person);
+                person.setFriends(listFriends);
+                friend.setFriends(listFriends1);
+                friendRequestRepository.save(friendRequest);
+                personRepository.save(person);
+                return personRepository.save(friend);
+            }
         }
 
         return null;

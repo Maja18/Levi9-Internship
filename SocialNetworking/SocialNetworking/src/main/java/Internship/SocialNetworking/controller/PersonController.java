@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.controller;
 
 
+import Internship.SocialNetworking.dto.FriendRequestDTO;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,21 @@ public class PersonController {
         }
 
         return new ResponseEntity<>(add, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/approve-friend-request")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<Person> approveFriendRequest(@RequestBody FriendRequestDTO friendRequestDTO) {
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+
+        Person approve = personService.approveFriendRequest(friendRequestDTO, userWithId.getPersonId());
+
+        if (approve == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(approve, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/remove-friend/{friendId}")
