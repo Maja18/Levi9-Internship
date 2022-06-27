@@ -144,13 +144,13 @@ public class PersonServiceImpl implements PersonService {
         if(group!=null) {
             Person addingPerson=personRepository.findByPersonId(personId);
 
-            if(group.isPublic()) {
-                for(Person member : group.getMembers()) {
-                    if(Objects.equals(personId, member.getPersonId())) {
+            if(group.getIsPublic()) {
+                for (Person member : group.getMembers()) {
+                    if (Objects.equals(personId, member.getPersonId())) {
                         return "Already a member";
                     }
                 }
-
+            }
             else {
                 //creating a request to send
                 GroupRequest accessRequest=new GroupRequest();
