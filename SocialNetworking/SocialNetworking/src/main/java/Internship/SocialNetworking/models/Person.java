@@ -67,6 +67,13 @@ public class Person implements UserDetails {
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "friend_request_list",
+            joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_request_id", referencedColumnName = "friend_request_id"))
+    private List<FriendRequest> friendRequest;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "user_notification",
             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))

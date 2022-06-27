@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service.iService;
 
+import Internship.SocialNetworking.dto.FriendRequestDTO;
 import Internship.SocialNetworking.models.Person;
 
 
@@ -22,4 +23,5 @@ public interface PersonService {
 
     List<Person> getAllPersons();
     Person removeFriend(Long personId, Long friendId);
+    Person approveFriendRequest(FriendRequestDTO friendRequestDTO, Long friendRequestId);
 }
