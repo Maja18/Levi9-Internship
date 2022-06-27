@@ -113,7 +113,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByCommentId(commentDTO.getParentId());
         Person person = personRepository.findByPersonId(creatorId);
 
-        if(post != null && person != null){
+        if(post != null && person != null && !post.isOver()){
             GroupNW group = groupRepository.findByGroupId(post.getGroupId());
 
             if(group != null) {
