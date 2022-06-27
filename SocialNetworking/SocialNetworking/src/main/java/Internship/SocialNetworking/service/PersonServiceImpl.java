@@ -53,16 +53,20 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);
 
-
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
             List<Person> listFriends = person.getFriends();
+            List<Person> listFriends1 = friend.getFriends();
 
-            if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friendId))){
+            if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friendId))
+            && listFriends1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
                     return null;
             }
 
             listFriends.add(friend);
+            listFriends1.add(person);
             person.setFriends(listFriends);
+            friend.setFriends(listFriends1);
+            personRepository.save(friend);
             return personRepository.save(person);
         }
 
@@ -75,8 +79,14 @@ public class PersonServiceImpl implements PersonService {
 
         if(person!= null && friend != null){
             List<Person> friendList = person.getFriends();
-            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))){
+            List<Person> friendList1 = friend.getFriends();
+
+            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))
+            && friendList1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
+
                 friendList.remove(friend);
+                friendList1.remove(person);
+                personRepository.save(friend);
                 return personRepository.save(person);
             }
         }
@@ -88,16 +98,14 @@ public class PersonServiceImpl implements PersonService {
         GroupNW group=groupRepository.findByGroupId(groupId);
         if(group!=null) {
             Person addingPerson=personRepository.findByPersonId(personId);
+
             if(group.isPublic()) {
                 for(Person member : group.getMembers()) {
                     if(Objects.equals(personId, member.getPersonId())) {
                         return "Already a member";
                     }
                 }
-                group.getMembers().add(addingPerson);
-                personRepository.save(addingPerson);
-                return "Successfully added user to a group";
-            }
+
             else {
                 //creating a request to send
                 GroupRequest accessRequest=new GroupRequest();

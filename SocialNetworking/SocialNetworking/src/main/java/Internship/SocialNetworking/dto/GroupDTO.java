@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GroupDTO {
 
-    private Long groupId;
+
 
 
     @NotNull(message = "Group must have a name!")
@@ -24,10 +24,7 @@ public class GroupDTO {
 
     private boolean isPublic;
 
-    @NotNull(message = "Someone must create a group!")
-    private Long creatorId;
 
-    private List<Person> members;
 
 
 

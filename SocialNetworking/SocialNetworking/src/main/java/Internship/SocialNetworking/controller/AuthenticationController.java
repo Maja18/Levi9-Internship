@@ -41,15 +41,5 @@ public class AuthenticationController {
         return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn));
     }
 
-    @GetMapping("/authority")
-    @RolesAllowed("ROLE_USER")
-    ResponseEntity<Person> getMyAccount()
-    {
-        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        return (userWithId == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(userWithId));
-    }
 }

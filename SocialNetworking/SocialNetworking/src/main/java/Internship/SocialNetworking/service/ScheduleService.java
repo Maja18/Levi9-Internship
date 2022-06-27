@@ -38,7 +38,7 @@ public class ScheduleService {
 
     @Bean
     @Async
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "2 * * * * *")
     public void checkEventStartingTime(){
         if (eventService.getAllEvents().size() != 0) {
            List<Event> events = eventService.getAllEvents()

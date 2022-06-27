@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.time.LocalDateTime;
 
 
 @SpringBootApplication
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SocialNetworkingApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(SocialNetworkingApplication.class, args);
 	}
 

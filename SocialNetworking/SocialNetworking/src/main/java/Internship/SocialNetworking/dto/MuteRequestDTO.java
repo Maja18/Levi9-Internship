@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MuteRequestDTO {
 
-    private Long muteRequestID;
+
 
     private Long groupId;
 

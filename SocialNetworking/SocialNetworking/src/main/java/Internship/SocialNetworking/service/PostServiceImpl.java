@@ -9,17 +9,14 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -95,16 +92,16 @@ public class PostServiceImpl implements PostService {
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         List<Person> personFriends = person.getFriends();
-        if (personFriends == null && !p.isPublic()) return;
-        if (personFriends == null && p.isPublic())
+        boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
+        if (isNullOrEmpty && !p.isPublic())
+            return;
+        if (isNullOrEmpty && p.isPublic())
             posts.add(p);
         else {
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
-                else
-                    return;
-                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                else if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                         posts.add(p);
             });
         }
@@ -118,7 +115,7 @@ public class PostServiceImpl implements PostService {
                 posts.add(p);
             else
                 return;
-            if (group.isPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+            if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
         });
     }
@@ -143,15 +140,20 @@ public class PostServiceImpl implements PostService {
         Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
         Post post = postRepository.findByPostId(hidePostDTO.getPostId());
 
-        if(person != null && blockPerson != null && post != null){
+        if(person != null && blockPerson != null && post != null
+                && person.getPersonId().equals(post.getCreatorId())
+                && !post.isOver()){
+
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
 
-            if(person.getPersonId().equals(post.getCreatorId()) && !Objects.equals(person.getPersonId(), blockPerson.getPersonId())
+            if(!Objects.equals(person.getPersonId(), blockPerson.getPersonId()) && groupNW != null
                     && groupNW.getMembers().stream().anyMatch(m -> m.getPersonId().equals(blockPerson.getPersonId()))){
 
-                    return post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
+                return post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
 
-            }
+            }else return post.getGroupId() == null
+                    && person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(blockPerson.getPersonId()))
+                    && post.getBlockedPersons().stream().noneMatch(b -> b.getPersonId().equals(blockPerson.getPersonId()));
         }
 
         return false;

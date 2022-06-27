@@ -48,14 +48,16 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public String createGroup(GroupDTO groupDTO) {
         Optional<GroupNW> grNameCheck = Optional.ofNullable(getByName(groupDTO.getName()));
+        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         if(grNameCheck.isPresent()){
             return "Group name already exists, make a new one!";
         }
         else {
             GroupNW groupNW = new GroupNW();
-            groupNW.setCreatorId(groupDTO.getCreatorId());
+            groupNW.setCreatorId(userWithId.getPersonId());
             groupNW.setDescription(groupDTO.getDescription());
-            groupNW.setPublic(groupDTO.getIsPublic());
+            groupNW.setIsPublic(groupDTO.getIsPublic());
             groupNW.setName(groupDTO.getName());
             save(groupNW);
             return "Group successfully made!";
@@ -91,6 +93,8 @@ public class GroupServiceImpl implements GroupService {
 
 
         return eventRepository.findAll().stream()
-                .filter(event -> event.getGroupId().equals(groupId)).collect(Collectors.toList());
+                .filter(event -> event.getGroupId().equals(groupId))
+                .filter(event -> !event.getIsOver())
+                .collect(Collectors.toList());
     }
 }
