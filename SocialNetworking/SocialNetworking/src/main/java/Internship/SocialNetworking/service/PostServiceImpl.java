@@ -105,6 +105,7 @@ public class PostServiceImpl implements PostService {
                         posts.add(p);
             });
         }
+        removeBlockedPosts(loggedPerson, posts, p);
     }
 
     private void getAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
@@ -118,6 +119,18 @@ public class PostServiceImpl implements PostService {
             if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
                     posts.add(p);
         });
+        removeBlockedPosts(loggedPerson, posts, p);
+    }
+
+    private void removeBlockedPosts(Person loggedPerson, List<Post> posts, Post p) {
+        List<Person> blockedPersons = p.getBlockedPersons();
+        boolean isNullOrEmpty = ObjectUtils.isEmpty(blockedPersons);
+        if(!isNullOrEmpty) {
+            blockedPersons.stream().forEach(blockedUser -> {
+                if (blockedUser.getPersonId().equals(loggedPerson.getPersonId()))
+                    posts.remove(p);
+            });
+        }
     }
 
     @Override
@@ -170,6 +183,7 @@ public class PostServiceImpl implements PostService {
                     p.setOver(true);
                 if (!p.isOver())
                     friendPosts.add(p);
+                removeBlockedPosts(loggedPerson, friendPosts, p);
             }
         });
 
