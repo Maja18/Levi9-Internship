@@ -19,8 +19,6 @@ public class SocialNetworkingApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(SocialNetworkingApplication.class, args);
-
-		System.out.println(LocalDateTime.now());
 	}
 
 }

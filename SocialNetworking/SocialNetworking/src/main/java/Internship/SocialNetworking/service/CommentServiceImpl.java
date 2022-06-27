@@ -114,11 +114,19 @@ public class CommentServiceImpl implements CommentService {
 
         if(post != null && person != null){
             GroupNW group = groupRepository.findByGroupId(post.getGroupId());
-            List<Person> members = group.getMembers();
 
-            if(members.stream().anyMatch(m-> m.getPersonId().equals(creatorId))){
-                return comment != null && comment.getPostId().equals(post.getPostId()) || commentDTO.getParentId() == null;
-            }
+            if(group != null) {
+                List<Person> members = group.getMembers();
+
+                if (members.stream().anyMatch(m -> m.getPersonId().equals(creatorId))) {
+                    return comment != null && comment.getPostId().equals(post.getPostId()) || commentDTO.getParentId() == null;
+                }
+            }else if(person.getFriends().stream().anyMatch(f-> f.getPersonId().equals(post.getCreatorId()))
+                    && comment != null && comment.getPostId().equals(post.getPostId())){
+                return true;
+
+            }else return person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(post.getCreatorId()))
+                    && commentDTO.getParentId() == null;
         }
 
         return false;
