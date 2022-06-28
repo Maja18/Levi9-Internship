@@ -247,21 +247,21 @@
         <insert  dbms="mysql" schemaName="social_networking" tableName="person">
             <column  name="name"  value="Stefan"/>
             <column  name="surname"  value="Ugarkovic"/>
-            <column  name="email"  value="ugar@gmail.com"/>
+            <column  name="email"  value="ugarkovic.stefan@gmail.com"/>
             <column  name="username"  value="ugar"/>
             <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
         </insert>
         <insert  dbms="mysql" schemaName="social_networking" tableName="person">
             <column  name="name"  value="Maja"/>
             <column  name="surname"  value="Dragojlovic"/>
-            <column  name="email"  value="maja@gmail.com"/>
+            <column  name="email"  value="maja98dragojlovic@gmail.com"/>
             <column  name="username"  value="maja18"/>
             <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
         </insert>
         <insert  dbms="mysql" schemaName="social_networking" tableName="person">
             <column  name="name"  value="Ivan"/>
             <column  name="surname"  value="Lecic"/>
-            <column  name="email"  value="ivan@gmail.com"/>
+            <column  name="email"  value="ika619@gmail.com"/>
             <column  name="username"  value="ivan"/>
             <column  name="password"  value="$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra"/>
         </insert>

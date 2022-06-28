@@ -1,28 +1,21 @@
 package Internship.SocialNetworking.config;
-
-
 import Internship.SocialNetworking.repository.AuthorityRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.RestAuthenticationEntryPoint;
 import Internship.SocialNetworking.security.auth.TokenAuthenticationFilter;
 import Internship.SocialNetworking.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -32,28 +25,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    @Autowired
-    private TokenUtils tokenUtils;
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    private CustomUserDetailsService jwtUserDetailsService;
-
-    @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,TokenUtils tokenUtils,RestAuthenticationEntryPoint restAuthenticationEntryPoint,CustomUserDetailsService jwtUserDetailsService,PersonRepository personRepository,AuthorityRepository authorityRepository) throws Exception {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
@@ -78,10 +56,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
+    public WebSecurityCustomizer webSecurityCustomizer(){
 
-       return web -> web.ignoring().antMatchers("/api/auth/login", "/swagger-ui/**", "/v3/api-docs/**");
-
+       return web -> web.ignoring().antMatchers("/api/auth/login","/api/person/registration","/swagger-ui/**", "/v3/api-docs/**");
 
     }
 

@@ -13,8 +13,8 @@ import java.util.List;
 public interface PersonService {
     Person findByEmailEquals(String email);
     Person findByPersonId(Long id);
-    Person addPerson(PersonDTO person);
     FriendInfoDTO sendFriendRequest(Long personId, Long friendId);
+    Person registerPerson(PersonDTO person);
 
     String addPersonToGroup(Long groupId,Long personId);
 

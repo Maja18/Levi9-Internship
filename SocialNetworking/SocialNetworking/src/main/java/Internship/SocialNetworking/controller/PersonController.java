@@ -85,22 +85,21 @@ public class PersonController {
     public ResponseEntity<List<Person>> getAllPersons() {
         var listPersons = personService.getAllPersons();
         if (listPersons == null || listPersons.size() == 0) {
-            return new ResponseEntity<List<Person>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Person>>(listPersons, HttpStatus.OK);
+        return new ResponseEntity<>(listPersons, HttpStatus.OK);
 
     }
 
     //if user is invalid then exception handler is called
-    @PostMapping("")
-    @RolesAllowed("ROLE_USER")
-    public ResponseEntity<Person> addPersons(@Valid @RequestBody PersonDTO person) {
-        var per=personService.addPerson(person);
+    @PostMapping("registration")
+    public ResponseEntity<Person> registerPersons(@RequestBody PersonDTO person) {
+        var per=personService.registerPerson(person);
         if(per == null) {
-            return new ResponseEntity<Person>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Person>(per,HttpStatus.OK);
+        return new ResponseEntity<>(per,HttpStatus.OK);
 
     }
     @PutMapping("")
@@ -112,15 +111,15 @@ public class PersonController {
         //we will loop through list of all persons to check is there a person with such id
         var personToAlter=personService.alterPersonInformation(person,loggedPersonId);
         if(personToAlter == null) {
-            return new ResponseEntity<String>("Person with such id " +
+            return new ResponseEntity<>("Person with such id " +
                     "does not exist",HttpStatus.NOT_FOUND);
         }
 
-        if(personToAlter == "No permission") {
-            return new ResponseEntity<String>("You cannot change " +
+        if(personToAlter.equals("No permission")) {
+            return new ResponseEntity<>("You cannot change " +
                     "other user's information",HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<String>("Successfully altered person",HttpStatus.OK);
+        return new ResponseEntity<>("Successfully altered person",HttpStatus.OK);
 
     }
 
@@ -134,15 +133,15 @@ public class PersonController {
         Long loggedPersonId=userWithId.getPersonId();
         String personToAdd=personService.addPersonToGroup(groupId,loggedPersonId);
         if(personToAdd== null) {
-            return new ResponseEntity<String>("There is no such group",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("There is no such group",HttpStatus.BAD_REQUEST);
         }
         if(personToAdd.equals("Successfully added user to a group")) {
-            return new ResponseEntity<String>("You have successfully joined a group",HttpStatus.OK);
+            return new ResponseEntity<>("You have successfully joined a group",HttpStatus.OK);
         }
         if(personToAdd.equals("Already a member")) {
-            return new ResponseEntity<String>("You are already a member",HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("You are already a member",HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<String>("User added on pending and needs approval",HttpStatus.OK);
+        return new ResponseEntity<>("User added on pending and needs approval",HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/{personId}")
@@ -153,16 +152,16 @@ public class PersonController {
         Long loggedPersonId=userWithId.getPersonId();
         String deletedUser=personService.deletePersonFromGroup(groupId,personId,loggedPersonId);
         if(deletedUser == null) {
-            return new ResponseEntity<String>("Either group does not exist or user is not" +
+            return new ResponseEntity<>("Either group does not exist or user is not" +
                     "a member of a group",
                     HttpStatus.BAD_REQUEST);
         }
-        if(deletedUser == "No permission") {
-            return new ResponseEntity<String>("You are not an administrator" +
+        if(deletedUser.equals("No permission")) {
+            return new ResponseEntity<>("You are not an administrator" +
                     " of a group with specified id" , HttpStatus.FORBIDDEN);
 
         }
-        return new ResponseEntity<String>("Successfully deleted member of group",HttpStatus.OK);
+        return new ResponseEntity<>("Successfully deleted member of group",HttpStatus.OK);
     }
 
     //this function prints validation errors

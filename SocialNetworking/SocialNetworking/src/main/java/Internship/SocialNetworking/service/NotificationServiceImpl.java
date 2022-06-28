@@ -36,6 +36,9 @@ public class NotificationServiceImpl implements NotificationService {
     private final EventRepository eventRepository;
 
 
+    private final EmailService emailService;
+
+
     @Override
     public void saveNotification(Notification notification) {
         notificationRepository.save(notification);
@@ -67,6 +70,7 @@ public class NotificationServiceImpl implements NotificationService {
             p.getNotifications().add(notification);
             personRepository.save(p);
 
+        emailService.sendSimpleEmail(p.getEmail(), content, "Group notification");
         }
 
     }
@@ -80,12 +84,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void sendNotificationsEvent(Event event) {
-        //Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        //Person loggedPerson = (Person) currentUser.getPrincipal();
+
         List<Person> persons = event.getGoing();
         String content = "The event you are going to " + event.getName()
                 + " is starting soon : " + event.getStartEvent().toLocalTime().toString();
-        //System.out.println(persons.size());
+
 
         for(Person p : persons){
             Notification notification = new Notification();
@@ -100,9 +103,9 @@ public class NotificationServiceImpl implements NotificationService {
             personRepository.save(temp);
 
 
+            emailService.sendSimpleEmail(p.getEmail(), content, "Event start reminder");
 
 
-            //System.out.println(notification.getNotificationId());
 
         }
 
@@ -115,7 +118,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void checkIfEventIsOver(Event event) {
         List<Person> persons = event.getGoing();
-        String content = "The event " + event.getName() +  "in group " +
+        String content = "The event " + event.getName() +  " in group " +
                 groupRepository.findByGroupId(event.getGroupId()).getName()
                 + " is over!! " ;
 
@@ -129,10 +132,12 @@ public class NotificationServiceImpl implements NotificationService {
             Person temp = personRepository.findByPersonId(person.getPersonId());
             temp.getNotifications().add(notification);
             personRepository.save(temp);
+            emailService.sendSimpleEmail(person.getEmail(), content, "Group event is over");
         });
         Event event1 = eventRepository.getByEventId(event.getEventId());
         event1.setIsOver(true);
         eventRepository.save(event1);
+
 
 
     }

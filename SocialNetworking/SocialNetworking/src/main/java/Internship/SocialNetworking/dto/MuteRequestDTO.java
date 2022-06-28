@@ -16,8 +16,6 @@ public class MuteRequestDTO {
 
     private Long groupId;
 
-    private Long personId;
-
     private LocalDateTime muteStart;
 
     private String muteEnd;
