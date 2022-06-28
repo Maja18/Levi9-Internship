@@ -5,16 +5,10 @@ import Internship.SocialNetworking.dto.UserTokenStateDTO;
 import Internship.SocialNetworking.security.TokenUtils;
 import Internship.SocialNetworking.security.auth.JwtAuthenticationRequest;
 import Internship.SocialNetworking.service.AuthorityServiceImpl;
-import Internship.SocialNetworking.service.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,12 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
+
     private final TokenUtils tokenUtils;
-
-    private final PersonServiceImpl personService;
-
     private final AuthorityServiceImpl authorityService;
-
 
     @RolesAllowed("ROLE_USER")
     @PostMapping("/login")
@@ -36,7 +27,6 @@ public class AuthenticationController {
         Person person = authorityService.getPerson(authenticationRequest);
         String jwt = tokenUtils.generateToken(person.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
-
 
         return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn));
     }

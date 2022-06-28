@@ -8,8 +8,8 @@ import Internship.SocialNetworking.models.Post;
 import java.util.List;
 
 public interface PostService {
-    Post addNewPost(PostDTO postDTO, Person loggedPerson);
-    List<Post> getAllUserPosts(Long userId, Person loggedPerson);
+    PostDTO addNewPost(PostDTO postDTO, Person loggedPerson);
+    List<PostDTO> getAllUserPosts(Long userId, Person loggedPerson);
     Post hidePost(HidePostDTO hidePostDTO, Long personId);
-    List<Post> getAllFriendPosts(Person loggedPerson);
+    List<PostDTO> getAllFriendPosts(Person loggedPerson);
 }
