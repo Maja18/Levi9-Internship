@@ -46,18 +46,18 @@ public class EventController {
         Long loggedPersonId=userWithId.getPersonId();
         String presentUser=eventService.goToEventOrNot(groupId,loggedPersonId,eventId,presenceStatus);
         if(presentUser == null) {
-            return new ResponseEntity<String>("No such group",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No such group",HttpStatus.NOT_FOUND);
         }
         if(presentUser.equals("Not a member")) {
-            return new ResponseEntity<String>("You are not a member of that group",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not a member of that group",HttpStatus.FORBIDDEN);
         }
         if(presentUser.equals("Not going")) {
-            return new ResponseEntity<String>("You have declared not to go to an event",HttpStatus.OK);
+            return new ResponseEntity<>("You have declared not to go to an event",HttpStatus.OK);
         }
         if(presentUser.equals("No such event")) {
-            return new ResponseEntity<String>("There is no such event" +
+            return new ResponseEntity<>("There is no such event" +
                     " in a group with specified id",HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>("You have successfully confirmed your presence",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("You have successfully confirmed your presence",HttpStatus.ACCEPTED);
     }
 }
