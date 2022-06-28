@@ -80,12 +80,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void sendNotificationsEvent(Event event) {
-        //Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        //Person loggedPerson = (Person) currentUser.getPrincipal();
+
         List<Person> persons = event.getGoing();
         String content = "The event you are going to " + event.getName()
                 + " is starting soon : " + event.getStartEvent().toLocalTime().toString();
-        //System.out.println(persons.size());
+
 
         for(Person p : persons){
             Notification notification = new Notification();
@@ -102,7 +101,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 
 
-            //System.out.println(notification.getNotificationId());
+
 
         }
 

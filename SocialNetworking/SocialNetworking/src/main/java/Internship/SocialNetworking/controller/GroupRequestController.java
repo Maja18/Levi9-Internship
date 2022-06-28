@@ -34,11 +34,11 @@ public class GroupRequestController {
         var listOfRequests=groupRequestService.listAllRequests(loggedPersonId);
 
 
-        if(listOfRequests.size() == 0 || listOfRequests == null) {
-            return new ResponseEntity<List<GroupRequest>>(listOfRequests,HttpStatus.NO_CONTENT);
+        if(listOfRequests.size() == 0) {
+            return new ResponseEntity<>(listOfRequests,HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<List<GroupRequest>>(listOfRequests,HttpStatus.OK);
+        return new ResponseEntity<>(listOfRequests,HttpStatus.OK);
     }
 
 
@@ -53,15 +53,15 @@ public class GroupRequestController {
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
         if(groupRequest.equals("Rejected")) {
-            return new ResponseEntity<String>("User request rejected",HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("User request rejected",HttpStatus.NOT_ACCEPTABLE);
         }
         if(groupRequest.equals("No request")) {
-            return new ResponseEntity<String>("There is no such request",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("There is no such request",HttpStatus.NOT_FOUND);
         }
         if(groupRequest.equals("No permission")) {
-            return new ResponseEntity<String>("You are not administrator of that group",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not administrator of that group",HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<String>("User request accepted and added to group",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("User request accepted and added to group",HttpStatus.ACCEPTED);
     }
 
 }
