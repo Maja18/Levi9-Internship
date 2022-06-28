@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.exceptions.GroupException;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
@@ -48,6 +49,9 @@ public class PostServiceImpl implements PostService {
 
     public Post addPostToGroup(PostDTO postDTO, Optional<GroupNW> group, Person loggedPerson) {
         Post post = new Post();
+        if (group.isEmpty()){
+            throw new GroupException("Group doesn't exist");
+        }
         if (group.get().getMembers().stream().anyMatch(member -> member.getPersonId().equals(loggedPerson.getPersonId()))){
             post.setIsPublic(postDTO.getIsPublic());
             post.setGroupId(postDTO.getGroupId());
@@ -95,6 +99,9 @@ public class PostServiceImpl implements PostService {
 
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
+        if (person == null){
+            throw new PersonException(userId, "Person with given id doesn't exist");
+        }
         List<Person> personFriends = person.getFriends();
         boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
         if (isNullOrEmpty && !p.getIsPublic())
@@ -111,11 +118,15 @@ public class PostServiceImpl implements PostService {
                         posts.add(p);
             });
         }
+
         removeBlockedPosts(loggedPerson, posts, p);
     }
 
     private void getAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
         GroupNW group = groupRepository.findByGroupId(p.getGroupId());
+        if (group == null){
+            throw new GroupException(p.getGroupId(), "Group with given id doesn't exist");
+        }
         List<Person> groupMembers = group.getMembers();
         groupMembers.stream().forEach(member -> {
             if (member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
