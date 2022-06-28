@@ -72,6 +72,7 @@ public class ScheduleService {
         if(eventService.getAllEvents() != null){
             List<Event> events = eventService.getAllEvents().stream()
                     .filter(event -> !event.getIsOver())
+                    .filter(event -> event.getEndEvent().toLocalDate().compareTo(LocalDate.now()) == 0)
                     .filter(event -> event.getEndEvent().toLocalTime().compareTo(LocalDateTime.now().toLocalTime()) < 0)
                     .collect(Collectors.toList());
 

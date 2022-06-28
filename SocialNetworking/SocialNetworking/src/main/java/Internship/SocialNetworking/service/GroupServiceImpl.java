@@ -1,8 +1,12 @@
 package Internship.SocialNetworking.service;
 
 
+import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
+import Internship.SocialNetworking.mapper.EventMapper;
+import Internship.SocialNetworking.mapper.EventMapperImpl;
+import Internship.SocialNetworking.mapper.GroupMapper;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -29,6 +33,8 @@ public class GroupServiceImpl implements GroupService {
     private final EventRepository eventRepository;
 
 
+
+
     @Override
     public List<GroupNW> getAllGroups() {
         return groupRepository.findAll();
@@ -46,21 +52,22 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public String createGroup(GroupDTO groupDTO) {
+    public GroupDTO createGroup(GroupDTO groupDTO) {
         Optional<GroupNW> grNameCheck = Optional.ofNullable(getByName(groupDTO.getName()));
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         if(grNameCheck.isPresent()){
-            return "Group name already exists, make a new one!";
+            return null;
         }
         else {
-            GroupNW groupNW = new GroupNW();
+            GroupNW groupNW = GroupMapper.INSTANCE.dtoToGroup(groupDTO);
             groupNW.setCreatorId(userWithId.getPersonId());
-            groupNW.setDescription(groupDTO.getDescription());
+            /*groupNW.setDescription(groupDTO.getDescription());
             groupNW.setIsPublic(groupDTO.getIsPublic());
-            groupNW.setName(groupDTO.getName());
+            groupNW.setName(groupDTO.getName());*/
+            
             save(groupNW);
-            return "Group successfully made!";
+            return groupDTO;
         }
 
 
@@ -80,7 +87,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Event> groupEvents(Long groupId) {
+    public List<EventDTO> groupEvents(Long groupId) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
         Optional<GroupNW> groupExists = Optional.ofNullable(groupRepository.findByGroupId(groupId));
@@ -92,9 +99,12 @@ public class GroupServiceImpl implements GroupService {
         }
 
 
-        return eventRepository.findAll().stream()
+
+        List<Event> events = eventRepository.findAll().stream()
                 .filter(event -> event.getGroupId().equals(groupId))
                 .filter(event -> !event.getIsOver())
                 .collect(Collectors.toList());
+
+        return EventMapper.INSTANCE.eventsToDto(events);
     }
 }
