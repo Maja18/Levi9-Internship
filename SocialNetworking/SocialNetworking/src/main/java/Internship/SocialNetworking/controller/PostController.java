@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.service.PersonServiceImpl;
@@ -44,6 +45,10 @@ public class PostController {
     {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         Person loggedPerson = (Person) currentUser.getPrincipal();
+        Person person = personService.findByPersonId(userId);
+        if (person == null){
+            throw new PersonException(userId, "Person with given id doesn't exist");
+        }
         List<PostDTO> posts =postService.getAllUserPosts(userId, loggedPerson);
 
         return posts == null ?

@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
