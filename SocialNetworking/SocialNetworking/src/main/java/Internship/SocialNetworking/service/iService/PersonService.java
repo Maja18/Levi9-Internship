@@ -14,7 +14,7 @@ public interface PersonService {
     Person findByEmailEquals(String email);
     Person findByPersonId(Long id);
     Person addPerson(PersonDTO person);
-    FriendInfoDTO addFriend(Long personId, Long friendId);
+    FriendInfoDTO sendFriendRequest(Long personId, Long friendId);
 
     String addPersonToGroup(Long groupId,Long personId);
 

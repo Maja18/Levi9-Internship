@@ -13,6 +13,7 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -56,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.commentToCommentInfoDTO(comment);
         }
 
+        log.info("The comment didn't pass a validation!");
         return null;
     }
 
@@ -71,6 +74,7 @@ public class CommentServiceImpl implements CommentService {
                 }
             }
         }
+
         return commentMapper.commentsToCommentsInfoDTOs(commentList1);
     }
 
@@ -110,6 +114,7 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.commentToCommentInfoDTO(comment);
         }
 
+        log.info("The comment doesn't exist or logged user isn't a creator of the comment!");
         return null;
     }
 

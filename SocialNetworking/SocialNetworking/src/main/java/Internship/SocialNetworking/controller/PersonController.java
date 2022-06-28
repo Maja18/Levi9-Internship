@@ -37,17 +37,17 @@ public class PersonController {
 
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<FriendInfoDTO> addFriend(@RequestBody FriendsDTO friendsDTO) {
+    public ResponseEntity<FriendInfoDTO> sendFriendRequest(@RequestBody FriendsDTO friendsDTO) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        FriendInfoDTO add = personService.addFriend(userWithId.getPersonId(), friendsDTO.getFriendId());
+        FriendInfoDTO send = personService.sendFriendRequest(userWithId.getPersonId(), friendsDTO.getFriendId());
 
-        if (add == null) {
+        if (send == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(add, HttpStatus.OK);
+        return new ResponseEntity<>(send, HttpStatus.OK);
     }
 
     @PostMapping(value = "/approve-friend-request")

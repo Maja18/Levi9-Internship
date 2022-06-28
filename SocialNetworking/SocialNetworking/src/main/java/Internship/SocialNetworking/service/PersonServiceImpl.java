@@ -18,6 +18,7 @@ import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PersonServiceImpl implements PersonService {
     private final  PersonRepository personRepository;
 
@@ -62,7 +64,7 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
-    public FriendInfoDTO addFriend(Long personId, Long friendId) {
+    public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);
 
@@ -71,6 +73,8 @@ public class PersonServiceImpl implements PersonService {
 
             if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(personId) && !f.getDeleted())
                 || IsFriendshipExist(person, friend)){
+
+                    log.info("The friend request already exist or friendship already exist!");
                     return null;
             }
 
@@ -85,6 +89,7 @@ public class PersonServiceImpl implements PersonService {
             return personMapper.personToFriendInfoDTO(friend);
         }
 
+        log.info("IDs don't exist or IDs are same!");
         return null;
     }
 
@@ -106,7 +111,10 @@ public class PersonServiceImpl implements PersonService {
                     friendRequestRepository.save(friendRequest);
 
                     return personMapper.personToFriendInfoDTO(friend);
-                }else if(friendRequestDTO.getStatus() == FriendRequestStatus.PENDING) return null;
+                }else if(friendRequestDTO.getStatus() == FriendRequestStatus.PENDING) {
+                    log.info("Friend request is already in pending!");
+                    return null;
+                }
 
                 personListFriends.add(friend);
                 friendListFriends.add(person);
@@ -121,6 +129,7 @@ public class PersonServiceImpl implements PersonService {
             }
         }
 
+        log.info("Logged person or friend request doesn't exist!");
         return null;
     }
 
@@ -147,8 +156,7 @@ public class PersonServiceImpl implements PersonService {
             List<Person> friendList = person.getFriends();
             List<Person> friendList1 = friend.getFriends();
 
-            if(friendList.stream().anyMatch(f -> f.getPersonId().equals(friendId))
-            && friendList1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
+            if(IsFriendshipExist(person, friend)){
 
                 friendList.remove(friend);
                 friendList1.remove(person);
@@ -157,8 +165,12 @@ public class PersonServiceImpl implements PersonService {
 
                 return personMapper.personToFriendInfoDTO(friend);
             }
+
+            log.info("Friendship doesn't exist!");
+            return null;
         }
 
+        log.info("One of ids doesn't exist!");
         return null;
     }
 
