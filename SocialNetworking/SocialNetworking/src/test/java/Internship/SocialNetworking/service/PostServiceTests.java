@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
@@ -10,9 +11,11 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
@@ -39,6 +42,9 @@ class PostServiceTests {
     @Mock
     private NotificationServiceImpl notificationService;
 
+    @Spy
+    PostMapper postMapper = Mappers.getMapper(PostMapper.class);
+
     @Before
     void init() {
         MockitoAnnotations.openMocks(this);
@@ -56,6 +62,7 @@ class PostServiceTests {
         post.setCreatorId(2L);
         post.setIsPublic(false);
         post.setCreationDate(LocalDateTime.now());
+        post.setIsOver(false);
         posts.add(post);
 
         Person loggedPerson = new Person();
@@ -89,6 +96,7 @@ class PostServiceTests {
         postFirst.setCreatorId(2L);
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
@@ -96,6 +104,7 @@ class PostServiceTests {
         postSecond.setCreatorId(2L);
         postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
+        postSecond.setIsOver(false);
         posts.add(postFirst);
         posts.add(postSecond);
 
@@ -122,6 +131,7 @@ class PostServiceTests {
         postFirst.setCreatorId(2L);
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
@@ -129,6 +139,7 @@ class PostServiceTests {
         postSecond.setCreatorId(2L);
         postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
+        postSecond.setIsOver(false);
         posts.add(postFirst);
         posts.add(postSecond);
 
@@ -156,6 +167,7 @@ class PostServiceTests {
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
         postFirst.setGroupId(1L);
+        postFirst.setIsOver(false);
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
@@ -163,6 +175,7 @@ class PostServiceTests {
         postSecond.setCreatorId(2L);
         postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
+        postSecond.setIsOver(false);
         posts.add(postFirst);
         posts.add(postSecond);
 
@@ -201,6 +214,7 @@ class PostServiceTests {
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
         postFirst.setGroupId(1L);
+        postFirst.setIsOver(false);
 
         Post postSecond = new Post();
         postSecond.setPostId(2L);
@@ -208,6 +222,7 @@ class PostServiceTests {
         postSecond.setCreatorId(2L);
         postSecond.setIsPublic(false);
         postSecond.setCreationDate(LocalDateTime.now());
+        postSecond.setIsOver(false);
         posts.add(postFirst);
         posts.add(postSecond);
 
