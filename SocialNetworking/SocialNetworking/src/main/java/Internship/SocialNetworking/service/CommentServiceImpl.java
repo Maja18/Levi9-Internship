@@ -1,5 +1,7 @@
 package Internship.SocialNetworking.service;
 
+import Internship.SocialNetworking.dto.CommentInfoDTO;
+import Internship.SocialNetworking.mappers.CommentMapper;
 import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -11,6 +13,7 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,15 +22,17 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final PersonRepository personRepository;
     private final GroupRepository groupRepository;
+    private final CommentMapper commentMapper;
 
     @Override
-    public Comment addComment(CommentDTO commentDTO, Long creatorId) {
+    public CommentInfoDTO addComment(CommentDTO commentDTO, Long creatorId) {
         Comment comment = new Comment();
         boolean val = validation(commentDTO, creatorId);
 
@@ -45,17 +50,20 @@ public class CommentServiceImpl implements CommentService {
                 List<Comment> commentList = parentComment.getComments();
                 commentList.add(comment);
                 parentComment.setComments(commentList);
-                return commentRepository.save(parentComment);
+                commentRepository.save(parentComment);
+                return commentMapper.commentToCommentInfoDTO(parentComment);
             }
 
-            return commentRepository.save(comment);
+            commentRepository.save(comment);
+            return commentMapper.commentToCommentInfoDTO(comment);
         }
 
+        log.info("The comment didn't pass a validation!");
         return null;
     }
 
     @Override
-    public List<Comment> getCommentsByPostId(Long postId) {
+    public List<CommentInfoDTO> getCommentsByPostId(Long postId) {
         List<Comment> commentList = commentRepository.findByPostIdOrderByCreationDateDesc(postId);
         List<Comment> commentList1 = new ArrayList<>();
         
@@ -66,28 +74,29 @@ public class CommentServiceImpl implements CommentService {
                 }
             }
         }
-        return commentList1;
+
+        return commentMapper.commentsToCommentsInfoDTOs(commentList1);
     }
 
     @Override
-    public List<Comment> getCommentsByCommentId(Long commentId) {
+    public List<CommentInfoDTO> getCommentsByCommentId(Long commentId) {
         Comment comment = commentRepository.findByCommentId(commentId);
         List<Comment> comments = commentRepository.findAll();
         List<Comment> childComments = new ArrayList<>();
 
         if(comment != null){
-            for (Comment c: comments) {
+            comments.forEach(c->{
                 if(c.getParentId() == comment.getCommentId()){
                     childComments.add(c);
                 }
-            }
+            });
         }
 
-        return childComments;
+        return commentMapper.commentsToCommentsInfoDTOs(childComments);
     }
 
     @Override
-    public String deleteComment(Long commentId, Person loggedUser) {
+    public CommentInfoDTO deleteComment(Long commentId, Person loggedUser) {
         Comment comment = commentRepository.findByCommentId(commentId);
         List<Comment> comments = commentRepository.findAll();
 
@@ -102,9 +111,10 @@ public class CommentServiceImpl implements CommentService {
             });
 
             commentRepository.delete(comment);
-            return "Successfully deleted";
+            return commentMapper.commentToCommentInfoDTO(comment);
         }
 
+        log.info("The comment doesn't exist or logged user isn't a creator of the comment!");
         return null;
     }
 

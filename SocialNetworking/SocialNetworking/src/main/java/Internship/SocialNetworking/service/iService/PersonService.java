@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service.iService;
 
+import Internship.SocialNetworking.dto.FriendInfoDTO;
 import Internship.SocialNetworking.dto.FriendRequestDTO;
 import Internship.SocialNetworking.models.Person;
 
@@ -12,8 +13,8 @@ import java.util.List;
 public interface PersonService {
     Person findByEmailEquals(String email);
     Person findByPersonId(Long id);
+    FriendInfoDTO sendFriendRequest(Long personId, Long friendId);
     Person registerPerson(PersonDTO person);
-    Person addFriend(Long personId, Long friendId);
 
     String addPersonToGroup(Long groupId,Long personId);
 
@@ -22,6 +23,6 @@ public interface PersonService {
     String deletePersonFromGroup(Long groupId,Long personId,Long administratorId);
 
     List<Person> getAllPersons();
-    Person removeFriend(Long personId, Long friendId);
-    Person approveFriendRequest(FriendRequestDTO friendRequestDTO, Long friendRequestId);
+    FriendInfoDTO removeFriend(Long personId, Long friendId);
+    FriendInfoDTO approveFriendRequest(FriendRequestDTO friendRequestDTO, Long friendRequestId);
 }

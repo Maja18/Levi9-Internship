@@ -1,9 +1,9 @@
 package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import Internship.SocialNetworking.service.PostServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -57,11 +57,11 @@ public class PostController {
 
     @PutMapping("/hide")
     @RolesAllowed({ "ROLE_USER", "ROLE_ADMIN" })
-    ResponseEntity<Post> hidePost(@RequestBody HidePostDTO hidePostDTO)
+    ResponseEntity<PostInfoDTO> hidePost(@RequestBody HidePostDTO hidePostDTO)
     {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
-        Post post = postService.hidePost(hidePostDTO, userWithId.getPersonId());
+        PostInfoDTO post = postService.hidePost(hidePostDTO, userWithId.getPersonId());
 
         if(post == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

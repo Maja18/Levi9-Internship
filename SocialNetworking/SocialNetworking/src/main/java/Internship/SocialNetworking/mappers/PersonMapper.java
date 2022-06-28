@@ -1,20 +1,17 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.mappers;
 
-
+import Internship.SocialNetworking.dto.FriendInfoDTO;
 import Internship.SocialNetworking.dto.PersonDTO;
 import Internship.SocialNetworking.models.Person;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(
         componentModel = "spring",
         injectionStrategy = InjectionStrategy.FIELD
 )
-
 public interface PersonMapper {
-
+    FriendInfoDTO personToFriendInfoDTO(Person person);
     PersonDTO personToPersonDTO(Person entity);
     Person personDTOtoPerson(PersonDTO dto);
 }

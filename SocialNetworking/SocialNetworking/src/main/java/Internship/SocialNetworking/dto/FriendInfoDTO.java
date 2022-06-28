@@ -1,14 +1,14 @@
 package Internship.SocialNetworking.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class HidePostDTO {
-    private Long postId;
-    private Long personId;
+public class FriendInfoDTO {
+    private String name;
+    private String surname;
+    private String username;
 }

@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.mappers;
 
+import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.models.Post;
 import org.mapstruct.InjectionStrategy;
@@ -12,7 +13,8 @@ import java.util.List;
         injectionStrategy = InjectionStrategy.FIELD
 )
 public interface PostMapper {
-
+    PostInfoDTO postToPostInfoDTO(Post post);
     PostDTO postToPostDTO(Post post);
     List<PostDTO> postsToPostDTOs(List<Post> posts);
+
 }

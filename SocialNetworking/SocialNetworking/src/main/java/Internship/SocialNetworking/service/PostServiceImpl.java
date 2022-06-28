@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
@@ -12,6 +13,7 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final GroupRepository groupRepository;
@@ -151,7 +154,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post hidePost(HidePostDTO hidePostDTO, Long personId) {
+    public PostInfoDTO hidePost(HidePostDTO hidePostDTO, Long personId) {
 
         if(validation(hidePostDTO, personId)) {
             Post post = postRepository.findByPostId(hidePostDTO.getPostId());
@@ -159,9 +162,12 @@ public class PostServiceImpl implements PostService {
             List<Person> blockListPersons = post.getBlockedPersons();
             blockListPersons.add(blockPerson);
             post.setBlockedPersons(blockListPersons);
+            postRepository.save(post);
 
-            return postRepository.save(post);
+            return postMapper.postToPostInfoDTO(post);
         }
+
+        log.info("The HidePostDTO and the personId didn't pass validation!");
         return null;
     }
 
