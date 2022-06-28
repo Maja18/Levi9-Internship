@@ -29,14 +29,14 @@ public class EventController {
     private final GroupServiceImpl groupService;
 
     @PostMapping
-    public ResponseEntity<String> newEvent(@Valid @RequestBody EventDTO eventDTO){
-        return new ResponseEntity<String>(eventService.createEvent(eventDTO), HttpStatus.OK);
+    public ResponseEntity<EventDTO> newEvent(@Valid @RequestBody EventDTO eventDTO){
+        return new ResponseEntity<>(eventService.createEvent(eventDTO), HttpStatus.OK);
     }
 
     @GetMapping(value = "events/{groupId}")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<List<Event>> eventsGroup(@PathVariable("groupId") Long groupId){
-        return new ResponseEntity<List<Event>>(groupService.groupEvents(groupId), HttpStatus.OK);
+    public ResponseEntity<List<EventDTO>> eventsGroup(@PathVariable("groupId") Long groupId){
+        return new ResponseEntity<>(groupService.groupEvents(groupId), HttpStatus.OK);
     }
     @PutMapping("{groupId}/{eventId}/{presenceStatus}")
     @RolesAllowed("ROLE_USER")

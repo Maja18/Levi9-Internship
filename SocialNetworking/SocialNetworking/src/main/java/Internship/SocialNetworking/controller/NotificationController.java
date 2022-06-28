@@ -26,9 +26,9 @@ public class NotificationController {
 
     @PostMapping
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<String> addNewNotification(@RequestBody MuteRequestDTO muteRequestDTO){
+    public ResponseEntity<MuteRequestDTO> addNewNotification(@RequestBody MuteRequestDTO muteRequestDTO){
 
-        return new ResponseEntity<String>(muteRequestService.muteGroup(muteRequestDTO), HttpStatus.OK);
+        return new ResponseEntity<>(muteRequestService.muteGroup(muteRequestDTO), HttpStatus.OK);
 
     }
 
