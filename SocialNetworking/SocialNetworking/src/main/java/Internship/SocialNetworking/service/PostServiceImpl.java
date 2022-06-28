@@ -89,15 +89,15 @@ public class PostServiceImpl implements PostService {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setIsOver(true);
             if (p.getGroupId() != null)
-                getAllGroupPosts(loggedPerson,posts, p);
+                setAllGroupPosts(loggedPerson,posts, p);
             else
-                getAllNotGroupPosts(loggedPerson,userId, posts, p);
+                setAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
 
         return postMapper.postsToPostDTOs(posts);
     }
 
-    private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
+    private void setAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
         if (person == null){
             throw new PersonException(userId, "Person with given id doesn't exist");
@@ -122,7 +122,7 @@ public class PostServiceImpl implements PostService {
         removeBlockedPosts(loggedPerson, posts, p);
     }
 
-    private void getAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
+    private void setAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
         GroupNW group = groupRepository.findByGroupId(p.getGroupId());
         if (group == null){
             throw new GroupException(p.getGroupId(), "Group with given id doesn't exist");
@@ -134,7 +134,7 @@ public class PostServiceImpl implements PostService {
             else
                 return;
             if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
-                    posts.add(p);
+                posts.add(p);
         });
         removeBlockedPosts(loggedPerson, posts, p);
     }

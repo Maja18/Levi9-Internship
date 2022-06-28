@@ -13,7 +13,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({PersonException.class})
+    @ExceptionHandler({PersonException.class, GroupException.class})
     public ResponseEntity<Object> entityNotFoundException(RuntimeException runtimeException, WebRequest webRequest){
         Map<String,Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
