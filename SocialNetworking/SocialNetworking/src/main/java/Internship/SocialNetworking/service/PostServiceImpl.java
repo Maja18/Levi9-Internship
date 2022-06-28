@@ -41,9 +41,8 @@ public class PostServiceImpl implements PostService {
                     personRepository.findByEmailEquals(loggedPerson.getEmail()));
         }
         postRepository.save(post);
-        PostDTO dtoPost = postMapper.postToPostDTO(post);
 
-        return dtoPost;
+        return postMapper.postToPostDTO(post);
     }
 
     public Post addPostToGroup(PostDTO postDTO, Optional<GroupNW> group, Person loggedPerson) {
@@ -89,9 +88,8 @@ public class PostServiceImpl implements PostService {
             else
                 getAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
-        List<PostDTO> postDTOs = postMapper.postsToPostDTOs(posts);
 
-        return postDTOs;
+        return postMapper.postsToPostDTOs(posts);
     }
 
     private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
@@ -193,7 +191,7 @@ public class PostServiceImpl implements PostService {
                 removeBlockedPosts(loggedPerson, friendPosts, p);
             }
         });
-        List<PostDTO> postDTOs = postMapper.postsToPostDTOs(friendPosts);
-        return postDTOs;
+
+        return postMapper.postsToPostDTOs(friendPosts);
     }
 }

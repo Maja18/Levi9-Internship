@@ -18,9 +18,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private TokenUtils tokenUtils;
     private UserDetailsService userDetailsService;
-
     private PersonRepository personRepository;
-
     private AuthorityRepository authorityRepository;
 
     public TokenAuthenticationFilter(TokenUtils tokenUtils, UserDetailsService userDetailsService,
@@ -41,8 +39,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         authorities = authorities.replace("[", "").replace("]", "");
         String[] authoritiesNames = authorities.split(",");
 
-
-
         if (authToken != null) {
             mail = tokenUtils.getMailFromToken(authToken);
 
@@ -54,12 +50,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
 
-
-
-
-
                 // Is token valid
-                if (tokenUtils.validateToken(authToken, userDetails)) {
+                if (Boolean.TRUE.equals(tokenUtils.validateToken(authToken, userDetails))) {
                     // Create authentication
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
                     authentication.setToken(authToken);
