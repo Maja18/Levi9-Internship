@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,7 +41,7 @@ public class EventServiceImpl implements EventService {
        GroupNW group=groupRepository.findByGroupId(groupId);
        if(group!=null) {
            for(int i=0; i<group.getMembers().size(); i++) {
-                if(personId == group.getMembers().get(i).getPersonId()) {
+                if(Objects.equals(personId, group.getMembers().get(i).getPersonId())) {
                     Event event=eventRepository.getByEventId(eventId);
                         if(event!=null) {
                             Person comingPerson=personRepository.findByPersonId(personId);
