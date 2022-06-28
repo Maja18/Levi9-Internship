@@ -127,6 +127,7 @@
             </column>
             <column name="friend_id" type="bigint"/>
             <column name="status" type="varchar(250)"/>
+            <column name="deleted" type="boolean"/>
         </createTable>
         <createTable tableName="friends">
             <column name="person_id" type="bigint"/>

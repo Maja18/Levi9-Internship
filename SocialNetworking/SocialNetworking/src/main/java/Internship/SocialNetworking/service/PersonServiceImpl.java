@@ -1,6 +1,8 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.config.WebSecurityConfig;
+import Internship.SocialNetworking.dto.FriendInfoDTO;
+import Internship.SocialNetworking.mappers.PersonMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
@@ -33,6 +35,7 @@ public class PersonServiceImpl implements PersonService {
     private final PasswordEncoder passwordEncoder;
 
     private final FriendRequestRepository friendRequestRepository;
+    private final PersonMapper personMapper;
 
 
     @Override
@@ -59,70 +62,88 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
-    public Person addFriend(Long personId, Long friendId) {
+    public FriendInfoDTO addFriend(Long personId, Long friendId) {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);
 
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
             List<FriendRequest> friendRequestList = friend.getFriendRequest();
 
-            if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(personId))){
+            if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(personId) && !f.getDeleted())
+                || IsFriendshipExist(person, friend)){
                     return null;
             }
 
             FriendRequest friendRequest = new FriendRequest();
             friendRequest.setFriendId(personId);
             friendRequest.setStatus(FriendRequestStatus.PENDING);
+            friendRequest.setDeleted(false);
             friendRequestList.add(friendRequest);
             friend.setFriendRequest(friendRequestList);
+            personRepository.save(friend);
 
-            return personRepository.save(friend);
+            return personMapper.personToFriendInfoDTO(friend);
         }
 
         return null;
     }
 
-    public Person approveFriendRequest(FriendRequestDTO friendRequestDTO, Long personId) {
+    public FriendInfoDTO approveFriendRequest(FriendRequestDTO friendRequestDTO, Long personId) {
         Person person = personRepository.findByPersonId(personId);
         FriendRequest friendRequest = friendRequestRepository.findByFriendRequestId(friendRequestDTO.getFriendRequestId());
 
-        if(person != null && friendRequest != null && !Objects.equals(person.getPersonId(), friendRequest.getFriendId())){
+        if(validation(person, friendRequest)){
             Person friend = personRepository.findByPersonId(friendRequest.getFriendId());
-            List<Person> listFriends = person.getFriends();
-            List<Person> listFriends1 = friend.getFriends();
+            List<Person> personListFriends = person.getFriends();
+            List<Person> friendListFriends = friend.getFriends();
 
-            if(person.getFriendRequest().stream().anyMatch(fr-> fr.getFriendId().equals(friend.getPersonId()))){
-                if(listFriends.stream().anyMatch(f -> f.getPersonId().equals(friend.getPersonId()))
-                        && listFriends1.stream().anyMatch(f -> f.getPersonId().equals(personId))){
-                    return null;
-                }
+            if(isPersonInFriendRequest(person, friend) && !IsFriendshipExist(person, friend)){
 
                 friendRequest.setStatus(friendRequestDTO.getStatus());
 
-                if(friendRequestDTO.getStatus() == FriendRequestStatus.DECLINE
-                        || friendRequestDTO.getStatus() == FriendRequestStatus.PENDING){
+                if(friendRequestDTO.getStatus() == FriendRequestStatus.DECLINE){
+                    friendRequest.setDeleted(true);
                     friendRequestRepository.save(friendRequest);
-                    return friend;
-                }
 
-                listFriends.add(friend);
-                listFriends1.add(person);
-                person.setFriends(listFriends);
-                friend.setFriends(listFriends1);
+                    return personMapper.personToFriendInfoDTO(friend);
+                }else if(friendRequestDTO.getStatus() == FriendRequestStatus.PENDING) return null;
+
+                personListFriends.add(friend);
+                friendListFriends.add(person);
+                person.setFriends(personListFriends);
+                friend.setFriends(friendListFriends);
+                friendRequest.setDeleted(true);
                 friendRequestRepository.save(friendRequest);
                 personRepository.save(person);
-                return personRepository.save(friend);
+                personRepository.save(friend);
+
+                return personMapper.personToFriendInfoDTO(friend);
             }
         }
 
         return null;
     }
 
-    public Person removeFriend(Long personId, Long friendId) {
+    private boolean validation(Person person, FriendRequest friendRequest){
+        return person != null && friendRequest != null
+                && !friendRequest.getDeleted()
+                && !Objects.equals(person.getPersonId(), friendRequest.getFriendId());
+    }
+
+    private boolean isPersonInFriendRequest(Person person, Person friend){
+        return person.getFriendRequest().stream().anyMatch(fr-> fr.getFriendId().equals(friend.getPersonId()));
+    }
+
+    private boolean IsFriendshipExist(Person person, Person friend){
+        return person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(friend.getPersonId()))
+                && friend.getFriends().stream().anyMatch(f -> f.getPersonId().equals(person.getPersonId()));
+    }
+
+    public FriendInfoDTO removeFriend(Long personId, Long friendId) {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);
 
-        if(person!= null && friend != null){
+        if(person != null && friend != null){
             List<Person> friendList = person.getFriends();
             List<Person> friendList1 = friend.getFriends();
 
@@ -132,9 +153,12 @@ public class PersonServiceImpl implements PersonService {
                 friendList.remove(friend);
                 friendList1.remove(person);
                 personRepository.save(friend);
-                return personRepository.save(person);
+                personRepository.save(person);
+
+                return personMapper.personToFriendInfoDTO(friend);
             }
         }
+
         return null;
     }
 

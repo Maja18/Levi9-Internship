@@ -1,6 +1,8 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
+import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
@@ -27,6 +29,7 @@ public class PostServiceImpl implements PostService {
     private final PersonRepository personRepository;
 
     private final NotificationServiceImpl notificationService;
+    private final PostMapper postMapper;
 
     @Override
     public Post addNewPost(PostDTO postDTO, Person loggedPerson){
@@ -136,7 +139,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post hidePost(HidePostDTO hidePostDTO, Long personId) {
+    public PostInfoDTO hidePost(HidePostDTO hidePostDTO, Long personId) {
 
         if(validation(hidePostDTO, personId)) {
             Post post = postRepository.findByPostId(hidePostDTO.getPostId());
@@ -144,8 +147,9 @@ public class PostServiceImpl implements PostService {
             List<Person> blockListPersons = post.getBlockedPersons();
             blockListPersons.add(blockPerson);
             post.setBlockedPersons(blockListPersons);
+            postRepository.save(post);
 
-            return postRepository.save(post);
+            return postMapper.postToPostInfoDTO(post);
         }
         return null;
     }
