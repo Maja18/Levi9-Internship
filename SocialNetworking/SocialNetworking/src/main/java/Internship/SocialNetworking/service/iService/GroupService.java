@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service.iService;
 
+import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
 import Internship.SocialNetworking.models.Event;
@@ -12,7 +13,7 @@ public interface GroupService {
 
     GroupNW getGroupById(Long id);
 
-    String createGroup(GroupDTO groupDTO);
+    GroupDTO createGroup(GroupDTO groupDTO);
 
     GroupNW getByName(String name);
 
@@ -20,7 +21,7 @@ public interface GroupService {
 
     boolean checkIfGroupMember(Long groupId, Long userId);
 
-    List<Event> groupEvents(Long groupId);
+    List<EventDTO> groupEvents(Long groupId);
 
 
 

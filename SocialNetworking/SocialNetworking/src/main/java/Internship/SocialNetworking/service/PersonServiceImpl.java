@@ -1,6 +1,5 @@
 package Internship.SocialNetworking.service;
 
-import Internship.SocialNetworking.config.WebSecurityConfig;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
@@ -14,8 +13,11 @@ import Internship.SocialNetworking.repository.FriendRequestRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
+import Internship.SocialNetworking.service.iService.PersonMapper;
+import Internship.SocialNetworking.service.iService.PersonMapperImpl;
 import Internship.SocialNetworking.service.iService.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -29,6 +31,8 @@ public class PersonServiceImpl implements PersonService {
 
     private  final GroupRequestRepository groupRequestRepository;
     private final GroupRepository groupRepository;
+
+    private final PersonMapper mapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -46,15 +50,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addPerson(PersonDTO person) {
+    public Person registerPerson(PersonDTO person) {
 
-               Person mappedPerson=new Person();
-              mappedPerson.setName(person.getName());
-              mappedPerson.setSurname(person.getSurname());
-              mappedPerson.setEmail(person.getEmail());
-              mappedPerson.setUsername(person.getUsername());
-              mappedPerson.setPassword(person.getPassword());
-
+            //   Person mappedPerson=new Person();
+             Person mappedPerson=mapper.personDTOtoPerson(person);
+             //we immediately hash a password
+              mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
               return personRepository.save(mappedPerson);
 
     }
@@ -64,19 +65,19 @@ public class PersonServiceImpl implements PersonService {
         Person friend = personRepository.findByPersonId(friendId);
 
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
-            List<FriendRequest> friendRequestList = person.getFriendRequest();
+            List<FriendRequest> friendRequestList = friend.getFriendRequest();
 
-            if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(friendId))){
+            if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(personId))){
                     return null;
             }
 
             FriendRequest friendRequest = new FriendRequest();
-            friendRequest.setFriendId(friendId);
+            friendRequest.setFriendId(personId);
             friendRequest.setStatus(FriendRequestStatus.PENDING);
             friendRequestList.add(friendRequest);
-            person.setFriendRequest(friendRequestList);
+            friend.setFriendRequest(friendRequestList);
 
-            return personRepository.save(person);
+            return personRepository.save(friend);
         }
 
         return null;
@@ -173,10 +174,10 @@ public class PersonServiceImpl implements PersonService {
         GroupNW group = groupRepository.findByGroupId(groupId);
 
      if (group != null) {
-         if(administratorId == group.getCreatorId()) {
+         if(Objects.equals(administratorId, group.getCreatorId())) {
              for (int i = 0; i < group.getMembers().size(); i++) {
                  Long personMemberId = group.getMembers().get(i).getPersonId();
-                 if (personId == personMemberId) {
+                 if (Objects.equals(personId, personMemberId)) {
                      Person personToRemove = group.getMembers().get(i);
                      group.getMembers().remove(personToRemove);
                      personRepository.save(personToRemove);
@@ -193,13 +194,14 @@ public class PersonServiceImpl implements PersonService {
     public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-                alteringPerson.setPersonId(userId);
-                alteringPerson.setName(person.getName());
-                alteringPerson.setSurname(person.getSurname());
-                alteringPerson.setEmail(person.getEmail());
-                alteringPerson.setUsername(person.getUsername());
-                alteringPerson.setPassword(passwordEncoder.encode(person.getPassword()));
-                        //we save changes to the database
+
+         alteringPerson.setPersonId(userId);
+         alteringPerson.setName(person.getName());
+         alteringPerson.setSurname(person.getSurname());
+         alteringPerson.setEmail(person.getEmail());
+         alteringPerson.setUsername(person.getUsername());
+         alteringPerson.setPassword(passwordEncoder.encode(person.getPassword()));
+                //we save changes to the database
                 personRepository.save(alteringPerson);
                 return "Successfully updated user";
 

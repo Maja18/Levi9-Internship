@@ -21,8 +21,8 @@ public class GroupController {
 
     @PostMapping
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<String> addNewGroup(@Valid @RequestBody GroupDTO groupDTO){
-        return new ResponseEntity<String>(groupService.createGroup(groupDTO), HttpStatus.OK);
+    public ResponseEntity<GroupDTO> addNewGroup(@Valid @RequestBody GroupDTO groupDTO){
+        return new ResponseEntity<>(groupService.createGroup(groupDTO), HttpStatus.OK);
     }
 
     

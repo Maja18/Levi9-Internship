@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.dto.MuteRequestDTO;
+import Internship.SocialNetworking.mapper.MuteRequestMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.MuteRequest;
 import Internship.SocialNetworking.models.Person;
@@ -38,7 +39,7 @@ public class MuteRequestServiceImpl implements MuteRequestService {
     }
 
     @Override
-    public String muteGroup(MuteRequestDTO muteRequestDTO) {
+    public MuteRequestDTO muteGroup(MuteRequestDTO muteRequestDTO) {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         Person loggedPerson = (Person) currentUser.getPrincipal();
         Person user = personRepository.findByEmailEquals(loggedPerson.getEmail());
@@ -51,8 +52,7 @@ public class MuteRequestServiceImpl implements MuteRequestService {
         user.getMutedGroups().add(muteRequest);
         personRepository.save(user);
 
-        return "You have successfully muted notifications from group " +
-                groupRepository.findByGroupId(muteRequestDTO.getGroupId()).getName();
+        return MuteRequestMapper.INSTANCE.muteRequestToDto(muteRequest);
     }
 
     @Override

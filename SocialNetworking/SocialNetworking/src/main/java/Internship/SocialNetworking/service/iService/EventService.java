@@ -9,5 +9,5 @@ public interface EventService {
     List<Event> getAllEvents();
 
      String goToEventOrNot(Long groupId,Long personId,Long eventId,Long presenceStatus);
-    public String createEvent(EventDTO eventDTO);
+     EventDTO createEvent(EventDTO eventDTO);
 }

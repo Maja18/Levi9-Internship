@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service;
 
+import Internship.SocialNetworking.mapper.EventMapper;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.dto.EventDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,7 +42,7 @@ public class EventServiceImpl implements EventService {
        GroupNW group=groupRepository.findByGroupId(groupId);
        if(group!=null) {
            for(int i=0; i<group.getMembers().size(); i++) {
-                if(personId == group.getMembers().get(i).getPersonId()) {
+                if(Objects.equals(personId, group.getMembers().get(i).getPersonId())) {
                     Event event=eventRepository.getByEventId(eventId);
                         if(event!=null) {
                             Person comingPerson=personRepository.findByPersonId(personId);
@@ -61,7 +63,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public String createEvent(EventDTO eventDTO) {
+    public EventDTO createEvent(EventDTO eventDTO) {
         Optional<GroupNW> groupExists = Optional.ofNullable(groupService.getGroupById(eventDTO.getGroupId()));
         Optional<Event> eventExists = Optional.ofNullable(eventRepository.getByName(eventDTO.getName()));
 
@@ -70,29 +72,30 @@ public class EventServiceImpl implements EventService {
         boolean isMember = groupService.checkIfGroupMember(eventDTO.getGroupId(), userWithId.getPersonId());
 
         if(groupExists.isEmpty()){
-            return "That group does not exist, please try again";
+            return null;
         }
         else if(eventExists.isPresent()){
-            return "Event with that name already exists, please enter new one";
+            return null;
         }
         else if(!isMember){
-            return "User must be a group member to make an event";
+            return null;
         } else if(LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())) > 0) {
-            return "End date can't be before start date, please enter dates again!";
+            return null;
         }
-        Event event = new Event();
+        Event event = EventMapper.INSTANCE.dtoToEvent(eventDTO);
+
         event.setCreatorId(userWithId.getPersonId());
-        event.setName(eventDTO.getName());
+        /*event.setName(eventDTO.getName());
         event.setX(eventDTO.getX());
         event.setY(eventDTO.getY());
         event.setStartEvent(LocalDateTime.parse(eventDTO.getStartEvent()));
         event.setEndEvent(LocalDateTime.parse(eventDTO.getEndEvent()));
-        event.setGroupId(eventDTO.getGroupId());
+        event.setGroupId(eventDTO.getGroupId());*/
         event.setIsOver(false);
         event.setNotified(false);
         eventRepository.save(event);
 
-        return "Event created!!";
+        return EventMapper.INSTANCE.eventToDto(event);
     }
 
 
