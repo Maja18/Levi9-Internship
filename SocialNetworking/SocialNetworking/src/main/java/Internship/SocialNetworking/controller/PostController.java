@@ -13,9 +13,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +35,7 @@ public class PostController {
 
     private final PostServiceImpl postService;
     private final PersonServiceImpl personService;
+    private static String uploadDir = "user-photos";
 
     @PostMapping
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
@@ -80,6 +90,34 @@ public class PostController {
 
         return posts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
+    }
+
+    @PostMapping(value = "/saveImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
+    public List<String> saveImage(@RequestParam("file") List<MultipartFile> multipartFiles ) throws IOException {
+        List<String> fileNames = new ArrayList<String>();
+        for(MultipartFile multipartFile:multipartFiles) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll("\\s", ""));
+            fileNames.add(fileName);
+            uploadDir = "user-photos";
+            saveFile(uploadDir, fileName, multipartFile);
+        }
+        return fileNames;
+    }
+
+    public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
     }
 
 }
