@@ -54,13 +54,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTO registerPerson(PersonDTO person) {
 
-       Person mappedPerson=mapper.personDTOtoPerson(person);
-             if(personRepository.findByEmailEquals(mappedPerson.getEmail())==null) {
+             Person mappedPerson=mapper.personDTOtoPerson(person);
+             if(personRepository.findByEmailEquals(mappedPerson.getEmail()) == null) {
                  //we immediately hash a password
                  mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
                  return mapper.personToPersonDTO(personRepository.save(mappedPerson));
              }
-             return null;
+            return null;
 
     }
 
@@ -233,7 +233,7 @@ public class PersonServiceImpl implements PersonService {
          alteringPerson.setSurname(person.getSurname());
          alteringPerson.setEmail(person.getEmail());
          alteringPerson.setUsername(person.getUsername());
-         alteringPerson.setPassword(person.getPassword());//passwordEncoder.encode(person.getPassword()));
+         alteringPerson.setPassword(passwordEncoder.encode(person.getPassword()));
                 //we save changes to the database
                 personRepository.save(alteringPerson);
                 return "Successfully updated user";
