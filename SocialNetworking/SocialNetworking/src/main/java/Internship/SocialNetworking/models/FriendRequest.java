@@ -21,4 +21,6 @@ public class FriendRequest {
 
     @Column
     private FriendRequestStatus status;
+    @Column
+    private Boolean deleted;
 }

@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.controller;
 
 
+import Internship.SocialNetworking.dto.FriendInfoDTO;
 import Internship.SocialNetworking.dto.FriendRequestDTO;
 import Internship.SocialNetworking.service.PersonServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,26 +37,26 @@ public class PersonController {
 
     @PostMapping(value = "/add-friend")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<Person> addFriend(@RequestBody FriendsDTO friendsDTO) {
+    public ResponseEntity<FriendInfoDTO> sendFriendRequest(@RequestBody FriendsDTO friendsDTO) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        Person add = personService.addFriend(userWithId.getPersonId(), friendsDTO.getFriendId());
+        FriendInfoDTO send = personService.sendFriendRequest(userWithId.getPersonId(), friendsDTO.getFriendId());
 
-        if (add == null) {
+        if (send == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(add, HttpStatus.OK);
+        return new ResponseEntity<>(send, HttpStatus.OK);
     }
 
     @PostMapping(value = "/approve-friend-request")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<Person> approveFriendRequest(@RequestBody FriendRequestDTO friendRequestDTO) {
+    public ResponseEntity<FriendInfoDTO> approveFriendRequest(@RequestBody FriendRequestDTO friendRequestDTO) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        Person approve = personService.approveFriendRequest(friendRequestDTO, userWithId.getPersonId());
+        FriendInfoDTO approve = personService.approveFriendRequest(friendRequestDTO, userWithId.getPersonId());
 
         if (approve == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,11 +67,11 @@ public class PersonController {
 
     @DeleteMapping(value = "/remove-friend/{friendId}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<Person> removeFriend(@PathVariable(name = "friendId") Long friendId) {
+    public ResponseEntity<FriendInfoDTO> removeFriend(@PathVariable(name = "friendId") Long friendId) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
-        Person remove = personService.removeFriend(userWithId.getPersonId(), friendId);
+        FriendInfoDTO remove = personService.removeFriend(userWithId.getPersonId(), friendId);
 
         if (remove == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -29,7 +29,7 @@ public class Post {
     private String videoUrl;
 
     @Column
-    private boolean isPublic;
+    private Boolean isPublic;
 
     @Column(name = "creator_id", nullable = false)
     private Long creatorId;
@@ -38,7 +38,7 @@ public class Post {
     private LocalDateTime creationDate;
 
     @Column
-    private boolean isOver;
+    private Boolean isOver;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "block_persons", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"),

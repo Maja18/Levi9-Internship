@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.controller;
 
+import Internship.SocialNetworking.dto.CommentInfoDTO;
 import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.dto.CommentDTO;
@@ -25,11 +26,11 @@ public class CommentController {
 
     @PostMapping
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<Comment> addComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<CommentInfoDTO> addComment(@RequestBody CommentDTO commentDTO) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person loggedUser = personService.findByPersonId(currentUser.getPersonId());
 
-        Comment comment = commentService.addComment(commentDTO, loggedUser.getPersonId());
+        CommentInfoDTO comment = commentService.addComment(commentDTO, loggedUser.getPersonId());
 
         if (comment == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -40,8 +41,8 @@ public class CommentController {
 
     @GetMapping(value = "/post/{post-id}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<List<Comment>> showComments(@PathVariable(name = "post-id") Long postId) {
-        List<Comment> comments = commentService.getCommentsByPostId(postId);
+    public ResponseEntity<List<CommentInfoDTO>> showComments(@PathVariable(name = "post-id") Long postId) {
+        List<CommentInfoDTO> comments = commentService.getCommentsByPostId(postId);
 
         if (comments == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -52,8 +53,8 @@ public class CommentController {
 
     @GetMapping(value = "/{comment-id}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<List<Comment>> showCommentsByCommentId(@PathVariable(name = "comment-id") Long commentId) {
-        List<Comment> comments = commentService.getCommentsByCommentId(commentId);
+    public ResponseEntity<List<CommentInfoDTO>> showCommentsByCommentId(@PathVariable(name = "comment-id") Long commentId) {
+        List<CommentInfoDTO> comments = commentService.getCommentsByCommentId(commentId);
 
         if (comments == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -64,11 +65,11 @@ public class CommentController {
 
     @DeleteMapping(value = "/{comment-id}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<String> deleteComment(@PathVariable(name = "comment-id") Long commentId) {
+    public ResponseEntity<CommentInfoDTO> deleteComment(@PathVariable(name = "comment-id") Long commentId) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person loggedUser = personService.findByPersonId(currentUser.getPersonId());
 
-        String comment = commentService.deleteComment(commentId, loggedUser);
+        CommentInfoDTO comment = commentService.deleteComment(commentId, loggedUser);
 
         if (comment == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
