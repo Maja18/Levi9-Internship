@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +20,5 @@ public class PostDTO {
     private LocalDateTime creationDate;
     private Boolean isOver;
     private Long groupId;
+    private List<ImageDTO> images;
 }

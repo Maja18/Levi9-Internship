@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
+import Internship.SocialNetworking.dto.ImageDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
@@ -17,12 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import org.apache.commons.io.IOUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class PostServiceImpl implements PostService {
     private final PersonRepository personRepository;
     private final NotificationServiceImpl notificationService;
     private final PostMapper postMapper;
+    private static String uploadDir = "user-photos";
 
     @Override
     public PostDTO addNewPost(PostDTO postDTO, Person loggedPerson){
@@ -89,6 +94,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getAllUserPosts(Long userId, Person loggedPerson) {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
+        List<String> mediasFileNames = new ArrayList<String>();
         allPosts.stream().forEach(p-> {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setIsOver(true);
@@ -98,7 +104,7 @@ public class PostServiceImpl implements PostService {
                 setAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
 
-        return postMapper.postsToPostDTOs(posts);
+        return getPostFiles(postMapper.postsToPostDTOs(posts));
     }
 
     private void setAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
@@ -210,5 +216,59 @@ public class PostServiceImpl implements PostService {
         });
 
         return postMapper.postsToPostDTOs(friendPosts);
+    }
+
+    public List<PostDTO> getPostFiles(List<PostDTO> posts) {
+        List<PostDTO> postsDto = new ArrayList<>();
+        if (posts != null) {
+            String filePath = new File("").getAbsolutePath();
+            filePath = filePath.concat("/" + uploadDir + "/");
+            for (PostDTO post : posts) {
+                postsDto.add(postFile(post, filePath));
+            }
+        }
+
+        return postsDto;
+
+    }
+
+    public PostDTO postFile(PostDTO post, String filePath) {
+        List<ImageDTO> images = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        //slucaj 1: ima i slika i video
+        if (post.getImageUrl() != null && post.getVideoUrl() != null){
+            fileNames.add(post.getImageUrl());
+            fileNames.add(post.getVideoUrl());
+        }
+        //slucaj 2: ima samo slika
+        else if (post.getImageUrl() != null && post.getVideoUrl() == null){
+            fileNames.add(post.getImageUrl());
+        }
+        //slucaj 3: ima samo video
+        else if (post.getVideoUrl() != null && post.getImageUrl() == null){
+            fileNames.add(post.getVideoUrl());
+        }
+        System.out.println("*********BEGIN*************");
+        for (String fileName:fileNames) {
+            System.out.println("File name: " + fileName);
+            ImageDTO imageDTO = new ImageDTO();
+            List<byte[]> bytes = new ArrayList<byte[]>();
+            imageDTO.setImageBytes(bytes);
+            File in = new File(filePath + "/"+ fileName);
+            System.out.println(fileName);
+            try {
+                bytes.add(IOUtils.toByteArray(new FileInputStream(in)));
+                imageDTO.setImageBytes(bytes);
+                images.add(imageDTO);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }catch(NullPointerException n) {
+                n.printStackTrace();
+            }
+        }
+        System.out.println("********END**************");
+
+        post.setImages(images);
+        return post;
     }
 }
