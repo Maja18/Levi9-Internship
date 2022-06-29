@@ -92,13 +92,13 @@ public class PersonController {
 
     //if user is invalid then exception handler is called
     @PostMapping("registration")
-    public ResponseEntity<Person> registerPersons(@RequestBody PersonDTO person) {
+    public ResponseEntity<String> registerPersons(@RequestBody PersonDTO person) {
         var per=personService.registerPerson(person);
         if(per == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User with such email already exists",HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(per,HttpStatus.OK);
+        return new ResponseEntity<>("Successfully registered user",HttpStatus.OK);
 
     }
     @PutMapping("")

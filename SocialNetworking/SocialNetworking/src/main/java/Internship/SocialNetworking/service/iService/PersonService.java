@@ -12,7 +12,7 @@ import java.util.List;
 public interface PersonService {
     Person findByEmailEquals(String email);
     Person findByPersonId(Long id);
-    Person registerPerson(PersonDTO person);
+    PersonDTO registerPerson(PersonDTO person);
     Person addFriend(Long personId, Long friendId);
 
     String addPersonToGroup(Long groupId,Long personId);

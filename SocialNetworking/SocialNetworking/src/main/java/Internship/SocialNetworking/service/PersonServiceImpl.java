@@ -50,13 +50,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person registerPerson(PersonDTO person) {
+    public PersonDTO registerPerson(PersonDTO person) {
 
-            //   Person mappedPerson=new Person();
-             Person mappedPerson=mapper.personDTOtoPerson(person);
-             //we immediately hash a password
-              mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
-              return personRepository.save(mappedPerson);
+       Person mappedPerson=mapper.personDTOtoPerson(person);
+             if(personRepository.findByEmailEquals(mappedPerson.getEmail())==null) {
+                 //we immediately hash a password
+                 mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
+                 return mapper.personToPersonDTO(personRepository.save(mappedPerson));
+             }
+             return null;
 
     }
 
