@@ -1,5 +1,9 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
+import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -51,7 +55,7 @@ class PostServiceTests {
     }
 
     @Test
-     void testGetFriendsPosts(){
+    void testGetFriendsPosts(){
         List<Post> posts = new ArrayList<>();
         Person person = new Person();
         person.setPersonId(2L);
@@ -63,7 +67,15 @@ class PostServiceTests {
         post.setIsPublic(false);
         post.setCreationDate(LocalDateTime.now());
         post.setIsOver(false);
+
+        Post postSecond = new Post();
+        postSecond.setPostId(1L);
+        postSecond.setDescription("mikin drugi post");
+        postSecond.setCreatorId(2L);
+        postSecond.setIsPublic(true);
+        postSecond.setCreationDate(LocalDateTime.now().minusDays(4));
         posts.add(post);
+        posts.add(postSecond);
 
         Person loggedPerson = new Person();
         loggedPerson.setPersonId(1L);
@@ -74,6 +86,7 @@ class PostServiceTests {
 
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         Assertions.assertFalse(postService.getAllFriendPosts(loggedPerson).isEmpty());
+        Assertions.assertEquals(1, postService.getAllFriendPosts(loggedPerson).size());
     }
 
     @Test
@@ -103,7 +116,7 @@ class PostServiceTests {
         postSecond.setDescription("mikin drugi post");
         postSecond.setCreatorId(2L);
         postSecond.setIsPublic(false);
-        postSecond.setCreationDate(LocalDateTime.now());
+        postSecond.setCreationDate(LocalDateTime.now().minusDays(1));
         postSecond.setIsOver(false);
         posts.add(postFirst);
         posts.add(postSecond);
@@ -111,7 +124,7 @@ class PostServiceTests {
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
-        Assertions.assertEquals(2, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
+        Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
     }
 
     @Test
@@ -155,10 +168,17 @@ class PostServiceTests {
         loggedPerson.setPersonId(1L);
         loggedPerson.setName("Pera");
 
+        Person p = new Person();
+        p.setPersonId(3L);
+        p.setName("Zika");
+
         List<Post> posts = new ArrayList<>();
+        List<Person> friends = new ArrayList<>();
+        friends.add(p);
         Person person = new Person();
         person.setPersonId(2L);
         person.setName("Mika");
+        person.setFriends(friends);
 
         Post postFirst = new Post();
         postFirst.setPostId(1L);
@@ -166,7 +186,6 @@ class PostServiceTests {
         postFirst.setCreatorId(2L);
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
-        postFirst.setGroupId(1L);
         postFirst.setIsOver(false);
 
         Post postSecond = new Post();
@@ -312,5 +331,442 @@ class PostServiceTests {
 
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         Assertions.assertEquals(0,postService.getAllFriendPosts(loggedPerson).size());
+    }
+
+    @Test
+    void testGetNoUserGroupPostsIfGroupDoesNotExist(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setGroupId(15L);
+        postFirst.setIsOver(false);
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        GroupException exception = Assertions.assertThrows(GroupException.class, () -> {
+            postService.getAllUserPosts(person.getPersonId(), loggedPerson);
+
+        });
+        Assertions.assertEquals("Group with given id doesn't exist", exception.getMessage());
+    }
+
+    @Test
+    void testGetNoUserGroupPostsIfNotMemberAndGroupIsPrivate(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(false);
+        group.setName("grupa");
+        group.setCreatorId(person.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        group.setMembers(members);
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(false);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setGroupId(1L);
+        postFirst.setIsOver(false);
+        postFirst.setGroupId(group.getGroupId());
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
+        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
+        Assertions.assertEquals(0, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
+    }
+
+    @Test
+    void testGetUserGroupPostsIfNotMemberAndGroupIsPublic(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(true);
+        group.setName("grupa");
+        group.setCreatorId(person.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        group.setMembers(members);
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setGroupId(1L);
+        postFirst.setIsOver(false);
+        postFirst.setGroupId(group.getGroupId());
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
+        Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
+        Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
+    }
+
+    @Test
+    void testGetUserGroupPostsIfMemberAndGroupIsPrivate(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(false);
+        group.setName("grupa");
+        group.setCreatorId(person.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        members.add(loggedPerson);
+        group.setMembers(members);
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(false);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setGroupId(1L);
+        postFirst.setIsOver(false);
+        postFirst.setGroupId(group.getGroupId());
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
+        Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
+        Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
+    }
+
+    @Test
+    void testGetNoPostsIfUserIsBlocked(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        List<Person> blockedPersons = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+        blockedPersons.add(loggedPerson);
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
+        postFirst.setBlockedPersons(blockedPersons);
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
+        Assertions.assertEquals(0, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
+    }
+
+    @Test
+    void testAddNoNewGroupPostIfNotMember(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setName("group");
+        List<Person> members = new ArrayList<>();
+        group.setMembers(members);
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setImageUrl("image url");
+        post.setIsPublic(true);
+        post.setGroupId(group.getGroupId());
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(group);
+        GroupException exception = Assertions.assertThrows(GroupException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+
+        });
+        Assertions.assertEquals("You are not member of this group!", exception.getMessage());
+
+    }
+
+    @Test
+    void testGetNoUserPostsIfUserDoesNotExist(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
+        posts.add(postFirst);
+
+        PersonException exception = Assertions.assertThrows(PersonException.class, () -> {
+            when(postRepository.findByCreatorId(10L)).thenReturn(posts);
+            postService.getAllUserPosts(10L, loggedPerson).isEmpty();
+
+        });
+        Assertions.assertEquals("Person with given id doesn't exist", exception.getMessage());
+    }
+
+    @Test
+    void blockPersonDoesNotExistInBlockList(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(1L);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(true);
+        group.setName("grupa");
+        group.setCreatorId(loggedPerson.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        members.add(loggedPerson);
+        group.setMembers(members);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void blockPersonExistInBlockList(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(1L);
+        post.setIsOver(false);
+        blockPersons.add(person);
+        post.setBlockedPersons(blockPersons);
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(true);
+        group.setName("grupa");
+        group.setCreatorId(loggedPerson.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        members.add(loggedPerson);
+        group.setMembers(members);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void groupIsNullForPostAndBlockPersonDoesNotFriendWithLoggedPerson(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+        loggedPerson.setFriends(friendList);
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void HidePostWherePostIsOver(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+        loggedPerson.setFriends(friendList);
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(true);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void groupIsNullForPostAndBlockPersonIsFriendWithLoggedPerson(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        friendList.add(person);
+        loggedPerson.setFriends(friendList);
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
     }
 }
