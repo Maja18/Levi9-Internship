@@ -1,5 +1,7 @@
 package Internship.SocialNetworking.service;
+import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -312,5 +314,216 @@ class PostServiceTests {
 
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         Assertions.assertEquals(0,postService.getAllFriendPosts(loggedPerson).size());
+    }
+
+    @Test
+    void blockPersonDoesNotExistInBlockList(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(1L);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(true);
+        group.setName("grupa");
+        group.setCreatorId(loggedPerson.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        members.add(loggedPerson);
+        group.setMembers(members);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void blockPersonExistInBlockList(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(1L);
+        post.setIsOver(false);
+        blockPersons.add(person);
+        post.setBlockedPersons(blockPersons);
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setIsPublic(true);
+        group.setName("grupa");
+        group.setCreatorId(loggedPerson.getPersonId());
+        List<Person> members = new ArrayList<>();
+        members.add(person);
+        members.add(loggedPerson);
+        group.setMembers(members);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void groupIsNullForPostAndBlockPersonDoesNotFriendWithLoggedPerson(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+        loggedPerson.setFriends(friendList);
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void HidePostWherePostIsOver(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+        loggedPerson.setFriends(friendList);
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(true);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void groupIsNullForPostAndBlockPersonIsFriendWithLoggedPerson(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+        List<Person> friendList = new ArrayList<>();
+
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Stefan");
+        List<Person> blockPersons = new ArrayList<>();
+
+        friendList.add(person);
+        loggedPerson.setFriends(friendList);
+
+        Post post = new Post();
+        post.setPostId(1L);
+        post.setDescription("mikin post");
+        post.setCreatorId(loggedPerson.getPersonId());
+        post.setIsPublic(true);
+        post.setCreationDate(LocalDateTime.now());
+        post.setGroupId(null);
+        post.setIsOver(false);
+        post.setBlockedPersons(blockPersons);
+
+        HidePostDTO hidePostDTO = new HidePostDTO();
+        hidePostDTO.setPostId(post.getPostId());
+        hidePostDTO.setPersonId(person.getPersonId());
+
+        PostInfoDTO postInfoDTO = new PostInfoDTO();
+        postInfoDTO = postMapper.postToPostInfoDTO(post);
+        System.out.println(postInfoDTO.getDescription());
+
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
+        when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
+        Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
     }
 }

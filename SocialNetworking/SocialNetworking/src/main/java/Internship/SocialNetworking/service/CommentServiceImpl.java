@@ -133,7 +133,10 @@ public class CommentServiceImpl implements CommentService {
                     return comment != null && comment.getPostId().equals(post.getPostId()) || commentDTO.getParentId() == null;
                 }
             }else if(person.getFriends().stream().anyMatch(f-> f.getPersonId().equals(post.getCreatorId()))
-                    && comment != null && comment.getPostId().equals(post.getPostId())){
+                    && comment != null && comment.getPostId().equals(post.getPostId())) {
+                return true;
+
+            }else if(person.getPersonId().equals(post.getCreatorId())){
                 return true;
 
             }else return person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(post.getCreatorId()))
