@@ -120,7 +120,7 @@ class PostControllerTests {
         post.setDescription("my first post");
         post.setCreationDate(LocalDateTime.now());
         post.setCreatorId(1L);
-        post.setPublic(true);
+        post.setIsPublic(true);
         doReturn(Lists.newArrayList(post)).when(postService).getAllFriendPosts(person);
         mockMvc.perform(get("/api/post"))
                 // Validate the response code and content type

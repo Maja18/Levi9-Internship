@@ -21,7 +21,7 @@ class PostRepositoryTests {
         post.setDescription("my first post");
         post.setCreationDate(LocalDateTime.now());
         post.setCreatorId(1L);
-        post.setPublic(true);
+        post.setIsPublic(true);
         postRepository.save(post);
         Post p = postRepository.findByPostId(1L);
         assertThat(p.getPostId()).isEqualTo(1L);

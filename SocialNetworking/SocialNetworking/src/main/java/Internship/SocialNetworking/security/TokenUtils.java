@@ -16,17 +16,17 @@ import java.util.Date;
 public class TokenUtils {
 
     @Value("SocialNetworkingApp")
-    private String APP_NAME;
+    private String appName;
 
     @Value("super_secret_code_value")
-    private String SECRET;
+    private String secret;
 
 
     @Value("3600000") // 1h
-    private int EXPIRES_IN;
+    private int expiresIn;
 
     @Value("3600000") // 1h
-    private int MOBILE_EXPIRES_IN;
+    private int mobileExpiresIn;
 
     @Value("Authorization")
     private String AUTH_HEADER;
@@ -41,7 +41,7 @@ public class TokenUtils {
 
     private PersonRepository personRepository;
 
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
     public TokenUtils(TimeProvider timeProvider, PersonRepository personRepository){
             this.timeProvider = timeProvider;
@@ -51,18 +51,18 @@ public class TokenUtils {
 
     public String generateToken(String username) {
         return Jwts.builder()
-                .setIssuer(APP_NAME)
+                .setIssuer(appName)
                 .setSubject(username)
                 .claim("authorities", personRepository.findByEmailEquals(username).getAuthorities().toString())
 //                .setAudience(generateAudience(device))
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate())
-                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+                .signWith(signatureAlgorithm, secret).compact();
     }
 
     private Date generateExpirationDate() {
-        return new Date(timeProvider.now().getTime() + EXPIRES_IN * 10000);
+        return new Date(timeProvider.now().getTime() + expiresIn * 10000);
     }
 
     //Function for refreshing jwt token
@@ -74,7 +74,7 @@ public class TokenUtils {
             refreshedToken = Jwts.builder()
                     .setClaims(claims)
                     .setExpiration(generateExpirationDate())
-                    .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+                    .signWith(signatureAlgorithm, secret).compact();
         } catch (Exception e) {
             refreshedToken = null;
         }
@@ -126,7 +126,7 @@ public class TokenUtils {
         Claims claims;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(SECRET)
+                    .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class TokenUtils {
     }
 
     public int getExpiredIn() {
-        return EXPIRES_IN;
+        return expiresIn;
     }
 
     /* Functions for getting JWT token out of HTTP request */

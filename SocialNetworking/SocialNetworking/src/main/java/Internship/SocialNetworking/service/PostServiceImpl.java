@@ -1,6 +1,10 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
+import Internship.SocialNetworking.dto.PostInfoDTO;
+import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.Post;
@@ -9,6 +13,7 @@ import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
 import Internship.SocialNetworking.service.iService.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -20,16 +25,17 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final GroupRepository groupRepository;
     private final  PostRepository postRepository;
     private final PersonRepository personRepository;
-
     private final NotificationServiceImpl notificationService;
+    private final PostMapper postMapper;
 
     @Override
-    public Post addNewPost(PostDTO postDTO, Person loggedPerson){
+    public PostDTO addNewPost(PostDTO postDTO, Person loggedPerson){
         Post post;
         Optional<GroupNW> group = Optional.ofNullable(groupRepository.findByGroupId(postDTO.getGroupId()));
         if (group.isEmpty()){
@@ -41,13 +47,16 @@ public class PostServiceImpl implements PostService {
         }
         postRepository.save(post);
 
-        return post;
+        return postMapper.postToPostDTO(post);
     }
 
     public Post addPostToGroup(PostDTO postDTO, Optional<GroupNW> group, Person loggedPerson) {
         Post post = new Post();
+        if (group.isEmpty()){
+            throw new GroupException("Group doesn't exist");
+        }
         if (group.get().getMembers().stream().anyMatch(member -> member.getPersonId().equals(loggedPerson.getPersonId()))){
-            post.setPublic(postDTO.getIsPublic());
+            post.setIsPublic(postDTO.getIsPublic());
             post.setGroupId(postDTO.getGroupId());
             LocalDateTime currentDate = LocalDateTime.now();
             post.setCreationDate(currentDate);
@@ -55,6 +64,7 @@ public class PostServiceImpl implements PostService {
             post.setDescription(postDTO.getDescription());
             post.setImageUrl(postDTO.getImageUrl());
             post.setVideoUrl(postDTO.getVideoUrl());
+            post.setIsOver(false);
         }
 
         return post;
@@ -62,64 +72,72 @@ public class PostServiceImpl implements PostService {
 
     public Post addPostOutsideGroup(PostDTO postDTO, Person loggedPerson) {
         Post post = new Post();
-        post.setPublic(postDTO.getIsPublic());
+        post.setIsPublic(postDTO.getIsPublic());
         LocalDateTime currentDate = LocalDateTime.now();
         post.setCreationDate(currentDate);
         post.setCreatorId(loggedPerson.getPersonId());
         post.setDescription(postDTO.getDescription());
         post.setImageUrl(postDTO.getImageUrl());
         post.setVideoUrl(postDTO.getVideoUrl());
+        post.setIsOver(false);
 
         return post;
     }
 
     @Override
-    public List<Post> getAllUserPosts(Long userId, Person loggedPerson) {
+    public List<PostDTO> getAllUserPosts(Long userId, Person loggedPerson) {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
         allPosts.stream().forEach(p-> {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
-                p.setOver(true);
+                p.setIsOver(true);
             if (p.getGroupId() != null)
-                getAllGroupPosts(loggedPerson,posts, p);
+                setAllGroupPosts(loggedPerson,posts, p);
             else
-                getAllNotGroupPosts(loggedPerson,userId, posts, p);
+                setAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
 
-        return posts;
+        return postMapper.postsToPostDTOs(posts);
     }
 
-    private void getAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
+    private void setAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
+        if (person == null){
+            throw new PersonException(userId, "Person with given id doesn't exist");
+        }
         List<Person> personFriends = person.getFriends();
         boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
-        if (isNullOrEmpty && !p.isPublic())
+        if (isNullOrEmpty && !p.getIsPublic())
             return;
-        if (isNullOrEmpty && p.isPublic())
+        if (isNullOrEmpty && p.getIsPublic())
             posts.add(p);
         else {
             personFriends.stream().forEach(friend -> {
-                if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
                 else
                     return;
-                if (p.isPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+                if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                         posts.add(p);
             });
         }
+
         removeBlockedPosts(loggedPerson, posts, p);
     }
 
-    private void getAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
+    private void setAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
         GroupNW group = groupRepository.findByGroupId(p.getGroupId());
+        if (group == null){
+            throw new GroupException(p.getGroupId(), "Group with given id doesn't exist");
+        }
         List<Person> groupMembers = group.getMembers();
         groupMembers.stream().forEach(member -> {
-            if (member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
+            if (member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                 posts.add(p);
             else
                 return;
-            if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.isOver())
-                    posts.add(p);
+            if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
+                posts.add(p);
         });
         removeBlockedPosts(loggedPerson, posts, p);
     }
@@ -136,7 +154,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post hidePost(HidePostDTO hidePostDTO, Long personId) {
+    public PostInfoDTO hidePost(HidePostDTO hidePostDTO, Long personId) {
 
         if(validation(hidePostDTO, personId)) {
             Post post = postRepository.findByPostId(hidePostDTO.getPostId());
@@ -144,9 +162,12 @@ public class PostServiceImpl implements PostService {
             List<Person> blockListPersons = post.getBlockedPersons();
             blockListPersons.add(blockPerson);
             post.setBlockedPersons(blockListPersons);
+            postRepository.save(post);
 
-            return postRepository.save(post);
+            return postMapper.postToPostInfoDTO(post);
         }
+
+        log.info("The HidePostDTO and the personId didn't pass validation!");
         return null;
     }
 
@@ -157,7 +178,7 @@ public class PostServiceImpl implements PostService {
 
         if(person != null && blockPerson != null && post != null
                 && person.getPersonId().equals(post.getCreatorId())
-                && !post.isOver()){
+                && !post.getIsOver()){
 
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
 
@@ -175,20 +196,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllFriendPosts(Person loggedPerson) {
+    public List<PostDTO> getAllFriendPosts(Person loggedPerson) {
         List<Post> friendPosts= new ArrayList<>();
         List<Person> personFriends = loggedPerson.getFriends();
         personFriends.stream().forEach(friend -> {
             List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
             for (Post p: posts) {
                 if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
-                    p.setOver(true);
-                if (!p.isOver())
+                    p.setIsOver(true);
+                if (!p.getIsOver())
                     friendPosts.add(p);
                 removeBlockedPosts(loggedPerson, friendPosts, p);
             }
         });
 
-        return friendPosts;
+        return postMapper.postsToPostDTOs(friendPosts);
     }
 }
