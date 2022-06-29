@@ -1,6 +1,7 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -165,10 +166,17 @@ class PostServiceTests {
         loggedPerson.setPersonId(1L);
         loggedPerson.setName("Pera");
 
+        Person p = new Person();
+        p.setPersonId(3L);
+        p.setName("Zika");
+
         List<Post> posts = new ArrayList<>();
+        List<Person> friends = new ArrayList<>();
+        friends.add(p);
         Person person = new Person();
         person.setPersonId(2L);
         person.setName("Mika");
+        person.setFriends(friends);
 
         Post postFirst = new Post();
         postFirst.setPostId(1L);
@@ -176,7 +184,6 @@ class PostServiceTests {
         postFirst.setCreatorId(2L);
         postFirst.setIsPublic(true);
         postFirst.setCreationDate(LocalDateTime.now());
-        postFirst.setGroupId(1L);
         postFirst.setIsOver(false);
 
         Post postSecond = new Post();
@@ -467,5 +474,86 @@ class PostServiceTests {
         when(groupRepository.findByGroupId(postFirst.getGroupId())).thenReturn(group);
         Assertions.assertFalse(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
         Assertions.assertEquals(1, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size() );
+    }
+
+    @Test
+    void testGetNoPostsIfUserIsBlocked(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+        List<Person> blockedPersons = new ArrayList<>();
+        Person person = new Person();
+        person.setPersonId(2L);
+        person.setName("Mika");
+        blockedPersons.add(loggedPerson);
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
+        postFirst.setBlockedPersons(blockedPersons);
+        posts.add(postFirst);
+
+        when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        Assertions.assertTrue(postService.getAllUserPosts(person.getPersonId(), loggedPerson).isEmpty());
+        Assertions.assertEquals(0, postService.getAllUserPosts(person.getPersonId(), loggedPerson).size());
+    }
+
+    @Test
+    void testAddNoNewGroupPostIfNotMember(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        GroupNW group = new GroupNW();
+        group.setGroupId(1L);
+        group.setName("group");
+        List<Person> members = new ArrayList<>();
+        group.setMembers(members);
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setImageUrl("image url");
+        post.setIsPublic(true);
+        post.setGroupId(group.getGroupId());
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(group);
+        GroupException exception = Assertions.assertThrows(GroupException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+
+        });
+        Assertions.assertEquals("You are not member of this group!", exception.getMessage());
+
+    }
+
+    @Test
+    void testGetNoUserPostsIfUserDoesNotExist(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        List<Post> posts = new ArrayList<>();
+
+        Post postFirst = new Post();
+        postFirst.setPostId(1L);
+        postFirst.setDescription("mikin post");
+        postFirst.setCreatorId(2L);
+        postFirst.setIsPublic(true);
+        postFirst.setCreationDate(LocalDateTime.now());
+        postFirst.setIsOver(false);
+        posts.add(postFirst);
+
+        PersonException exception = Assertions.assertThrows(PersonException.class, () -> {
+            when(postRepository.findByCreatorId(10L)).thenReturn(posts);
+            postService.getAllUserPosts(10L, loggedPerson).isEmpty();
+
+        });
+        Assertions.assertEquals("Person with given id doesn't exist", exception.getMessage());
     }
 }

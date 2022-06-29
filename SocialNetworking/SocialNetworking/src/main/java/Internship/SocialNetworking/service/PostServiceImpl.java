@@ -111,16 +111,13 @@ public class PostServiceImpl implements PostService {
             return;
         if (isNullOrEmpty && p.getIsPublic())
             posts.add(p);
-        else {
+        else
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
-                else
-                    return;
-                if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
-                        posts.add(p);
+                else if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
+                    posts.add(p);
             });
-        }
 
         removeBlockedPosts(loggedPerson, posts, p);
     }
