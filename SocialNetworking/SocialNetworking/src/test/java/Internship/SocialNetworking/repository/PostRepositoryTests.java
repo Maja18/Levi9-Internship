@@ -3,15 +3,19 @@ import Internship.SocialNetworking.models.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class PostRepositoryTests {
 
-    @Autowired
+    @Resource
     private PostRepository postRepository;
 
     @Test
