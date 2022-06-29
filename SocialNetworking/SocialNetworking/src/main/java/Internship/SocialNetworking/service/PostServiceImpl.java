@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,9 +53,8 @@ public class PostServiceImpl implements PostService {
 
     public Post addPostToGroup(PostDTO postDTO, Optional<GroupNW> group, Person loggedPerson) {
         Post post = new Post();
-        if (group.isEmpty()){
+        if (group.isEmpty())
             throw new GroupException("Group doesn't exist");
-        }
         if (group.get().getMembers().stream().anyMatch(member -> member.getPersonId().equals(loggedPerson.getPersonId()))){
             post.setIsPublic(postDTO.getIsPublic());
             post.setGroupId(postDTO.getGroupId());
@@ -65,7 +65,8 @@ public class PostServiceImpl implements PostService {
             post.setImageUrl(postDTO.getImageUrl());
             post.setVideoUrl(postDTO.getVideoUrl());
             post.setIsOver(false);
-        }
+        } else
+            throw new GroupException("You are not member of this group!");
 
         return post;
     }
@@ -92,7 +93,7 @@ public class PostServiceImpl implements PostService {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setIsOver(true);
             if (p.getGroupId() != null)
-                setAllGroupPosts(loggedPerson,posts, p);
+                setAllGroupPosts(loggedPerson, posts, p);
             else
                 setAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
@@ -102,9 +103,8 @@ public class PostServiceImpl implements PostService {
 
     private void setAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
         Person person = personRepository.findByPersonId(userId);
-        if (person == null){
+        if (person == null)
             throw new PersonException(userId, "Person with given id doesn't exist");
-        }
         List<Person> personFriends = person.getFriends();
         boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
         if (isNullOrEmpty && !p.getIsPublic())
@@ -127,19 +127,21 @@ public class PostServiceImpl implements PostService {
 
     private void setAllGroupPosts(Person loggedPerson,List<Post> posts, Post p) {
         GroupNW group = groupRepository.findByGroupId(p.getGroupId());
-        if (group == null){
+        if (group == null)
             throw new GroupException(p.getGroupId(), "Group with given id doesn't exist");
-        }
         List<Person> groupMembers = group.getMembers();
-        groupMembers.stream().forEach(member -> {
-            if (member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
+        if (!p.getIsOver()) {
+            if (group.getIsPublic())
                 posts.add(p);
-            else
-                return;
-            if (group.getIsPublic() && ! member.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
-                posts.add(p);
-        });
-        removeBlockedPosts(loggedPerson, posts, p);
+            else {
+                groupMembers.stream().forEach(member -> {
+                    if (member.getPersonId().equals(loggedPerson.getPersonId()))
+                        posts.add(p);
+                });
+            }
+
+            removeBlockedPosts(loggedPerson, posts, p);
+        }
     }
 
     private void removeBlockedPosts(Person loggedPerson, List<Post> posts, Post p) {
