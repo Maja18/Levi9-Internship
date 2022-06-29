@@ -177,12 +177,11 @@ public class PersonServiceImpl implements PersonService {
 
      if (group != null) {
          if(Objects.equals(administratorId, group.getCreatorId())) {
-             for (int i = 0; i < group.getMembers().size(); i++) {
-                 Long personMemberId = group.getMembers().get(i).getPersonId();
+             for (Person member : group.getMembers()) {
+                 Long personMemberId = member.getPersonId();
                  if (Objects.equals(personId, personMemberId)) {
-                     Person personToRemove = group.getMembers().get(i);
-                     group.getMembers().remove(personToRemove);
-                     personRepository.save(personToRemove);
+                     group.getMembers().remove(member);
+                     personRepository.save(member);
                      return "Successfully deleted member of group";
                  }
              }
