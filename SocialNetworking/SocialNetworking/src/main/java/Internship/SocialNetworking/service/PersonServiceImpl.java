@@ -228,13 +228,12 @@ public class PersonServiceImpl implements PersonService {
     public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-
          alteringPerson.setPersonId(userId);
          alteringPerson.setName(person.getName());
          alteringPerson.setSurname(person.getSurname());
          alteringPerson.setEmail(person.getEmail());
          alteringPerson.setUsername(person.getUsername());
-         alteringPerson.setPassword(passwordEncoder.encode(person.getPassword()));
+         alteringPerson.setPassword(person.getPassword());//passwordEncoder.encode(person.getPassword()));
                 //we save changes to the database
                 personRepository.save(alteringPerson);
                 return "Successfully updated user";

@@ -54,6 +54,9 @@ class PersonServiceTests {
 
     @Mock
     private PersonRepository personRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
     
       @Mock
     private GroupRepository groupRepository;
@@ -63,9 +66,6 @@ class PersonServiceTests {
 
     @Spy
     PersonMapper personMapper = Mappers.getMapper(PersonMapper.class);
-    
-     @Autowired
-    private  PasswordEncoder passwordEncoder;
 
     @Before
     void init() {
@@ -94,7 +94,7 @@ class PersonServiceTests {
         group.setCreatorId(1L);
 
         Person person=new Person();
-        person.setPersonId(1L);
+        person.setPersonId(2L);
         person.setName("Nikola");
         person.setSurname("Perisic");
         person.setUsername("userName");
@@ -104,23 +104,34 @@ class PersonServiceTests {
         members.add(person);
         group.setMembers(members);
 
-        Assertions.assertEquals(group.getCreatorId(),person.getPersonId());
-        Assertions.assertFalse(!Objects.equals(group.getCreatorId(), person.getPersonId()));
+        Assertions.assertNotEquals(group.getCreatorId(),person.getPersonId());
+        Assertions.assertTrue(!Objects.equals(group.getCreatorId(), person.getPersonId()));
         for(Person per : group.getMembers()) {
             Assertions.assertEquals(per.getPersonId(), person.getPersonId());
         }
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         Assertions.assertNotNull(personService.addPersonToGroup(group.getGroupId(),person.getPersonId()));
     }
     @Test
     void alterUserInformation() {
+
+        Person realPerson=new Person();
+        realPerson.setPersonId(7L);
+        realPerson.setName("Milos");
+        realPerson.setSurname("Milinovic");
+        realPerson.setEmail("milosmilinovic9@gmail.com");
+        realPerson.setPassword("mili123");
+
         PersonDTO person=new PersonDTO();
         person.setName("Marko");
         person.setSurname("Mihajlovic");
         person.setEmail("marko@gmail.com");
         person.setUsername("marko123");
-        person.setPassword(passwordEncoder.encode("markoni123"));
+        person.setPassword("markoni123");
 
-        Assertions.assertNotNull(personService.alterPersonInformation(person,1L));
+        when(personRepository.findByPersonId(realPerson.getPersonId())).thenReturn(realPerson);
+        Assertions.assertNotNull(personService.alterPersonInformation(person,realPerson.getPersonId()));
     }
     @Test
     void testDeletingUserFromGroup() {
@@ -148,6 +159,10 @@ class PersonServiceTests {
 
         Assertions.assertEquals(4L,group.getGroupId());
         Assertions.assertTrue(Objects.equals(group.getGroupId(), group.getCreatorId()));
+        when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
+        when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
+        Assertions.assertNotNull(personService.deletePersonFromGroup(group.getGroupId(),person.getPersonId(),loggedPerson.getPersonId()));
 
     }
 
@@ -155,7 +170,7 @@ class PersonServiceTests {
     void getAllPersons() {
 
         Assertions.assertNotNull(personService.getAllPersons());
-        Assertions.assertTrue(personService.getAllPersons().size()!=0);
+        Assertions.assertFalse(personService.getAllPersons().size()!=0);
 
     }
 
