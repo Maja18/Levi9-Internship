@@ -53,13 +53,4 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "person_id"))
     private List<Person> going;
 
-   /*public boolean getIsNotified(){
-       return this.isNotified;
-   } */
-
-  // public void setIsNotified(boolean isNotified){
-       //this.isNotified = isNotified;
-   //}
-
-
 }

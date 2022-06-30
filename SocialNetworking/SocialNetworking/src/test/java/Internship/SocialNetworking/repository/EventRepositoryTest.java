@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.repository;
 
+import Internship.SocialNetworking.models.Event;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,17 +20,38 @@ class EventRepositoryTest {
 
     @Test
     void checkIfReturnsEventById(){
-        assertThat(eventRepository.getByEventId(2L)).isNotNull();
+       Event event = new Event();
+       event.setEventId(1L);
+       event.setName("Pri event");
+       event.setGroupId(1L);
+       eventRepository.save(event);
+       Event e = eventRepository.getByEventId(1L);
+       assertThat(e.getEventId()).isEqualTo(1L);
+
     }
 
     @Test
     void checkIfReturnsNullForFalseEventId(){
-        assertThat(eventRepository.getByEventId(273L)).isNull();
+        Event event = new Event();
+        event.setEventId(1L);
+        event.setName("Pri event");
+        event.setGroupId(1L);
+        eventRepository.save(event);
+        Event e = eventRepository.getByEventId(111L);
+        assertThat(e).isNull();
+
     }
 
     @Test
     void checkIfGetByEventNameWorks(){
-        assertThat(eventRepository.getByName("Event1")).isNotNull();
+
+        Event event = new Event();
+        event.setEventId(1L);
+        event.setName("Pri event");
+        event.setGroupId(1L);
+        eventRepository.save(event);
+        Event e = eventRepository.getByName("Pri event");
+        assertThat(e.getName()).isEqualTo("Pri event");
     }
 
     @Test

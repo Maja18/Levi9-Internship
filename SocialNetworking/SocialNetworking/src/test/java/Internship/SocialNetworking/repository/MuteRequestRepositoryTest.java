@@ -1,5 +1,6 @@
 package Internship.SocialNetworking.repository;
 
+import Internship.SocialNetworking.models.MuteRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +19,14 @@ class MuteRequestRepositoryTest {
 
     @Test
     void checkIfFindByMuteRequestIdWorks() {
-        assertThat(muteRequestRepository.findByMuteRequestId(1L)).isNotNull();
+
+        MuteRequest muteRequest = new MuteRequest();
+       muteRequest.setMuteRequestId(1L);
+       muteRequestRepository.save(muteRequest);
+
+       MuteRequest m1 = muteRequestRepository.findByMuteRequestId(1L);
+       assertThat(m1.getMuteRequestId()).isEqualTo(1L);
+
     }
 
     @Test
