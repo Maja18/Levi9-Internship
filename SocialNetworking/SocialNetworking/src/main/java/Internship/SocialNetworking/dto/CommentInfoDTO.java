@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 public class CommentInfoDTO {
-    private String content;
-    private LocalDateTime creationDate;
+    private String content; //NOSONAR
+    private LocalDateTime creationDate; //NOSONAR
 }

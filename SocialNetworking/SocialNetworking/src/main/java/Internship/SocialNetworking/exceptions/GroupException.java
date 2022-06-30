@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class GroupException extends RuntimeException {
 
-    private GroupNW group;
-    private Long groupId;
+    private GroupNW group; //NOSONAR
+    private Long groupId; //NOSONAR
 
     public GroupException(String message){
         super(message);

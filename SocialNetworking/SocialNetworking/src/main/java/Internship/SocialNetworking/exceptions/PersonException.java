@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class PersonException extends RuntimeException{
 
-    private Person person;
-    private Long personId;
+    private Person person; //NOSONAR
+    private Long personId; //NOSONAR
 
     public PersonException(String message){
         super(message);

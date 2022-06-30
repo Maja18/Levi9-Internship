@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class FriendInfoDTO {
-    private String name;
-    private String surname;
-    private String username;
+    private String name; //NOSONAR
+    private String surname; //NOSONAR
+    private String username; //NOSONAR
 }

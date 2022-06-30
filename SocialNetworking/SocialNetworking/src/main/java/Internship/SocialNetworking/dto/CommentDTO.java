@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 public class CommentDTO {
     @NotBlank
-    private String content;
+    private String content; //NOSONAR
     @NotNull
-    private Long postId;
-    private Long parentId;
+    private Long postId; //NOSONAR
+    private Long parentId; //NOSONAR
 }

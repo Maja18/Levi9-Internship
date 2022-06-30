@@ -18,11 +18,11 @@ public class GroupDTO {
 
     @NotNull(message = "Group must have a name!")
     @NotBlank(message = "Group must have a name!")
-    private String name;
+    private String name; //NOSONAR
 
-    private String description;
+    private String description; //NOSONAR
 
-    private boolean isPublic;
+    private boolean isPublic; //NOSONAR
 
 
 

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class HidePostDTO {
-    private Long postId;
-    private Long personId;
+    private Long postId; //NOSONAR
+    private Long personId; //NOSONAR
 }
