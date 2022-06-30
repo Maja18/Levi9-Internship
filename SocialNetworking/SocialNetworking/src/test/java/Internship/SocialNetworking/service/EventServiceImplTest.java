@@ -133,7 +133,7 @@ class EventServiceImplTest {
         assertEquals(-10, LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())));
 
         GroupException exception = Assertions.assertThrows(GroupException.class, () ->
-                eventService.createEvent(eventDTO, person.getPersonId()));
+                eventService.createEvent(eventDTO, 11L));
         Assertions.assertEquals("That group does not exists!", exception.getMessage());
 
     }
@@ -171,7 +171,7 @@ class EventServiceImplTest {
         assertEquals(-10, LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())));
 
         EventException exception = Assertions.assertThrows(EventException.class, () ->
-                eventService.createEvent(eventDTO, person.getPersonId()));
+                eventService.createEvent(eventDTO, 11L));
         Assertions.assertEquals("An event with that name already exists!", exception.getMessage());
     }
 
@@ -210,7 +210,7 @@ class EventServiceImplTest {
         assertEquals(-10, LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())));
 
         GroupException exception = Assertions.assertThrows(GroupException.class, () ->
-                eventService.createEvent(eventDTO, person.getPersonId()));
+                eventService.createEvent(eventDTO, 11L));
         Assertions.assertEquals("User is not group member!", exception.getMessage());
 
     }
@@ -247,7 +247,7 @@ class EventServiceImplTest {
         assertNotEquals(-10, LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())));
 
         EventException exception = Assertions.assertThrows(EventException.class, () ->
-                eventService.createEvent(eventDTO, person.getPersonId()));
+                eventService.createEvent(eventDTO, 11L));
         Assertions.assertEquals("Event end date can't be before start date!", exception.getMessage());
 
     }
