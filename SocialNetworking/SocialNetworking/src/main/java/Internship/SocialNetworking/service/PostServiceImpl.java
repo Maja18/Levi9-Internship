@@ -251,10 +251,13 @@ public class PostServiceImpl implements PostService {
     public List<String> getFileNames(List<MultipartFile> multipartFiles) throws IOException {
         List<String> fileNames = new ArrayList<String>();
         for(MultipartFile multipartFile: multipartFiles) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll("\\s", ""));
-            fileNames.add(fileName);
-            uploadDir = "user-photos";
-            saveFile(uploadDir, fileName, multipartFile);
+            String multipartFileName = multipartFile.getOriginalFilename();
+            if (multipartFileName != null){
+                String fileName = StringUtils.cleanPath(multipartFileName.replaceAll("\\s", ""));
+                fileNames.add(fileName);
+                uploadDir = "user-photos";
+                saveFile(uploadDir, fileName, multipartFile);
+            }
         }
         return fileNames;
     }

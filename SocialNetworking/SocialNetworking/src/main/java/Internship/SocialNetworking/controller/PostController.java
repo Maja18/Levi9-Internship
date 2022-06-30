@@ -13,18 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,7 +28,6 @@ public class PostController {
 
     private final PostServiceImpl postService;
     private final PersonServiceImpl personService;
-    private static String uploadDir = "user-photos";
 
     @PostMapping
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
