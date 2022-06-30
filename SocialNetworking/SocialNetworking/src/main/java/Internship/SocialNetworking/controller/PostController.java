@@ -92,32 +92,11 @@ public class PostController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
     }
 
-    @PostMapping(value = "/saveImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/save-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     public List<String> saveImage(@RequestParam("file") List<MultipartFile> multipartFiles ) throws IOException {
-        List<String> fileNames = new ArrayList<String>();
-        for(MultipartFile multipartFile:multipartFiles) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll("\\s", ""));
-            fileNames.add(fileName);
-            uploadDir = "user-photos";
-            saveFile(uploadDir, fileName, multipartFile);
-        }
+        List<String> fileNames = postService.getFileNames(multipartFiles);
+
         return fileNames;
     }
-
-    public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
-        }
-    }
-
 }

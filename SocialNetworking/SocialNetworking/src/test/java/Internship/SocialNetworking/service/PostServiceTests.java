@@ -272,7 +272,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
 
         when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
@@ -295,7 +295,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
         post.setGroupId(group.getGroupId());
 
