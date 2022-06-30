@@ -4,7 +4,7 @@ import Internship.SocialNetworking.models.Authority;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.AuthorityRepository;
 import Internship.SocialNetworking.security.auth.JwtAuthenticationRequest;
-import Internship.SocialNetworking.service.iService.AuthorityService;
+import Internship.SocialNetworking.service.interface_service.AuthorityService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

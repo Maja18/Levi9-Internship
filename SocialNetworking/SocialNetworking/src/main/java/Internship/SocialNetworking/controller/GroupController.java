@@ -2,8 +2,9 @@ package Internship.SocialNetworking.controller;
 import Internship.SocialNetworking.dto.GroupDTO;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.service.GroupServiceImpl;
+
 import Internship.SocialNetworking.service.PersonServiceImpl;
-import Internship.SocialNetworking.service.iService.EventService;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

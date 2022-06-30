@@ -3,6 +3,7 @@ import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.MediaException;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
@@ -274,7 +275,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
 
         when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
@@ -297,7 +298,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
         post.setGroupId(group.getGroupId());
 
@@ -357,7 +358,7 @@ class PostServiceTests {
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         GroupException exception = Assertions.assertThrows(GroupException.class, () -> {
-            postService.getAllUserPosts(person.getPersonId(), loggedPerson);
+            postService.getAllUserPosts(2L, loggedPerson);
 
         });
         Assertions.assertEquals("Group with given id doesn't exist", exception.getMessage());
@@ -551,9 +552,9 @@ class PostServiceTests {
         postFirst.setIsOver(false);
         posts.add(postFirst);
 
+        when(postRepository.findByCreatorId(10L)).thenReturn(posts);
         PersonException exception = Assertions.assertThrows(PersonException.class, () -> {
-            when(postRepository.findByCreatorId(10L)).thenReturn(posts);
-            postService.getAllUserPosts(10L, loggedPerson).isEmpty();
+            postService.getAllUserPosts(10L, loggedPerson);
 
         });
         Assertions.assertEquals("Person with given id doesn't exist", exception.getMessage());
@@ -768,5 +769,41 @@ class PostServiceTests {
         when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
         when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
         Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void testThrowImageExceptionIfPostNotValid(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setImageUrl("url");
+        post.setIsPublic(true);
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
+        MediaException exception = Assertions.assertThrows(MediaException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+        });
+        Assertions.assertEquals("Image url is incorrect!", exception.getMessage());
+    }
+
+    @Test
+    void testThrowVideoExceptionIfPostNotValid(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setVideoUrl("url");
+        post.setIsPublic(true);
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
+        MediaException exception = Assertions.assertThrows(MediaException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+        });
+        Assertions.assertEquals("Video url is incorrect!", exception.getMessage());
     }
 }

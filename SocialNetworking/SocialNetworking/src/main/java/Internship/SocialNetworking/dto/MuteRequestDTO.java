@@ -14,11 +14,11 @@ public class MuteRequestDTO {
 
 
 
-    private Long groupId;
+    private Long groupId; //NOSONAR
 
-    private LocalDateTime muteStart;
+    private LocalDateTime muteStart; //NOSONAR
 
-    private String muteEnd;
+    private String muteEnd; //NOSONAR
 
 
 }

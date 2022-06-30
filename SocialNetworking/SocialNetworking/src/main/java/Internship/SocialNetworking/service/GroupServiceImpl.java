@@ -4,18 +4,20 @@ package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
+
 import Internship.SocialNetworking.exceptions.GroupException;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.EventMapper;
 import Internship.SocialNetworking.mappers.GroupMapper;
+
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.EventRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
-import Internship.SocialNetworking.service.iService.GroupService;
+import Internship.SocialNetworking.service.interface_service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

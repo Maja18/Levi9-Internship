@@ -14,8 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -82,4 +84,11 @@ public class PostController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(posts);
     }
 
+    @PostMapping(value = "/save-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
+    public List<String> saveImage(@RequestParam("file") List<MultipartFile> multipartFiles ) throws IOException {
+        List<String> fileNames = postService.getFileNames(multipartFiles);
+
+        return fileNames;
+    }
 }

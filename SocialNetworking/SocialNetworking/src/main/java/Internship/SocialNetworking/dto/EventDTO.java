@@ -17,23 +17,23 @@ public class EventDTO {
 
 
     @NotNull(message = "You must input date!")
-    private String startEvent;
+    private String startEvent; //NOSONAR
 
     @NotNull(message = "You must input date!")
-    private String endEvent;
+    private String endEvent; //NOSONAR
 
     @NotNull(message = "You must input name!")
-    private String name;
+    private String name; //NOSONAR
 
 
-    private float x;
+    private float x; //NOSONAR
 
 
-    private float y;
+    private float y; //NOSONAR
 
 
     @NotNull(message = "Group must be real!")
-    private Long groupId;
+    private Long groupId; //NOSONAR
 
 
 }

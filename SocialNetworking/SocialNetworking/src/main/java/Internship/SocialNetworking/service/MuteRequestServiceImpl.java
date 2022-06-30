@@ -1,17 +1,17 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.dto.MuteRequestDTO;
+
 import Internship.SocialNetworking.mappers.MuteRequestMapper;
 import Internship.SocialNetworking.models.GroupNW;
+
 import Internship.SocialNetworking.models.MuteRequest;
 import Internship.SocialNetworking.models.Person;
-import Internship.SocialNetworking.repository.GroupRepository;
+
 import Internship.SocialNetworking.repository.MuteRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.MuteRequestService;
+import Internship.SocialNetworking.service.interface_service.MuteRequestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

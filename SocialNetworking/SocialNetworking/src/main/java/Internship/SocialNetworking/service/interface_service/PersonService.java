@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.service.interface_service;
 
 import Internship.SocialNetworking.dto.FriendInfoDTO;
 import Internship.SocialNetworking.dto.FriendRequestDTO;
@@ -15,8 +15,6 @@ public interface PersonService {
     Person findByPersonId(Long id);
 
     PersonDTO registerPerson(PersonDTO person);
-    Person addFriend(Long personId, Long friendId);
-
     FriendInfoDTO sendFriendRequest(Long personId, Long friendId);
 
     String addPersonToGroup(Long groupId,Long personId);

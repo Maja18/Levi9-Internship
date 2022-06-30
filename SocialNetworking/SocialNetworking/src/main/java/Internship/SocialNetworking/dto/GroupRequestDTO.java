@@ -11,11 +11,11 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class GroupRequestDTO {
 
-    private Long groupRequestId;
+    private Long groupRequestId; //NOSONAR
 
-    private RequestStatus requestStatus;
+    private RequestStatus requestStatus; //NOSONAR
 
-    private Long creatorId;
+    private Long creatorId; //NOSONAR
 
-    private Long groupId;
+    private Long groupId; //NOSONAR
 }

@@ -104,7 +104,7 @@ public class Person implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
+    public String getUsername() { //NOSONAR
         return this.email;
     }
 

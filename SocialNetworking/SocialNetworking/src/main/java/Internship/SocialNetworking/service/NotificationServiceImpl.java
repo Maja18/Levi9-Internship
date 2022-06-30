@@ -8,14 +8,13 @@ import Internship.SocialNetworking.repository.EventRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.NotificationRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.NotificationService;
+import Internship.SocialNetworking.service.interface_service.NotificationService;
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

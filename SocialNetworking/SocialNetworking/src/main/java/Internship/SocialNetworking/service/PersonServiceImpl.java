@@ -1,6 +1,8 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.dto.FriendInfoDTO;
+import Internship.SocialNetworking.exceptions.FriendRequestException;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PersonMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
@@ -15,14 +17,14 @@ import Internship.SocialNetworking.repository.FriendRequestRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.PersonService;
+import Internship.SocialNetworking.service.interface_service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,13 +56,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTO registerPerson(PersonDTO person) {
 
-       Person mappedPerson=mapper.personDTOtoPerson(person);
-             if(personRepository.findByEmailEquals(mappedPerson.getEmail())==null) {
+             Person mappedPerson=mapper.personDTOtoPerson(person);
+             if(personRepository.findByEmailEquals(mappedPerson.getEmail()) == null) {
                  //we immediately hash a password
                  mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
                  return mapper.personToPersonDTO(personRepository.save(mappedPerson));
              }
-             return null;
+            return null;
 
     }
 
@@ -70,8 +72,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
-        Person person = personRepository.findByPersonId(personId);
-        Person friend = personRepository.findByPersonId(friendId);
+        Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
+                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+        Person friend = Optional.ofNullable(personRepository.findByPersonId(friendId))
+                .orElseThrow(()-> new PersonException("Friend ID doesn't exist!"));
 
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
             List<FriendRequest> friendRequestList = friend.getFriendRequest();
@@ -99,11 +103,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public FriendInfoDTO approveFriendRequest(FriendRequestDTO friendRequestDTO, Long personId) {
-        Person person = personRepository.findByPersonId(personId);
-        FriendRequest friendRequest = friendRequestRepository.findByFriendRequestId(friendRequestDTO.getFriendRequestId());
+        Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
+                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+        FriendRequest friendRequest = Optional.ofNullable(friendRequestRepository.findByFriendRequestId(friendRequestDTO.getFriendRequestId()))
+                .orElseThrow(() -> new FriendRequestException("Friend request ID doesn't exist!"));
 
         if(validation(person, friendRequest)){
-            Person friend = personRepository.findByPersonId(friendRequest.getFriendId());
+            Person friend = Optional.ofNullable(personRepository.findByPersonId(friendRequest.getFriendId()))
+                    .orElseThrow(() -> new PersonException("Friend ID doesn't exist!"));
             List<Person> personListFriends = person.getFriends();
             List<Person> friendListFriends = friend.getFriends();
 
@@ -154,8 +161,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public FriendInfoDTO removeFriend(Long personId, Long friendId) {
-        Person person = personRepository.findByPersonId(personId);
-        Person friend = personRepository.findByPersonId(friendId);
+        Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
+                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+        Person friend = Optional.ofNullable(personRepository.findByPersonId(friendId))
+                .orElseThrow(()-> new PersonException("Friend ID doesn't exist!"));
 
         if(person != null && friend != null){
             List<Person> friendList = person.getFriends();
@@ -233,7 +242,6 @@ public class PersonServiceImpl implements PersonService {
     public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-
          alteringPerson.setPersonId(userId);
          alteringPerson.setName(person.getName());
          alteringPerson.setSurname(person.getSurname());

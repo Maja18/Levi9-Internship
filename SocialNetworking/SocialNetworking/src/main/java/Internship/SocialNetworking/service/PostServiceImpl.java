@@ -1,9 +1,12 @@
 package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.HidePostDTO;
+import Internship.SocialNetworking.dto.ImageDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.MediaException;
 import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.exceptions.PostException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -11,18 +14,24 @@ import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
-import Internship.SocialNetworking.service.iService.PostService;
+import Internship.SocialNetworking.service.interface_service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import org.apache.commons.io.IOUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +43,7 @@ public class PostServiceImpl implements PostService {
     private final PersonRepository personRepository;
     private final NotificationServiceImpl notificationService;
     private final PostMapper postMapper;
+    private  String uploadDir = "user-photos";
 
     @Override
     public PostDTO addNewPost(PostDTO postDTO, Person loggedPerson){
@@ -46,9 +56,37 @@ public class PostServiceImpl implements PostService {
             notificationService.addNotificationPost(group.get().getName(),
                     personRepository.findByEmailEquals(loggedPerson.getEmail()));
         }
+        throwExceptionIfPostNotValid(post);
         postRepository.save(post);
 
         return postMapper.postToPostDTO(post);
+    }
+
+    private void throwExceptionIfPostNotValid(Post post) {
+        String filePath = new File("").getAbsolutePath();
+        filePath = filePath.concat("/" + uploadDir + "/");
+        List<File> files = new ArrayList<>();
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(filePath))) {
+            for (Path path : stream) {
+                if (!Files.isDirectory(path)) {
+                    files.add(path.toFile());
+                }
+            }
+            if (post.getImageUrl() != null){
+                boolean isImageNameCorrect = files.stream().anyMatch(f -> post.getImageUrl().equals(f.getName()));
+                if (!isImageNameCorrect)
+                    throw new MediaException("Image url is incorrect!");
+            }
+            if (post.getVideoUrl() != null){
+                boolean isVideoNameCorrect = files.stream().anyMatch(f -> post.getVideoUrl().equals(f.getName()));
+                if (!isVideoNameCorrect)
+                    throw new MediaException("Video url is incorrect!");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Post addPostToGroup(PostDTO postDTO, Optional<GroupNW> group, Person loggedPerson) {
@@ -98,7 +136,7 @@ public class PostServiceImpl implements PostService {
                 setAllNotGroupPosts(loggedPerson,userId, posts, p);
         });
 
-        return postMapper.postsToPostDTOs(posts);
+        return getPostFiles(postMapper.postsToPostDTOs(posts));
     }
 
     private void setAllNotGroupPosts(Person loggedPerson,Long userId , List<Post> posts, Post p) {
@@ -111,13 +149,14 @@ public class PostServiceImpl implements PostService {
             return;
         if (isNullOrEmpty && p.getIsPublic())
             posts.add(p);
-        else
+        else {
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
                 else if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
             });
+        }
 
         removeBlockedPosts(loggedPerson, posts, p);
     }
@@ -156,8 +195,10 @@ public class PostServiceImpl implements PostService {
     public PostInfoDTO hidePost(HidePostDTO hidePostDTO, Long personId) {
 
         if(validation(hidePostDTO, personId)) {
-            Post post = postRepository.findByPostId(hidePostDTO.getPostId());
-            Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
+            Post post = Optional.ofNullable(postRepository.findByPostId(hidePostDTO.getPostId()))
+                    .orElseThrow(() -> new PostException("Post ID doesn't exist!"));
+            Person blockPerson = Optional.ofNullable(personRepository.findByPersonId(hidePostDTO.getPersonId()))
+                    .orElseThrow(() -> new PersonException("Block person ID doesn't exist!"));
             List<Person> blockListPersons = post.getBlockedPersons();
             blockListPersons.add(blockPerson);
             post.setBlockedPersons(blockListPersons);
@@ -171,9 +212,12 @@ public class PostServiceImpl implements PostService {
     }
 
     private boolean validation(HidePostDTO hidePostDTO, Long personId) {
-        Person person = personRepository.findByPersonId(personId);
-        Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
-        Post post = postRepository.findByPostId(hidePostDTO.getPostId());
+        Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
+                .orElseThrow(() -> new PersonException("Person ID doesn't exist!"));
+        Person blockPerson = Optional.ofNullable(personRepository.findByPersonId(hidePostDTO.getPersonId()))
+                .orElseThrow(() -> new PersonException("Block person ID doesn't exist!"));
+        Post post = Optional.ofNullable(postRepository.findByPostId(hidePostDTO.getPostId()))
+                .orElseThrow(() -> new PostException("Post ID doesn't exist!"));
 
         if(person != null && blockPerson != null && post != null
                 && person.getPersonId().equals(post.getCreatorId())
@@ -209,6 +253,77 @@ public class PostServiceImpl implements PostService {
             }
         });
 
-        return postMapper.postsToPostDTOs(friendPosts);
+        return getPostFiles(postMapper.postsToPostDTOs(friendPosts));
+    }
+
+    @Override
+    public List<String> getFileNames(List<MultipartFile> multipartFiles) throws IOException {
+        List<String> fileNames = new ArrayList<>();
+        for(MultipartFile multipartFile: multipartFiles) {
+            String multipartFileName = multipartFile.getOriginalFilename();
+            if (multipartFileName != null){
+                String fileName = StringUtils.cleanPath(multipartFileName.replaceAll("\\s", ""));
+                fileNames.add(fileName);
+                uploadDir = "user-photos";
+                saveFile(uploadDir, fileName, multipartFile);
+            }
+        }
+        return fileNames;
+    }
+
+    public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath))
+            Files.createDirectories(uploadPath);
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
+    }
+
+    public List<PostDTO> getPostFiles(List<PostDTO> posts) {
+        List<PostDTO> postsDto = new ArrayList<>();
+        if (!posts.isEmpty()) {
+            String filePath = new File("").getAbsolutePath();
+            filePath = filePath.concat("/" + uploadDir + "/");
+            for (PostDTO post : posts) {
+                postsDto.add(getPostFile(post, filePath));
+            }
+        }
+
+        return postsDto;
+    }
+
+    public PostDTO getPostFile(PostDTO postDTO, String filePath) {
+        List<ImageDTO> images = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        if (postDTO.getImageUrl() != null && postDTO.getVideoUrl() != null) {
+            fileNames.add(postDTO.getImageUrl());
+            fileNames.add(postDTO.getVideoUrl());
+        }
+        else if (postDTO.getImageUrl() != null && postDTO.getVideoUrl() == null)
+            fileNames.add(postDTO.getImageUrl());
+        else if (postDTO.getVideoUrl() != null && postDTO.getImageUrl() == null)
+            fileNames.add(postDTO.getVideoUrl());
+        fileNames.stream().forEach(fileName ->{
+            ImageDTO imageDTO = new ImageDTO();
+            List<byte[]> bytes = new ArrayList<byte[]>();
+            imageDTO.setImageBytes(bytes);
+            File in = new File(filePath + "/"+ fileName);
+            try {
+                bytes.add(IOUtils.toByteArray(new FileInputStream(in)));
+                imageDTO.setImageBytes(bytes);
+                images.add(imageDTO);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }catch(NullPointerException n) {
+                n.printStackTrace();
+            }
+        });
+
+        postDTO.setImages(images);
+        return postDTO;
     }
 }
