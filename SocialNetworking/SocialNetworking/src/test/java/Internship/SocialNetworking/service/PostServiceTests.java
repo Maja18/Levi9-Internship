@@ -274,7 +274,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
 
         when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
@@ -297,7 +297,7 @@ class PostServiceTests {
 
         PostDTO post = new PostDTO();
         post.setDescription("my first post");
-        post.setImageUrl("image url");
+        post.setImageUrl("slika1.png");
         post.setIsPublic(true);
         post.setGroupId(group.getGroupId());
 
@@ -357,7 +357,7 @@ class PostServiceTests {
         when(postRepository.findByCreatorId(person.getPersonId())).thenReturn(posts);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
         GroupException exception = Assertions.assertThrows(GroupException.class, () -> {
-            postService.getAllUserPosts(person.getPersonId(), loggedPerson);
+            postService.getAllUserPosts(2L, loggedPerson);
 
         });
         Assertions.assertEquals("Group with given id doesn't exist", exception.getMessage());
@@ -551,9 +551,9 @@ class PostServiceTests {
         postFirst.setIsOver(false);
         posts.add(postFirst);
 
+        when(postRepository.findByCreatorId(10L)).thenReturn(posts);
         PersonException exception = Assertions.assertThrows(PersonException.class, () -> {
-            when(postRepository.findByCreatorId(10L)).thenReturn(posts);
-            postService.getAllUserPosts(10L, loggedPerson).isEmpty();
+            postService.getAllUserPosts(10L, loggedPerson);
 
         });
         Assertions.assertEquals("Person with given id doesn't exist", exception.getMessage());
