@@ -52,13 +52,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person registerPerson(PersonDTO person) {
+    public PersonDTO registerPerson(PersonDTO person) {
 
-            //   Person mappedPerson=new Person();
              Person mappedPerson=mapper.personDTOtoPerson(person);
-             //we immediately hash a password
-              mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
-              return personRepository.save(mappedPerson);
+             if(personRepository.findByEmailEquals(mappedPerson.getEmail()) == null) {
+                 //we immediately hash a password
+                 mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
+                 return mapper.personToPersonDTO(personRepository.save(mappedPerson));
+             }
+            return null;
 
     }
 
@@ -208,12 +210,11 @@ public class PersonServiceImpl implements PersonService {
 
      if (group != null) {
          if(Objects.equals(administratorId, group.getCreatorId())) {
-             for (int i = 0; i < group.getMembers().size(); i++) {
-                 Long personMemberId = group.getMembers().get(i).getPersonId();
+             for (Person member : group.getMembers()) {
+                 Long personMemberId = member.getPersonId();
                  if (Objects.equals(personId, personMemberId)) {
-                     Person personToRemove = group.getMembers().get(i);
-                     group.getMembers().remove(personToRemove);
-                     personRepository.save(personToRemove);
+                     group.getMembers().remove(member);
+                     personRepository.save(member);
                      return "Successfully deleted member of group";
                  }
              }
@@ -227,7 +228,6 @@ public class PersonServiceImpl implements PersonService {
     public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-
          alteringPerson.setPersonId(userId);
          alteringPerson.setName(person.getName());
          alteringPerson.setSurname(person.getSurname());
