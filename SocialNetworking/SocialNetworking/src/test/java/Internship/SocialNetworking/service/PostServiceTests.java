@@ -3,6 +3,7 @@ import Internship.SocialNetworking.dto.HidePostDTO;
 import Internship.SocialNetworking.dto.PostDTO;
 import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.MediaException;
 import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
@@ -768,5 +769,41 @@ class PostServiceTests {
         when(postRepository.findByPostId(hidePostDTO.getPostId())).thenReturn(post);
         when(personRepository.findByPersonId(hidePostDTO.getPersonId())).thenReturn(person);
         Assertions.assertNotNull(postService.hidePost(hidePostDTO, loggedPerson.getPersonId()));
+    }
+
+    @Test
+    void testThrowImageExceptionIfPostNotValid(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setImageUrl("url");
+        post.setIsPublic(true);
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
+        MediaException exception = Assertions.assertThrows(MediaException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+        });
+        Assertions.assertEquals("Image url is incorrect!", exception.getMessage());
+    }
+
+    @Test
+    void testThrowVideoExceptionIfPostNotValid(){
+        Person loggedPerson = new Person();
+        loggedPerson.setPersonId(1L);
+        loggedPerson.setName("Pera");
+
+        PostDTO post = new PostDTO();
+        post.setDescription("my first post");
+        post.setVideoUrl("url");
+        post.setIsPublic(true);
+
+        when(groupRepository.findByGroupId(post.getGroupId())).thenReturn(null);
+        MediaException exception = Assertions.assertThrows(MediaException.class, () -> {
+            postService.addNewPost(post, loggedPerson);
+        });
+        Assertions.assertEquals("Video url is incorrect!", exception.getMessage());
     }
 }
