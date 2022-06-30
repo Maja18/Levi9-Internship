@@ -87,8 +87,7 @@ public class PostController {
     @PostMapping(value = "/save-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     public List<String> saveImage(@RequestParam("file") List<MultipartFile> multipartFiles ) throws IOException {
-        List<String> fileNames = postService.getFileNames(multipartFiles);
 
-        return fileNames;
+        return postService.getFileNames(multipartFiles);
     }
 }

@@ -126,7 +126,6 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getAllUserPosts(Long userId, Person loggedPerson) {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
-        List<String> mediasFileNames;
         allPosts.stream().forEach(p-> {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setIsOver(true);
@@ -145,15 +144,15 @@ public class PostServiceImpl implements PostService {
             throw new PersonException(userId, "Person with given id doesn't exist");
         List<Person> personFriends = person.getFriends();
         boolean isNullOrEmpty = ObjectUtils.isEmpty(personFriends);
-        if (isNullOrEmpty && !p.getIsPublic())
+        if (isNullOrEmpty && p.getIsPublic().equals(Boolean.FALSE))
             return;
-        if (isNullOrEmpty && p.getIsPublic())
+        if (isNullOrEmpty && p.getIsPublic().equals(Boolean.TRUE))
             posts.add(p);
         else
             personFriends.stream().forEach(friend -> {
-                if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
+                if (friend.getPersonId().equals(loggedPerson.getPersonId()) && p.getIsOver().equals(Boolean.FALSE))
                     posts.add(p);
-                else if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
+                else if (p.getIsPublic().equals(Boolean.TRUE) && !friend.getPersonId().equals(loggedPerson.getPersonId()) && p.getIsOver().equals(Boolean.FALSE))
                     posts.add(p);
             });
 
@@ -165,8 +164,8 @@ public class PostServiceImpl implements PostService {
         if (group == null)
             throw new GroupException(p.getGroupId(), "Group with given id doesn't exist");
         List<Person> groupMembers = group.getMembers();
-        if (!p.getIsOver()) {
-            if (group.getIsPublic())
+        if (p.getIsOver().equals(Boolean.FALSE)) {
+            if (group.getIsPublic().equals(Boolean.TRUE))
                 posts.add(p);
             else {
                 groupMembers.stream().forEach(member -> {
@@ -215,7 +214,7 @@ public class PostServiceImpl implements PostService {
 
         if(person != null && blockPerson != null && post != null
                 && person.getPersonId().equals(post.getCreatorId())
-                && !post.getIsOver()){
+                && post.getIsOver().equals(Boolean.FALSE)){
 
             GroupNW groupNW = groupRepository.findByGroupId(post.getGroupId());
 
@@ -241,7 +240,7 @@ public class PostServiceImpl implements PostService {
             for (Post p: posts) {
                 if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                     p.setIsOver(true);
-                if (!p.getIsOver())
+                if (p.getIsOver().equals(Boolean.FALSE))
                     friendPosts.add(p);
                 removeBlockedPosts(loggedPerson, friendPosts, p);
             }
@@ -303,7 +302,7 @@ public class PostServiceImpl implements PostService {
             fileNames.add(postDTO.getVideoUrl());
         fileNames.stream().forEach(fileName ->{
             ImageDTO imageDTO = new ImageDTO();
-            List<byte[]> bytes = new ArrayList<byte[]>();
+            List<byte[]> bytes = new ArrayList<>();
             imageDTO.setImageBytes(bytes);
             File in = new File(filePath + "/"+ fileName);
             try {
