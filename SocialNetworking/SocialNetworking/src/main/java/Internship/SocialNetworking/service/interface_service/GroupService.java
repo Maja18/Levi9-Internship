@@ -12,7 +12,7 @@ public interface GroupService {
 
     GroupNW getGroupById(Long id);
 
-    GroupDTO createGroup(GroupDTO groupDTO);
+    GroupDTO createGroup(GroupDTO groupDTO, Long loggedUserId);
 
     GroupNW getByName(String name);
 
@@ -20,7 +20,7 @@ public interface GroupService {
 
     boolean checkIfGroupMember(Long groupId, Long userId);
 
-    List<EventDTO> groupEvents(Long groupId);
+    List<EventDTO> groupEvents(Long groupId, Long userId);
 
 
 

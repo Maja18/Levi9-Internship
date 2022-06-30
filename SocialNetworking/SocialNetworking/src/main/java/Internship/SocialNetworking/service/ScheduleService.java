@@ -30,7 +30,6 @@ public class ScheduleService {
 
     private final EventServiceImpl eventService;
 
-    private final EventRepository eventRepository;
 
     private final NotificationServiceImpl notificationService;
 
@@ -40,26 +39,16 @@ public class ScheduleService {
     @Async
     @Scheduled(cron = "2 * * * * *")
     public void checkEventStartingTime(){
-        if (eventService.getAllEvents().size() != 0) {
-           List<Event> events = eventService.getAllEvents()
+        List<Event> loadedEvents = eventService.getAllEvents();
+        if (!loadedEvents.isEmpty()) {
+           List<Event> events = loadedEvents
                     .stream()
                     .filter(event -> !event.getNotified())
                     .filter(e -> e.getStartEvent().toLocalDate().compareTo(LocalDate.now()) == 0)
                     .filter(e -> e.getStartEvent().toLocalTime().compareTo(LocalDateTime.now().toLocalTime().plusMinutes(60)) < 0)
                     .collect(Collectors.toList());
-          // for(Event e : events){
-          //     notificationService.sendNotificationsEvent(e);
-           //}
-            //System.out.println("Radi se!!");
-           /* for(Event e : events){
-                notificationService.sendNotificationsEvent(e);
-            } */
+
             notificationService.iterateEventsList(events);
-           // System.out.println(events.size());
-
-
-
-            //System.out.println(events.size());
 
         }
 
@@ -69,8 +58,10 @@ public class ScheduleService {
     @Async
     @Scheduled(cron = "1 * * * * *")
     public void checkIfEventFinished(){
-        if(eventService.getAllEvents() != null){
-            List<Event> events = eventService.getAllEvents().stream()
+        List<Event> loadedEvents = eventService.getAllEvents();
+        if(!loadedEvents.isEmpty()){
+            List<Event> events = loadedEvents
+                    .stream()
                     .filter(event -> !event.getIsOver())
                     .filter(event -> event.getEndEvent().toLocalDate().compareTo(LocalDate.now()) == 0)
                     .filter(event -> event.getEndEvent().toLocalTime().compareTo(LocalDateTime.now().toLocalTime()) < 0)

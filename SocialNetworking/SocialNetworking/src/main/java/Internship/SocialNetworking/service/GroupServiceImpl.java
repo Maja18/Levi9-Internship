@@ -4,8 +4,12 @@ package Internship.SocialNetworking.service;
 import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
-import Internship.SocialNetworking.mapper.EventMapper;
-import Internship.SocialNetworking.mapper.GroupMapper;
+
+import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.mappers.EventMapper;
+import Internship.SocialNetworking.mappers.GroupMapper;
+
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -13,7 +17,7 @@ import Internship.SocialNetworking.repository.EventRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.service.interface_service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,20 +55,19 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupDTO createGroup(GroupDTO groupDTO) {
+    public GroupDTO createGroup(GroupDTO groupDTO, Long loggedUserId) {
         Optional<GroupNW> grNameCheck = Optional.ofNullable(getByName(groupDTO.getName()));
-        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+        Optional<Person> personExists = Optional.ofNullable(personService.findByPersonId(loggedUserId));
         if(grNameCheck.isPresent()){
-            return null;
+            throw new GroupException("A group with that name already exist, choose a new one!");
+        }
+        else if(personExists.isEmpty())
+        {
+            throw new PersonException("That person does not exists!");
         }
         else {
             GroupNW groupNW = GroupMapper.INSTANCE.dtoToGroup(groupDTO);
-            groupNW.setCreatorId(userWithId.getPersonId());
-            /*groupNW.setDescription(groupDTO.getDescription());
-            groupNW.setIsPublic(groupDTO.getIsPublic());
-            groupNW.setName(groupDTO.getName());*/
-            
+            groupNW.setCreatorId(loggedUserId);
             save(groupNW);
             return groupDTO;
         }
@@ -86,19 +89,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<EventDTO> groupEvents(Long groupId) {
-        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
+    public List<EventDTO> groupEvents(Long groupId, Long userId) {
         Optional<GroupNW> groupExists = Optional.ofNullable(groupRepository.findByGroupId(groupId));
         if(groupExists.isEmpty()){
-            return null;
+            throw new GroupException("That group does not exists!");
         }
-        else if(!checkIfGroupMember(groupId, userWithId.getPersonId())){
-            return null;
+        else if(!checkIfGroupMember(groupId, userId)){
+            throw new GroupException("You are not member of this group!");
         }
-
-
-
         List<Event> events = eventRepository.findAll().stream()
                 .filter(event -> event.getGroupId().equals(groupId))
                 .filter(event -> !event.getIsOver())

@@ -10,6 +10,9 @@ import Internship.SocialNetworking.repository.NotificationRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.service.interface_service.NotificationService;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
@@ -96,7 +100,6 @@ public class NotificationServiceImpl implements NotificationService {
             saveNotification(notification);
             Person temp = personRepository.findByPersonId(p.getPersonId());
             temp.getNotifications().add(notification);
-            //p.getNotifications().add(notification);
             personRepository.save(temp);
 
 
@@ -105,10 +108,8 @@ public class NotificationServiceImpl implements NotificationService {
 
 
         }
+        updateEventToNotified(event.getEventId());
 
-        event.setNotified(true);
-        eventRepository.save(event);
-        System.out.println("zavrseno!!!!!!!!");
     }
 
 
@@ -131,11 +132,24 @@ public class NotificationServiceImpl implements NotificationService {
             personRepository.save(temp);
             emailService.sendSimpleEmail(person.getEmail(), content, "Group event is over");
         });
-        Event event1 = eventRepository.getByEventId(event.getEventId());
+
+            updateEventToOver(event.getEventId());
+
+
+    }
+
+    @Override
+    public void updateEventToNotified(Long id) {
+        Event event = eventRepository.getByEventId(id);
+        event.setNotified(true);
+        eventRepository.save(event);
+        log.info("zavrseno!!!!!!!!");
+    }
+
+    @Override
+    public void updateEventToOver(Long id) {
+        Event event1 = eventRepository.getByEventId(id);
         event1.setIsOver(true);
         eventRepository.save(event1);
-
-
-
     }
 }

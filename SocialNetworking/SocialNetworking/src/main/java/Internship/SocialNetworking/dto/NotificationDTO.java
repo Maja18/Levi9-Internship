@@ -18,17 +18,15 @@ import javax.validation.constraints.NotBlank;
 public class NotificationDTO {
 
 
-    private Long notificationId; //NOSONAR
-
     @NotBlank(message = "content is required")
-    private String content; //NOSONAR
+    private String content;
 
     @NotBlank(message = "source is required")
-    private String source; //NOSONAR
+    private String source;
 
     @NotBlank(message = "sender is required")
-    private String sender; //NOSONAR
+    private String sender;
 
     @NotBlank(message = "receiver is required")
-    private String receiver; //NOSONAR
+    private String receiver;
 }
