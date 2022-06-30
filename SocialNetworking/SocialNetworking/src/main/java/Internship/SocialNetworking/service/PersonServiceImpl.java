@@ -68,11 +68,7 @@ public class PersonServiceImpl implements PersonService {
             return null;
 
     }
-
-    @Override
-    public Person addFriend(Long personId, Long friendId) {
-        return null;
-    }
+    
 
     public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
         Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
