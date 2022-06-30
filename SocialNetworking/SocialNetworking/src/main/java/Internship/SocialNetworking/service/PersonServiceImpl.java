@@ -42,6 +42,9 @@ public class PersonServiceImpl implements PersonService {
     private final FriendRequestRepository friendRequestRepository;
     private final PersonMapper personMapper;
 
+    private final String personMessage = "Person ID doesn't exist!";
+    private final String friendMessage = "Friend ID doesn't exist!";
+
 
     @Override
     public Person findByEmailEquals(String email) {
@@ -68,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
 
     public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
         Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
-                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+                .orElseThrow(()-> new PersonException(personMessage));
         Person friend = Optional.ofNullable(personRepository.findByPersonId(friendId))
                 .orElseThrow(()-> new PersonException("Friend ID doesn't exist!"));
 
@@ -99,13 +102,13 @@ public class PersonServiceImpl implements PersonService {
 
     public FriendInfoDTO approveFriendRequest(FriendRequestDTO friendRequestDTO, Long personId) {
         Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
-                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+                .orElseThrow(()-> new PersonException(personMessage));
         FriendRequest friendRequest = Optional.ofNullable(friendRequestRepository.findByFriendRequestId(friendRequestDTO.getFriendRequestId()))
                 .orElseThrow(() -> new FriendRequestException("Friend request ID doesn't exist!"));
 
         if(validation(person, friendRequest)){
             Person friend = Optional.ofNullable(personRepository.findByPersonId(friendRequest.getFriendId()))
-                    .orElseThrow(() -> new PersonException("Friend ID doesn't exist!"));
+                    .orElseThrow(() -> new PersonException(friendMessage));
             List<Person> personListFriends = person.getFriends();
             List<Person> friendListFriends = friend.getFriends();
 
@@ -157,9 +160,9 @@ public class PersonServiceImpl implements PersonService {
 
     public FriendInfoDTO removeFriend(Long personId, Long friendId) {
         Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
-                .orElseThrow(()-> new PersonException("Person ID doesn't exist!"));
+                .orElseThrow(()-> new PersonException(personMessage));
         Person friend = Optional.ofNullable(personRepository.findByPersonId(friendId))
-                .orElseThrow(()-> new PersonException("Friend ID doesn't exist!"));
+                .orElseThrow(()-> new PersonException(friendMessage));
 
         if(person != null && friend != null){
             List<Person> friendList = person.getFriends();

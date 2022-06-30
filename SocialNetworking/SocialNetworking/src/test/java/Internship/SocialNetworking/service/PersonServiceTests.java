@@ -3,6 +3,7 @@ package Internship.SocialNetworking.service;
 
 
 import Internship.SocialNetworking.dto.PersonDTO;
+import Internship.SocialNetworking.exceptions.PersonException;
 import Internship.SocialNetworking.models.*;
 import Internship.SocialNetworking.repository.*;
 
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -128,7 +131,7 @@ class PersonServiceTests {
         Assertions.assertNotEquals(openGroup.getCreatorId(),person.getPersonId());
         Assertions.assertTrue(!Objects.equals(openGroup.getCreatorId(), person.getPersonId()));
         for(Person per : openGroup.getMembers()) {
-            Assertions.assertEquals(per.getPersonId(), person.getPersonId());
+            assertEquals(per.getPersonId(), person.getPersonId());
         }
         when(groupRepository.findByGroupId(openGroup.getGroupId())).thenReturn(openGroup);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
@@ -182,7 +185,7 @@ class PersonServiceTests {
         members.add(person);
         group.setMembers(members);
 
-        Assertions.assertEquals(4L,group.getGroupId());
+        assertEquals(4L,group.getGroupId());
         Assertions.assertTrue(Objects.equals(group.getGroupId(), group.getCreatorId()));
         when(groupRepository.findByGroupId(group.getGroupId())).thenReturn(group);
         when(personRepository.findByPersonId(person.getPersonId())).thenReturn(person);
@@ -451,8 +454,12 @@ class PersonServiceTests {
         friend.setPersonId(2L);
         friend.setName("Ivan");
 
-        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(loggedPerson);
-        Assertions.assertNull(personService.removeFriend(loggedPerson.getPersonId(), friend.getPersonId()));
+        when(personRepository.findByPersonId(loggedPerson.getPersonId())).thenReturn(null);
+        when(personRepository.findByPersonId(friend.getPersonId())).thenReturn(null);
+
+        Throwable exception = assertThrows(PersonException.class,
+                () -> personService.removeFriend(loggedPerson.getPersonId(), friend.getPersonId()));
+        assertEquals("Person ID doesn't exist!", exception.getMessage());
     }
 
 }

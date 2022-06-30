@@ -34,6 +34,7 @@ public class CommentServiceImpl implements CommentService {
     private final PersonRepository personRepository;
     private final GroupRepository groupRepository;
     private final CommentMapper commentMapper;
+    private final String commentMessage = "Comment ID doesn't exist!";
 
     @Override
     public CommentInfoDTO addComment(CommentDTO commentDTO, Long creatorId) {
@@ -86,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentInfoDTO> getCommentsByCommentId(Long commentId) {
         Comment comment = Optional.ofNullable(commentRepository.findByCommentId(commentId))
-                .orElseThrow(() -> new CommentException("Comment ID doesn't exist!"));
+                .orElseThrow(() -> new CommentException(commentMessage));
         List<Comment> comments = commentRepository.findAll();
         List<Comment> childComments = new ArrayList<>();
 
@@ -104,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentInfoDTO deleteComment(Long commentId, Person loggedUser) {
         Comment comment = Optional.ofNullable(commentRepository.findByCommentId(commentId))
-                .orElseThrow(() -> new CommentException("Comment ID doesn't exist!"));
+                .orElseThrow(() -> new CommentException(commentMessage));
         List<Comment> comments = commentRepository.findAll();
 
         if(comment != null && comment.getCreatorId().equals(loggedUser.getPersonId())){
