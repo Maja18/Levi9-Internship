@@ -19,7 +19,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private TokenUtils tokenUtils;
     private UserDetailsService userDetailsService;
     private PersonRepository personRepository;
-    private AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository; //NOSONAR
 
     public TokenAuthenticationFilter(TokenUtils tokenUtils, UserDetailsService userDetailsService,
                                      PersonRepository personRepository,  AuthorityRepository authorityRepository) {

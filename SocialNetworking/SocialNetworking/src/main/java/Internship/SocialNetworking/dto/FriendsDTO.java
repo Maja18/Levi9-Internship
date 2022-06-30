@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class FriendsDTO {
-    private Long friendId;
+    private Long friendId; //NOSONAR
 }

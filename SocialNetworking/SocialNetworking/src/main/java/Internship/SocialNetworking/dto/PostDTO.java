@@ -11,14 +11,14 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 public class PostDTO {
-    private Long postId;
-    private String description;
-    private String imageUrl;
-    private String videoUrl;
-    private Boolean isPublic;
-    private Long creatorId;
-    private LocalDateTime creationDate;
-    private Boolean isOver;
-    private Long groupId;
-    private List<ImageDTO> images;
+    private Long postId; //NOSONAR
+    private String description; //NOSONAR
+    private String imageUrl; //NOSONAR
+    private String videoUrl; //NOSONAR
+    private Boolean isPublic; //NOSONAR
+    private Long creatorId; //NOSONAR
+    private LocalDateTime creationDate; //NOSONAR
+    private Boolean isOver; //NOSONAR
+    private Long groupId; //NOSONAR
+    private List<ImageDTO> images; //NOSONAR
 }

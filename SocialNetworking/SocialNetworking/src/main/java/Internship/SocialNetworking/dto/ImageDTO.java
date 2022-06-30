@@ -11,5 +11,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImageDTO {
 
-    private List<byte[]> imageBytes;
+    private List<byte[]> imageBytes; //NOSONAR
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class FriendRequestDTO {
-    private Long friendRequestId;
-    private FriendRequestStatus status;
+    private Long friendRequestId; //NOSONAR
+    private FriendRequestStatus status; //NOSONAR
 }

@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 public class PostInfoDTO {
-    private String description;
-    private String imageUrl;
-    private String videoUrl;
-    private boolean isPublic;
-    private LocalDateTime creationDate;
-    private boolean isOver;
+    private String description; //NOSONAR
+    private String imageUrl; //NOSONAR
+    private String videoUrl; //NOSONAR
+    private boolean isPublic; //NOSONAR
+    private LocalDateTime creationDate; //NOSONAR
+    private boolean isOver; //NOSONAR
 }
