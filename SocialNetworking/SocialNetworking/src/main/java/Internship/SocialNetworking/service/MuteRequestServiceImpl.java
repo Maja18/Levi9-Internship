@@ -1,7 +1,7 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.dto.MuteRequestDTO;
-import Internship.SocialNetworking.mapper.MuteRequestMapper;
+import Internship.SocialNetworking.mappers.MuteRequestMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.MuteRequest;
 import Internship.SocialNetworking.models.Person;
@@ -26,8 +26,6 @@ public class MuteRequestServiceImpl implements MuteRequestService {
 
     private final PersonRepository personRepository;
 
-    private final GroupRepository groupRepository;
-
     @Override
     public List<MuteRequest> getAllMuteRequests() {
         return muteRequestRepository.findAll();
@@ -39,10 +37,8 @@ public class MuteRequestServiceImpl implements MuteRequestService {
     }
 
     @Override
-    public MuteRequestDTO muteGroup(MuteRequestDTO muteRequestDTO) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        Person loggedPerson = (Person) currentUser.getPrincipal();
-        Person user = personRepository.findByEmailEquals(loggedPerson.getEmail());
+    public MuteRequestDTO muteGroup(MuteRequestDTO muteRequestDTO, Long userId) {
+        Person user = personRepository.findByPersonId(userId);
         MuteRequest muteRequest = new MuteRequest();
         muteRequest.setGroupId(muteRequestDTO.getGroupId());
         muteRequest.setPersonId(user.getPersonId());

@@ -9,7 +9,7 @@ public interface MuteRequestService {
     List<MuteRequest> getAllMuteRequests();
     void saveMuteRequest(MuteRequest muteRequest);
 
-    MuteRequestDTO muteGroup(MuteRequestDTO muteRequestDTO);
+    MuteRequestDTO muteGroup(MuteRequestDTO muteRequestDTO, Long userId);
 
     boolean isGroupBlockedPermanently(Long personId, Long groupId);
 

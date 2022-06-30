@@ -64,6 +64,11 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
+    @Override
+    public Person addFriend(Long personId, Long friendId) {
+        return null;
+    }
+
     public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
         Person person = personRepository.findByPersonId(personId);
         Person friend = personRepository.findByPersonId(friendId);

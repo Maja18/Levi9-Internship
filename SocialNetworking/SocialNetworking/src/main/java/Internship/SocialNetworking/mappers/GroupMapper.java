@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.mapper;
+package Internship.SocialNetworking.mappers;
 
 
 import Internship.SocialNetworking.dto.GroupDTO;

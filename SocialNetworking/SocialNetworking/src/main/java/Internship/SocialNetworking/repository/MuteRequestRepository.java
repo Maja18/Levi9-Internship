@@ -9,5 +9,4 @@ public interface MuteRequestRepository extends JpaRepository<MuteRequest, Long> 
 
     MuteRequest findByMuteRequestId(Long muteRequestId);
 
-    MuteRequest findAllByPersonId(Long personId);
 }

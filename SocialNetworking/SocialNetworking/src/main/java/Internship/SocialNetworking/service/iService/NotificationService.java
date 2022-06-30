@@ -20,4 +20,8 @@ public interface NotificationService {
 
     void checkIfEventIsOver(Event event);
 
+    void updateEventToOver(Long id);
+
+    void updateEventToNotified(Long id);
+
 }

@@ -1,6 +1,9 @@
 package Internship.SocialNetworking.service;
 
-import Internship.SocialNetworking.mapper.EventMapper;
+import Internship.SocialNetworking.exceptions.EventException;
+import Internship.SocialNetworking.exceptions.GroupException;
+import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.mappers.EventMapper;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.dto.EventDTO;
@@ -28,7 +31,7 @@ public class EventServiceImpl implements EventService {
 
     private final GroupServiceImpl groupService;
 
-    private final PersonServiceImpl personService;
+
 
 
 
@@ -63,34 +66,28 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDTO createEvent(EventDTO eventDTO) {
+    public EventDTO createEvent(EventDTO eventDTO, Long creatorId) {
         Optional<GroupNW> groupExists = Optional.ofNullable(groupService.getGroupById(eventDTO.getGroupId()));
         Optional<Event> eventExists = Optional.ofNullable(eventRepository.getByName(eventDTO.getName()));
 
-        Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Person userWithId = personService.findByPersonId(currentUser.getPersonId());
-        boolean isMember = groupService.checkIfGroupMember(eventDTO.getGroupId(), userWithId.getPersonId());
+
+        boolean isMember = groupService.checkIfGroupMember(eventDTO.getGroupId(), creatorId);
+        int checkDate = LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent()));
 
         if(groupExists.isEmpty()){
-            return null;
+            throw new GroupException("That group does not exists!");
         }
         else if(eventExists.isPresent()){
-            return null;
+            throw new EventException("An event with that name already exists!");
         }
         else if(!isMember){
-            return null;
-        } else if(LocalDateTime.parse(eventDTO.getStartEvent()).compareTo(LocalDateTime.parse(eventDTO.getEndEvent())) > 0) {
-            return null;
+            throw new GroupException("User is not group member!");
+        } else if(checkDate > 0) {
+            throw new EventException("Event end date can't be before start date!");
         }
         Event event = EventMapper.INSTANCE.dtoToEvent(eventDTO);
 
-        event.setCreatorId(userWithId.getPersonId());
-        /*event.setName(eventDTO.getName());
-        event.setX(eventDTO.getX());
-        event.setY(eventDTO.getY());
-        event.setStartEvent(LocalDateTime.parse(eventDTO.getStartEvent()));
-        event.setEndEvent(LocalDateTime.parse(eventDTO.getEndEvent()));
-        event.setGroupId(eventDTO.getGroupId());*/
+        event.setCreatorId(creatorId);
         event.setIsOver(false);
         event.setNotified(false);
         eventRepository.save(event);

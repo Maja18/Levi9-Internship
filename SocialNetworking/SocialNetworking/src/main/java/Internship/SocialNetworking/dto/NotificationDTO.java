@@ -17,9 +17,6 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class NotificationDTO {
 
-
-    private Long notificationId;
-
     @NotBlank(message = "content is required")
     private String content;
 
