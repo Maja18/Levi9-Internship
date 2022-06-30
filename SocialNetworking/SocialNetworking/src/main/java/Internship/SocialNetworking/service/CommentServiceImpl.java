@@ -1,6 +1,9 @@
 package Internship.SocialNetworking.service;
 
 import Internship.SocialNetworking.dto.CommentInfoDTO;
+import Internship.SocialNetworking.exceptions.CommentException;
+import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.exceptions.PostException;
 import Internship.SocialNetworking.mappers.CommentMapper;
 import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.models.GroupNW;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +68,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentInfoDTO> getCommentsByPostId(Long postId) {
-        List<Comment> commentList = commentRepository.findByPostIdOrderByCreationDateDesc(postId);
+        List<Comment> commentList = Optional.ofNullable(commentRepository.findByPostIdOrderByCreationDateDesc(postId))
+                .orElseThrow(() -> new CommentException("Comment with post ID doesn't exist!"));
         List<Comment> commentList1 = new ArrayList<>();
         
         if(!commentList.isEmpty()) {
@@ -80,7 +85,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentInfoDTO> getCommentsByCommentId(Long commentId) {
-        Comment comment = commentRepository.findByCommentId(commentId);
+        Comment comment = Optional.ofNullable(commentRepository.findByCommentId(commentId))
+                .orElseThrow(() -> new CommentException("Comment ID doesn't exist!"));
         List<Comment> comments = commentRepository.findAll();
         List<Comment> childComments = new ArrayList<>();
 
@@ -97,7 +103,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentInfoDTO deleteComment(Long commentId, Person loggedUser) {
-        Comment comment = commentRepository.findByCommentId(commentId);
+        Comment comment = Optional.ofNullable(commentRepository.findByCommentId(commentId))
+                .orElseThrow(() -> new CommentException("Comment ID doesn't exist!"));
         List<Comment> comments = commentRepository.findAll();
 
         if(comment != null && comment.getCreatorId().equals(loggedUser.getPersonId())){
@@ -119,9 +126,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private boolean validation(CommentDTO commentDTO, Long creatorId) {
-        Post post = postRepository.findByPostId(commentDTO.getPostId());
+        Post post = Optional.ofNullable(postRepository.findByPostId(commentDTO.getPostId()))
+                .orElseThrow(() -> new PostException("Post ID doesn't exist!"));
         Comment comment = commentRepository.findByCommentId(commentDTO.getParentId());
-        Person person = personRepository.findByPersonId(creatorId);
+        Person person = Optional.ofNullable(personRepository.findByPersonId(creatorId))
+                .orElseThrow(() -> new PersonException("Creator ID doesn't exist!"));
 
         if(post != null && person != null && !post.getIsOver()){
             GroupNW group = groupRepository.findByGroupId(post.getGroupId());

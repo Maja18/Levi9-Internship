@@ -6,6 +6,7 @@ import Internship.SocialNetworking.dto.PostInfoDTO;
 import Internship.SocialNetworking.exceptions.GroupException;
 import Internship.SocialNetworking.exceptions.MediaException;
 import Internship.SocialNetworking.exceptions.PersonException;
+import Internship.SocialNetworking.exceptions.PostException;
 import Internship.SocialNetworking.mappers.PostMapper;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
@@ -194,8 +195,10 @@ public class PostServiceImpl implements PostService {
     public PostInfoDTO hidePost(HidePostDTO hidePostDTO, Long personId) {
 
         if(validation(hidePostDTO, personId)) {
-            Post post = postRepository.findByPostId(hidePostDTO.getPostId());
-            Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
+            Post post = Optional.ofNullable(postRepository.findByPostId(hidePostDTO.getPostId()))
+                    .orElseThrow(() -> new PostException("Post ID doesn't exist!"));
+            Person blockPerson = Optional.ofNullable(personRepository.findByPersonId(hidePostDTO.getPersonId()))
+                    .orElseThrow(() -> new PersonException("Block person ID doesn't exist!"));
             List<Person> blockListPersons = post.getBlockedPersons();
             blockListPersons.add(blockPerson);
             post.setBlockedPersons(blockListPersons);
@@ -209,9 +212,12 @@ public class PostServiceImpl implements PostService {
     }
 
     private boolean validation(HidePostDTO hidePostDTO, Long personId) {
-        Person person = personRepository.findByPersonId(personId);
-        Person blockPerson = personRepository.findByPersonId(hidePostDTO.getPersonId());
-        Post post = postRepository.findByPostId(hidePostDTO.getPostId());
+        Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
+                .orElseThrow(() -> new PersonException("Person ID doesn't exist!"));
+        Person blockPerson = Optional.ofNullable(personRepository.findByPersonId(hidePostDTO.getPersonId()))
+                .orElseThrow(() -> new PersonException("Block person ID doesn't exist!"));
+        Post post = Optional.ofNullable(postRepository.findByPostId(hidePostDTO.getPostId()))
+                .orElseThrow(() -> new PostException("Post ID doesn't exist!"));
 
         if(person != null && blockPerson != null && post != null
                 && person.getPersonId().equals(post.getCreatorId())
