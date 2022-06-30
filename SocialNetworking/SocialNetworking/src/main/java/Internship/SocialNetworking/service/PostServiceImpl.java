@@ -127,7 +127,6 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getAllUserPosts(Long userId, Person loggedPerson) {
         List<Post> allPosts = postRepository.findByCreatorId(userId);
         List<Post> posts = new ArrayList<>();
-        List<String> mediasFileNames;
         allPosts.stream().forEach(p-> {
             if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
                 p.setIsOver(true);
@@ -150,13 +149,14 @@ public class PostServiceImpl implements PostService {
             return;
         if (isNullOrEmpty && p.getIsPublic())
             posts.add(p);
-        else
+        else {
             personFriends.stream().forEach(friend -> {
                 if (friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
                 else if (p.getIsPublic() && !friend.getPersonId().equals(loggedPerson.getPersonId()) && !p.getIsOver())
                     posts.add(p);
             });
+        }
 
         removeBlockedPosts(loggedPerson, posts, p);
     }
@@ -258,7 +258,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<String> getFileNames(List<MultipartFile> multipartFiles) throws IOException {
-        List<String> fileNames = new ArrayList<String>();
+        List<String> fileNames = new ArrayList<>();
         for(MultipartFile multipartFile: multipartFiles) {
             String multipartFileName = multipartFile.getOriginalFilename();
             if (multipartFileName != null){
