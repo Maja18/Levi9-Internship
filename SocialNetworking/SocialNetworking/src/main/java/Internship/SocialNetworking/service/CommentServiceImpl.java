@@ -11,7 +11,7 @@ import Internship.SocialNetworking.repository.CommentRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
-import Internship.SocialNetworking.service.iService.CommentService;
+import Internship.SocialNetworking.service.interface_service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
