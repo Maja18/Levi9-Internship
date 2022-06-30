@@ -231,13 +231,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getAllFriendPosts(Person loggedPerson) {
-        System.out.println("USAO U SERVIS");
-        System.out.println(loggedPerson.getName());
         List<Post> friendPosts= new ArrayList<>();
         List<Person> personFriends = loggedPerson.getFriends();
-        System.out.println(personFriends.size());
         personFriends.stream().forEach(friend -> {
-            System.out.println("U foru");
             List<Post> posts = postRepository.findByCreatorId(friend.getPersonId());
             for (Post p: posts) {
                 if(p.getCreationDate().isBefore(LocalDateTime.now().minusDays(1)))
