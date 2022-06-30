@@ -5,14 +5,13 @@ import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
 import Internship.SocialNetworking.mapper.EventMapper;
-import Internship.SocialNetworking.mapper.EventMapperImpl;
 import Internship.SocialNetworking.mapper.GroupMapper;
 import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.EventRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
-import Internship.SocialNetworking.service.iService.GroupService;
+import Internship.SocialNetworking.service.interface_service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

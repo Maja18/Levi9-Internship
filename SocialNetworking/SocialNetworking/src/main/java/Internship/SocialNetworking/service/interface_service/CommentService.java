@@ -1,7 +1,6 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.service.interface_service;
 
 import Internship.SocialNetworking.dto.CommentInfoDTO;
-import Internship.SocialNetworking.models.Comment;
 import Internship.SocialNetworking.dto.CommentDTO;
 import Internship.SocialNetworking.models.Person;
 

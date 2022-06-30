@@ -1,9 +1,8 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.service.interface_service;
 
 import Internship.SocialNetworking.dto.EventDTO;
 import Internship.SocialNetworking.dto.GroupDTO;
 
-import Internship.SocialNetworking.models.Event;
 import Internship.SocialNetworking.models.GroupNW;
 
 import java.util.List;

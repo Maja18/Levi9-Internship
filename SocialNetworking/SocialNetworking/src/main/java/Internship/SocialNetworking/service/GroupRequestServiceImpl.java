@@ -4,11 +4,10 @@ import Internship.SocialNetworking.models.GroupNW;
 import Internship.SocialNetworking.models.GroupRequest;
 import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.models.RequestStatus;
-import Internship.SocialNetworking.dto.GroupRequestDTO;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.GroupRequestService;
+import Internship.SocialNetworking.service.interface_service.GroupRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

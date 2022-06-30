@@ -1,4 +1,4 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.service.interface_service;
 
 import Internship.SocialNetworking.dto.FriendInfoDTO;
 import Internship.SocialNetworking.dto.FriendRequestDTO;

@@ -11,7 +11,7 @@ import Internship.SocialNetworking.models.Post;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
 import Internship.SocialNetworking.repository.PostRepository;
-import Internship.SocialNetworking.service.iService.PostService;
+import Internship.SocialNetworking.service.interface_service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

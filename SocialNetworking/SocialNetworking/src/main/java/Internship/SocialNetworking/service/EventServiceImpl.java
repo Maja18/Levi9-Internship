@@ -8,7 +8,7 @@ import Internship.SocialNetworking.models.Person;
 import Internship.SocialNetworking.repository.EventRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.EventService;
+import Internship.SocialNetworking.service.interface_service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,6 @@
-package Internship.SocialNetworking.service.iService;
+package Internship.SocialNetworking.service.interface_service;
 
 import Internship.SocialNetworking.models.GroupRequest;
-import Internship.SocialNetworking.dto.GroupRequestDTO;
 
 import java.util.List;
 

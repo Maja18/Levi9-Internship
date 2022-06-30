@@ -15,7 +15,7 @@ import Internship.SocialNetworking.repository.FriendRequestRepository;
 import Internship.SocialNetworking.repository.GroupRepository;
 import Internship.SocialNetworking.repository.GroupRequestRepository;
 import Internship.SocialNetworking.repository.PersonRepository;
-import Internship.SocialNetworking.service.iService.PersonService;
+import Internship.SocialNetworking.service.interface_service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
