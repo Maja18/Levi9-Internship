@@ -54,13 +54,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTO registerPerson(PersonDTO person) {
 
-       Person mappedPerson=mapper.personDTOtoPerson(person);
-             if(personRepository.findByEmailEquals(mappedPerson.getEmail())==null) {
+             Person mappedPerson=mapper.personDTOtoPerson(person);
+             if(personRepository.findByEmailEquals(mappedPerson.getEmail()) == null) {
                  //we immediately hash a password
                  mappedPerson.setPassword(passwordEncoder.encode(person.getPassword()));
                  return mapper.personToPersonDTO(personRepository.save(mappedPerson));
              }
-             return null;
+            return null;
 
     }
 
@@ -228,7 +228,6 @@ public class PersonServiceImpl implements PersonService {
     public String alterPersonInformation(PersonDTO person, Long userId) {
         Person alteringPerson=personRepository.findByPersonId(userId);
         //checking whether user with specified id exists at all
-
          alteringPerson.setPersonId(userId);
          alteringPerson.setName(person.getName());
          alteringPerson.setSurname(person.getSurname());
