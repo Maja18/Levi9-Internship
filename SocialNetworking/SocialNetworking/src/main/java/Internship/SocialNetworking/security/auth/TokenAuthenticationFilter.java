@@ -34,6 +34,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String mail;
         String authToken = tokenUtils.getToken(request);
+        System.out.println("###############");
+        System.out.println(authToken);
         Claims claims = tokenUtils.getAllClaimsFromToken(authToken);
         String authorities = (String) claims.get("authorities");
         authorities = authorities.replace("[", "").replace("]", "");

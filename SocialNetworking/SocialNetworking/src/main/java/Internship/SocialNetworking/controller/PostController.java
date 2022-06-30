@@ -76,8 +76,10 @@ public class PostController {
     @RolesAllowed({ "ROLE_USER", "ROLE_MEMBER" })
     ResponseEntity<List<PostDTO>> getAllFriendPosts()
     {
+        System.out.println("USAO U KONTROLER");
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person loggedPerson = personService.findByPersonId(currentUser.getPersonId());
+        System.out.println("AAAAA");
         List<PostDTO> posts = postService.getAllFriendPosts(loggedPerson);
 
         return posts == null ?

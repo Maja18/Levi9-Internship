@@ -54,7 +54,7 @@ class PostControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     PostServiceImpl postService;
 
     @Autowired
@@ -71,43 +71,14 @@ class PostControllerTests {
         assertThat(mockMvc).isNotNull();
     }
 
-    @BeforeEach
-    public void createUser() {
-        Person person = new Person();
-        person.setPersonId(1L);
-        person.setName("Pera");
-        person.setSurname("Peric");
-        person.setEmail("maja@gmail.com");
-        person.setPassword("123");
-        Authority authority = new Authority();
-        authority.setAuthorityId(1L);
-        authority.setName("ROLE_USER");
-        List<Authority> authorityList = new ArrayList<>();
-        authorityList.add(authority);
-        person.setAuthorities(authorityList);
-        System.out.println(person.getPassword());
-        System.out.println(person.getUsername());
-        System.out.println(person.getAuthorities());
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(person.getUsername(),
-                        person.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        Person p = (Person) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(p.getEmail());
-        System.out.println("*********************");
-        System.out.println(jwt);
-        int expiresIn = tokenUtils.getExpiredIn();
-    }
-
     @Test
-    @WithMockUser(username="maja@gmail.com",roles={"USER","MEMBER"})
+    @WithMockUser(username="maja98dragojlovic@gmail.com",roles={"USER","MEMBER"})
     void testGetAllFriendsPosts() throws Exception {
         Person person = new Person();
         person.setPersonId(1L);
         person.setName("Maja");
         person.setSurname("Dragojlovic");
-        person.setEmail("pera@gmail.com");
+        person.setEmail("maja98dragojlovic@gmail.com");
         person.setPassword("123");
         Authority authority = new Authority();
         authority.setAuthorityId(1L);
@@ -115,24 +86,38 @@ class PostControllerTests {
         List<Authority> authorityList = new ArrayList<>();
         authorityList.add(authority);
         person.setAuthorities(authorityList);
+
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(person.getUsername(),
+                        person.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Person p = (Person) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(p.getEmail());
+
         Post post = new Post();
         post.setPostId(1L);
-        post.setDescription("my first post");
+        post.setDescription("Post1");
         post.setCreationDate(LocalDateTime.now());
         post.setCreatorId(1L);
         post.setIsPublic(true);
-        doReturn(Lists.newArrayList(post)).when(postService).getAllFriendPosts(person);
-        mockMvc.perform(get("/api/post"))
+
+        Person friend = new Person();
+        friend.setPersonId(2L);
+        friend.setName("Pera");
+        List<Person> friends = new ArrayList<>();
+        friends.add(friend);
+        person.setFriends(friends);
+        mockMvc.perform(get("/api/post/friends-posts").
+                header(HttpHeaders.AUTHORIZATION, "Bearer "+ jwt))
+
                 // Validate the response code and content type
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                // Validate headers
-                .andExpect(header().string(HttpHeaders.LOCATION, "/api/post"))
-
                 // Validate the returned fields
                 .andExpect(MockMvcResultMatchers.jsonPath("$.posts").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.posts[*].postId").isNotEmpty());
+        doReturn(Lists.newArrayList(post)).when(postService).getAllFriendPosts(person);
     }
 
 }
