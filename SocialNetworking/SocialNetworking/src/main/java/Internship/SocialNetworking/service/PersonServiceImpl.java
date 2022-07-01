@@ -68,19 +68,18 @@ public class PersonServiceImpl implements PersonService {
             return null;
 
     }
-    
 
     public FriendInfoDTO sendFriendRequest(Long personId, Long friendId) {
         Person person = Optional.ofNullable(personRepository.findByPersonId(personId))
                 .orElseThrow(()-> new PersonException(personMessage));
         Person friend = Optional.ofNullable(personRepository.findByPersonId(friendId))
-                .orElseThrow(()-> new PersonException("Friend ID doesn't exist!"));
+                .orElseThrow(()-> new PersonException(friendMessage));
 
         if(person != null && friend != null && !Objects.equals(person.getPersonId(), friend.getPersonId())){
             List<FriendRequest> friendRequestList = friend.getFriendRequest();
 
             if(friendRequestList.stream().anyMatch(f -> f.getFriendId().equals(personId) && !f.getDeleted())
-                || IsFriendshipExist(person, friend)){
+                || isFriendshipExist(person, friend)){
 
                     log.info("The friend request already exist or friendship already exist!");
                     return null;
@@ -113,7 +112,7 @@ public class PersonServiceImpl implements PersonService {
             List<Person> personListFriends = person.getFriends();
             List<Person> friendListFriends = friend.getFriends();
 
-            if(isPersonInFriendRequest(person, friend) && !IsFriendshipExist(person, friend)){
+            if(isPersonInFriendRequest(person, friend) && !isFriendshipExist(person, friend)){
 
                 friendRequest.setStatus(friendRequestDTO.getStatus());
 
@@ -154,7 +153,7 @@ public class PersonServiceImpl implements PersonService {
         return person.getFriendRequest().stream().anyMatch(fr-> fr.getFriendId().equals(friend.getPersonId()));
     }
 
-    private boolean IsFriendshipExist(Person person, Person friend){
+    private boolean isFriendshipExist(Person person, Person friend){
         return person.getFriends().stream().anyMatch(f -> f.getPersonId().equals(friend.getPersonId()))
                 && friend.getFriends().stream().anyMatch(f -> f.getPersonId().equals(person.getPersonId()));
     }
@@ -169,7 +168,7 @@ public class PersonServiceImpl implements PersonService {
             List<Person> friendList = person.getFriends();
             List<Person> friendList1 = friend.getFriends();
 
-            if(IsFriendshipExist(person, friend)){
+            if(isFriendshipExist(person, friend)){
 
                 friendList.remove(friend);
                 friendList1.remove(person);
