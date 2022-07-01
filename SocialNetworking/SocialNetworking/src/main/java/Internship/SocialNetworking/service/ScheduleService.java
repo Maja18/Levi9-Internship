@@ -44,7 +44,7 @@ public class ScheduleService {
            List<Event> events = loadedEvents
                     .stream()
                     .filter(event -> !event.getNotified())
-                    .filter(e -> e.getStartEvent().toLocalDate().compareTo(LocalDate.now()) == 0)
+                    //.filter(e -> e.getStartEvent().toLocalDate().compareTo(LocalDate.now()) == 0)
                     .filter(e -> e.getStartEvent().toLocalTime().compareTo(LocalDateTime.now().toLocalTime().plusMinutes(60)) < 0)
                     .collect(Collectors.toList());
 
