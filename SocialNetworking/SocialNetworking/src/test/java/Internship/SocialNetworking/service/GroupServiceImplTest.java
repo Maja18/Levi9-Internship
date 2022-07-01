@@ -151,7 +151,7 @@ class GroupServiceImplTest {
         when(personService.findByPersonId(person.getPersonId())).thenReturn(person);
 
         GroupException exception = Assertions.assertThrows(GroupException.class, ()->
-                groupService.createGroup(groupDTO, person.getPersonId()));
+                groupService.createGroup(groupDTO, 1L));
         Assertions.assertEquals("A group with that name already exist, choose a new one!", exception.getMessage());
 
 
@@ -176,7 +176,7 @@ class GroupServiceImplTest {
 
 
         PersonException exception = Assertions.assertThrows(PersonException.class, ()->
-                groupService.createGroup(groupDTO, person.getPersonId()));
+                groupService.createGroup(groupDTO, 1L));
         Assertions.assertEquals("That person does not exists!", exception.getMessage());
 
     }
@@ -268,7 +268,7 @@ class GroupServiceImplTest {
         when(groupRepository.findByGroupId(groupNW.getGroupId())).thenReturn(null);
 
         GroupException exception = Assertions.assertThrows(GroupException.class, ()-> {
-            groupService.groupEvents(groupNW.getGroupId(), person.getPersonId());
+            groupService.groupEvents(225L, 1L);
         });
         Assertions.assertEquals("That group does not exists!", exception.getMessage());
 
@@ -298,7 +298,7 @@ class GroupServiceImplTest {
 
 
         GroupException exception = Assertions.assertThrows(GroupException.class, ()-> {
-            groupService.groupEvents(groupNW.getGroupId(), person.getPersonId());
+            groupService.groupEvents(225L, 1L);
         });
         Assertions.assertEquals("You are not member of this group!", exception.getMessage());
 
