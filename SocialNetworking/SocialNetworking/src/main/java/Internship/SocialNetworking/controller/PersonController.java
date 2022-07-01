@@ -67,7 +67,7 @@ public class PersonController {
 
     @DeleteMapping(value = "/remove-friend/{friend-id}")
     @RolesAllowed("ROLE_USER")
-    public ResponseEntity<FriendInfoDTO> removeFriend(@PathVariable(name = "friendId") Long friendId) {
+    public ResponseEntity<FriendInfoDTO> removeFriend(@PathVariable(name = "friend-id") Long friendId) {
         Person currentUser = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person userWithId = personService.findByPersonId(currentUser.getPersonId());
 
